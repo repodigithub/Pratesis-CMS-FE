@@ -3,7 +3,7 @@
         <q-banner inline-actions class="text-white bg-red btn-radius" v-if="error">
             Email/password yang anda masukkan salah
         </q-banner>
-        <div class="font-big text-blackown  text-center">Hi, Selamat datang kembali!</div>
+        <div class="font-big blackown  text-center">Hi, Selamat datang kembali!</div>
         <div class="font-medium text-grey  text-center">Silahkan login untuk kembali menggunakan layanan</div>
         <q-form
         @submit.prevent.stop="onSubmit('auth/login',user)" ref="form"

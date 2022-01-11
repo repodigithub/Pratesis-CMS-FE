@@ -3,7 +3,7 @@
         <q-banner inline-actions class="text-white bg-red btn-radius" v-if="error">
             Email/password yang anda masukkan salah
         </q-banner>
-        <div class="font-big text-blackown">Register</div>
+        <div class="font-big blackown">Register</div>
         <div class="font-medium text-grey">Bergabung untuk terhubung dengan layanan kami</div>
         <q-form
         @submit.prevent.stop="onSubmit('auth/register',user)" ref="form"
@@ -158,7 +158,7 @@ export default {
             if(val === this.user.password){
                 return true;
             }else{
-                return 'Password tidak samsa';
+                return 'Password tidak sama';
             }
         },
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="row justify-center">
         <q-img
-            src="~assets/auth/authbg.svg"
+            src="~assets/auth/authbg.png"
             spinner-color="primary"
             spinner-size="82px"
             class="col-6"

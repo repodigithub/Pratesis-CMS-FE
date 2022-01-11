@@ -1,28 +1,55 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header bordered class="bg-white text-black">
       <q-toolbar>
-        <q-btn
+        <!-- <q-btn
           flat
           dense
           round
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
-        />
+        /> -->
 
         <q-toolbar-title>
-          Quasar App
+          <q-btn color="primary" icon-right="expand_more" label="Head Office" no-caps flat dense  class="font-normal"/>
+          <q-menu fit>
+          <q-list style="min-width: 100px">
+            <q-item clickable>
+              <q-item-section>New tab</q-item-section>
+            </q-item>
+            <q-item clickable>
+              <q-item-section>New incognito tab</q-item-section>
+            </q-item>
+            <q-separator />
+            <q-item clickable>
+              <q-item-section>Recent tabs</q-item-section>
+            </q-item>
+            <q-item clickable>
+              <q-item-section>History</q-item-section>
+            </q-item>
+            <q-item clickable>
+              <q-item-section>Downloads</q-item-section>
+            </q-item>
+            <q-separator />
+            <q-item clickable>
+              <q-item-section>Settings</q-item-section>
+            </q-item>
+            <q-separator />
+            <q-item clickable>
+              <q-item-section>Help &amp; Feedback</q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <div class="font-normal q-mr-sm">Hi, Joko</div>
+        <q-avatar class="btn-radius" color="primary" text-color="white">J</q-avatar>
       </q-toolbar>
     </q-header>
 
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
-      bordered
     >
       <q-list>
         <q-item-label
@@ -39,7 +66,7 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container class="bg-admin">
       <router-view />
     </q-page-container>
   </q-layout>
