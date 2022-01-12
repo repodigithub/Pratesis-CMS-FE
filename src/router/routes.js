@@ -4,7 +4,8 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { path: '',name:'overview', component: () => import('pages/Index.vue') },
+      { path: 'promo',name:'promo', component: () => import('pages/master/Promo.vue') }
     ]
   },
   {
@@ -12,7 +13,7 @@ const routes = [
     redirect: '/login',
     component: () => import('layouts/AuthLayout.vue'),
     children: [
-      { path:'/login',component:()=> import('pages/auth/Login.vue') },
+      { path:'/login',name:'login',component:()=> import('pages/auth/Login.vue') },
       { path:'/register',component:()=>import('pages/auth/Register.vue') }
     ]
   },

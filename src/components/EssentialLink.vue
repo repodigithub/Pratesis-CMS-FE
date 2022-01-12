@@ -1,21 +1,22 @@
 <template>
   <q-item
     clickable
-    tag="a"
-    target="_blank"
-    :href="link"
+    :to="{name: link}"
+    exact
+    style="padding-left:30px;"
+    active-class="bg-primary4"
   >
-    <q-item-section
-      v-if="icon"
-      avatar
-    >
-      <q-icon :name="icon" />
-    </q-item-section>
-
     <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
-      <q-item-label caption>
-        {{ caption }}
+      <q-item-label class=" text-primary">
+        <q-img
+          :src="require(`assets/icon/${icon}.svg`)"
+          spinner-color="primary"
+          spinner-size="5px"
+          style="width:18px;height:18px;"
+          v-if="icon"
+          class="q-mr-sm"
+        />
+        {{ title }}
       </q-item-label>
     </q-item-section>
   </q-item>
@@ -30,11 +31,6 @@ export default defineComponent({
     title: {
       type: String,
       required: true
-    },
-
-    caption: {
-      type: String,
-      default: ''
     },
 
     link: {

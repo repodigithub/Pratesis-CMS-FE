@@ -141,8 +141,8 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: `pratesis-cms`,
-        short_name: `pratesis-cms`,
+        name: `Scylla-Claim Management System`,
+        short_name: `Scylla-Claim Management System`,
         description: `claim management system build with quasar framework based vue`,
         display: 'standalone',
         orientation: 'portrait',

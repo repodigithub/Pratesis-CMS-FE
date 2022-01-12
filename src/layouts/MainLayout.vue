@@ -13,32 +13,19 @@
 
         <q-toolbar-title>
           <q-btn color="primary" icon-right="expand_more" label="Head Office" no-caps flat dense  class="font-normal"/>
-          <q-menu fit>
-          <q-list style="min-width: 100px">
+          <q-menu style="max-width:150px">
+          <q-list >
             <q-item clickable>
-              <q-item-section>New tab</q-item-section>
+              <q-item-section>Profil</q-item-section>
             </q-item>
             <q-item clickable>
-              <q-item-section>New incognito tab</q-item-section>
-            </q-item>
-            <q-separator />
-            <q-item clickable>
-              <q-item-section>Recent tabs</q-item-section>
-            </q-item>
-            <q-item clickable>
-              <q-item-section>History</q-item-section>
-            </q-item>
-            <q-item clickable>
-              <q-item-section>Downloads</q-item-section>
+              <q-item-section>Setting</q-item-section>
             </q-item>
             <q-separator />
             <q-item clickable>
-              <q-item-section>Settings</q-item-section>
+              <q-item-section>Logout</q-item-section>
             </q-item>
-            <q-separator />
-            <q-item clickable>
-              <q-item-section>Help &amp; Feedback</q-item-section>
-            </q-item>
+            
           </q-list>
         </q-menu>
         </q-toolbar-title>
@@ -49,21 +36,134 @@
 
     <q-drawer
       v-model="leftDrawerOpen"
-      show-if-above
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+    <div class="sidebar">
+      <q-img
+        src="~assets/dashboard/logo.png"
+        spinner-color="primary"
+        spinner-size="82px"
+      />
+      <q-scroll-area class="fit ">
+        <q-list style="margin-top:40px;">
+          <EssentialLink
+            v-for="link in essentialLinks"
+            :key="link.title"
+            v-bind="link"
+          />
+          <q-expansion-item
+            expand-separator
+            header-style="padding-left:30px;"
+            expand-icon-class="text-primary"
+          >
+          <template v-slot:header >
+            <q-item-section>
+              <q-item-label class=" text-primary">
+                <q-img
+                  :src="require(`assets/icon/master.svg`)"
+                  spinner-color="primary"
+                  spinner-size="5px"
+                  style="width:18px;height:18px;"
+                  class="q-mr-sm"
+                />
+                Master
+              </q-item-label>
+            </q-item-section>
+          </template>
+            <EssentialLink
+            style="padding-left:60px;"
+              v-for="link in master"
+              :key="link.title"
+              v-bind="link"
+            />
+            
+          </q-expansion-item>
+          <q-expansion-item
+            expand-separator
+            header-style="padding-left:30px;"
+            expand-icon-class="text-primary"
+            
+          >
+          <template v-slot:header >
+            <q-item-section>
+              <q-item-label class=" text-primary">
+                <q-img
+                  :src="require(`assets/icon/utility.svg`)"
+                  spinner-color="primary"
+                  spinner-size="5px"
+                  style="width:18px;height:18px;"
+                  class="q-mr-sm"
+                />
+                Utility
+              </q-item-label>
+            </q-item-section>
+          </template>
+            <EssentialLink
+            style="padding-left:60px;"
+              v-for="link in utility"
+              :key="link.title"
+              v-bind="link"
+            />
+            
+          </q-expansion-item>
+          <q-expansion-item
+            expand-separator
+            header-style="padding-left:30px;"
+            expand-icon-class="text-primary"
+            
+          >
+          <template v-slot:header >
+            <q-item-section>
+              <q-item-label class=" text-primary">
+                <q-img
+                  :src="require(`assets/icon/laporan.svg`)"
+                  spinner-color="primary"
+                  spinner-size="5px"
+                  style="width:18px;height:18px;"
+                  class="q-mr-sm"
+                />
+                Laporan
+              </q-item-label>
+            </q-item-section>
+          </template>
+            <EssentialLink
+            style="padding-left:60px;"
+              v-for="link in laporan"
+              :key="link.title"
+              v-bind="link"
+            />
+            
+          </q-expansion-item>
+          <q-expansion-item
+            expand-separator
+            header-style="padding-left:30px;"
+            expand-icon-class="text-primary"
+            
+          >
+          <template v-slot:header >
+            <q-item-section>
+              <q-item-label class=" text-primary">
+                <q-img
+                  :src="require(`assets/icon/transaksi.svg`)"
+                  spinner-color="primary"
+                  spinner-size="5px"
+                  style="width:18px;height:18px;"
+                  class="q-mr-sm"
+                />
+                Transaksi
+              </q-item-label>
+            </q-item-section>
+          </template>
+            <EssentialLink
+            style="padding-left:60px;"
+              v-for="link in transaksi"
+              :key="link.title"
+              v-bind="link"
+            />
+            
+          </q-expansion-item>
+        </q-list>
+      </q-scroll-area>
+    </div>
     </q-drawer>
 
     <q-page-container class="bg-admin">
@@ -74,51 +174,7 @@
 
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
+import { menu,transaksi,master,utility,laporan } from 'src/common/menu'
 
 import { defineComponent, ref } from 'vue'
 
@@ -130,15 +186,29 @@ export default defineComponent({
   },
 
   setup () {
-    const leftDrawerOpen = ref(false)
+    const leftDrawerOpen = ref(true)
 
     return {
-      essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
+  },
+  data(){
+    return{
+      essentialLinks: menu,
+      transaksi: transaksi,
+      master:master,
+      utility:utility,
+      laporan:laporan,
+      texpand:false
+    }
+  },
+  computed:{
+      transaksiexpand(){
+        return this.transaksi.some(tr => tr.link === this.$route.name) 
+      }
   }
 })
 </script>
