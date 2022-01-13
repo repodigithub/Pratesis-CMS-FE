@@ -1,7 +1,7 @@
 <template>
   <q-item
     clickable
-    :to="{name: link}"
+    :to="{name: title}"
     exact
     style="padding-left:30px;"
     active-class="bg-primary4"

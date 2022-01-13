@@ -4,8 +4,14 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '',name:'overview', component: () => import('pages/Index.vue') },
-      { path: 'promo',name:'promo', component: () => import('pages/master/Promo.vue') }
+      { path: '',name:'Overview', component: () => import('pages/Index.vue')},
+      { path: 'promo',name:'Promo', component: () => import('pages/master/Promo.vue'),
+        meta:{
+          master:true
+        }
+      },
+      { path: 'documentclaim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue') },
+      { path: 'region',name:'Region', component: () => import('pages/master/Region.vue') },
     ]
   },
   {

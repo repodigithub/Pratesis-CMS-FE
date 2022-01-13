@@ -1,130 +1,268 @@
-let menu = [
-  {
-    title: 'Overview',
-    icon: 'overview',
-    link: 'overview'
-  },
-]
-let master = [
+const menu = [
     {
-        title:'Promo',
-        link:'promo'
+        title:'Overview',
+        icon: 'overview',
+        access:{
+            superadmin:true,
+            distributor:true,
+            headoffice:true,
+            depot:true
+        },
     },
-    {
-        title:'Sales Hierarchy',
-        link:'promo'
-    },
-    {
-        title:'Product Hierarchy',
-        link:'promo'
-    },
-    {
-        title:'Document Claim',
-        link:'promo'
-    },
-    {
-        title:'Alasan',
-        link:'promo'
-    },
-    {
-        title:'Tax',
-        link:'promo'
-    },
-    {
-        title:'Spend Type',
-        link:'promo'
-    },
-    {
-        title:'Type Promo',
-        link:'promo'
-    },
-    {
-        title:'Investment',
-        link:'promo'
-    },
-    {
-        title:'Budget Holder',
-        link:'promo'
-    },
-
-]
-let utility = [
-    {
-        title:'Master Data',
-        link:'promo'
-    },
-    {
-        title:'Daftar Upload Budget',
-        link:'promo'
-    },
-    {
-        title:'Status Data',
-        link:'promo'
-    },
-    {
-        title:'Upload',
-        link:'promo'
-    },
-    {
-        title:'Otorisasi Menu',
-        link:'promo'
-    },
-    {
-        title:'User',
-        link:'promo'
-    },
-    {
-        title:'Group User',
-        link:'promo'
-    },
-]
-let laporan =[
     {
         title:'Master',
-        link:'promo'
+        icon: 'master',
+        submenu:[
+            {
+                title:'Promo',
+                access:{
+                    superadmin:true,
+                    distributor:true,
+                    headoffice:true
+                },
+        
+            },
+            
+            {
+                title:'Sales Hierarchy',
+                submenu:[
+                    {title : 'Region'},
+                    {title : 'Area'},
+                    {title : 'Distributor Group'},
+                    {title : 'Distributor'},
+                ],
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Product Hierarchy',
+                submenu:[
+                    {title : 'Divisi'},
+                    {title : 'Category'},
+                    {title : 'Brand'},
+                    {title : 'Sub Brand'},
+                    {title : 'Product'},
+                ],
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Document Claim',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Alasan',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Tax',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Spend Type',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Type Promo',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Investment',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Budget Holder',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+        ],
+        access:{
+            superadmin:true,
+            distributor:true,
+            headoffice:true
+        },
     },
     {
-        title:'Ubah Profil',
-        link:'promo'
+        title:'Utility',
+        icon:'utility',
+        submenu:[
+            {
+                title:'Region',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Daftar Upload Budget',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Status Data',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Upload',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Otorisasi Menu',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'User',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Group User',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+        ],
+        access:{
+            superadmin:true,
+            distributor:true,
+            headoffice:true,
+            depot:true
+        },
     },
     {
-        title:'Upload Paid Claim',
-        link:'promo'
+        title:'Laporan',
+        icon:'laporan',
+        submenu:[
+            {
+                title:'Master',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Ubah Profil',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Upload Paid Claim',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Data Promosi',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Alokasi',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Klaim',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Tpr Distributor',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+        ],
+        access:{
+            superadmin:true,
+            distributor:true,
+            headoffice:true,
+            depot:true
+        },
     },
     {
-        title:'Data Promosi',
-        link:'promo'
-    },
-    {
-        title:'Alokasi',
-        link:'promo'
-    },
-    {
-        title:'Klaim',
-        link:'promo'
-    },
-    {
-        title:'Tpr Distributor',
-        link:'promo'
-    },
-]
-let transaksi = [
-    {
-        title: 'Klaim Promo',
-        link: 'promo'
-    },
-    {
-        title: 'Edit Budget',
-        link: 'promo'
-    },
-    {
-        title: 'Verifikasi',
-        link: 'promo'
-    },
-    {
-        title: 'Cetak Ulang BPP',
-        link: 'promo'
-    },
+        title:'Transaksi',
+        icon:'transaksi',
+        submenu:[
+            {
+                title: 'Klaim Promo',
+                access:{
+                    superadmin:true,
+                }
+            },
+            {
+                title: 'Edit Budget',
+                access:{
+                    superadmin:true,
+                }
+            },
+            {
+                title: 'Verifikasi',
+                access:{
+                    superadmin:true,
+                }
+            },
+            {
+                title: 'Cetak Ulang BPP',
+                access:{
+                    superadmin:true,
+                }
+            },
+        ],
+        access:{
+            superadmin:true,
+            distributor:true,
+            depot:true
+        },
+    }
 ]
 
-export { menu,master,utility,laporan,transaksi }
+export { menu }
