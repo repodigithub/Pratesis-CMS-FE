@@ -104,6 +104,27 @@ components: {
       submenuexpand:{}
     }
   },
+  mounted(){
+    if(this.$route.name === 'User'){
+      if(Object.keys(this.masterexpand).length < 0){
+        this.masterexpand = {
+          1 : true
+        }
+      }else{
+        this.masterexpand[1] = true
+      }
+    }
+    else if(this.$route.name === 'Ubah Profil'){
+      if(Object.keys(this.masterexpand).length < 0){
+        this.masterexpand = {
+          2 : true
+        }
+      }else{
+        this.masterexpand[2] = true
+      }
+    }
+
+  },
     computed:{
         activesubmenu(){
             return val => val.filter(m => m.access[this.role])

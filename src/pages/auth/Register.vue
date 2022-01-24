@@ -6,17 +6,31 @@
         <div class="font-big blackown">Register</div>
         <div class="font-medium text-grey">Bergabung untuk terhubung dengan layanan kami</div>
         <q-form
-        @submit.prevent.stop="onSubmit('auth/register',user)" ref="form"
+        @submit.prevent.stop="onAuth('auth/register',user)" ref="form"
             class="q-gutter-sm q-mt-lg "
         >
             <div class="row justify-between">
-                <div class="col-6">
-                    <label for="email" class="font-normal">First Name</label>
-                    <q-input v-model="user.firstname" dense outlined id="email" class="q-mb-md" 
-                    lazy-rules
+                <div class="col-4">
+                    <label for="user_id" class="font-normal">User ID</label>
+                    <q-input v-model="user.user_id" dense outlined id="user_id" class="q-mb-md" 
                     hide-bottom-space
+                    placeholder="User ID"
+                    >
+                        <template v-slot:append>
+                        <q-icon
+                            name="person"
+                        />
+                        </template>
+                    </q-input>
+                </div>
+                <div class="col-7">
+                    <label for="fullname" class="font-normal">Full Name</label>
+                    <q-input v-model="user.fullname" dense outlined id="fullname" class="q-mb-md" 
+                    hide-bottom-space
+                    placeholder="Full Name"
+                    lazy-rules
                     :rules="[
-                    (val) => (val && val.length > 0) || 'First Name tidak boleh kosong'
+                    (val) => (val && val.length > 0) || 'Full Name tidak boleh kosong'
                     ]"
                     >
                         <template v-slot:append>
@@ -26,43 +40,12 @@
                         </template>
                     </q-input>
                 </div>
-                <div class="col-5">
-                    <label for="email" class="font-normal">Last Name</label>
-                    <q-input v-model="user.lastname" dense outlined id="email" class="q-mb-md" 
-                    lazy-rules
-                    hide-bottom-space
-                    :rules="[
-                    (val) => (val && val.length > 0) || 'Last Name tidak boleh kosong'
-                    ]"
-                    >
-                        <template v-slot:append>
-                        <q-icon
-                            name="person"
-                        />
-                        </template>
-                    </q-input>
-                </div>
-                <div class="col-6">
-                    <label for="email" class="font-normal">Phone Number</label>
-                    <q-input v-model="user.phone" dense outlined id="email" class="q-mb-md" 
-                    lazy-rules
-                    hide-bottom-space
-                    :rules="[
-                    (val) => (val && val.length > 0) || 'Phone number tidak boleh kosong'
-                    ]"
-                    >
-                        <template v-slot:append>
-                        <q-icon
-                            name="phone"
-                        />
-                        </template>
-                    </q-input>
-                </div>
-                <div class="col-5">
+                <div class="col-12">
                     <label for="email" class="font-normal">Email Address</label>
                     <q-input v-model="user.email" dense outlined id="email" class="q-mb-md" type="email"
                     lazy-rules
                     hide-bottom-space
+                    placeholder="your.name@gmail.com"
                     :rules="[
                     (val) => (val && val.length > 0) || 'Email tidak boleh kosong',val => validemail(val)
                     ]"
@@ -75,9 +58,27 @@
                     </q-input>
                 </div>
                 <div class="col-6">
+                    <label for="username" class="font-normal">Username</label>
+                    <q-input v-model="user.username" dense outlined id="username" class="q-mb-md" 
+                    lazy-rules
+                    placeholder="username"
+                    hide-bottom-space
+                    :rules="[
+                    (val) => (val && val.length > 0) || 'Username tidak boleh kosong'
+                    ]"
+                    >
+                        <template v-slot:append>
+                        <q-icon
+                            name="person"
+                        />
+                        </template>
+                    </q-input>
+                </div>
+                <div class="col-5">
                     <label for="password" class="font-normal">Password</label>
                     <q-input v-model="user.password"  dense outlined id="password" :type="visibility ? 'password' : 'text'" class="q-mb-md"
                     lazy-rules
+                    placeholder="password"
                     hide-bottom-space
                     :rules="[
                         (val) => (val && val.length > 0) || 'password tidak boleh kosong'
@@ -92,20 +93,51 @@
                         </template>
                     </q-input>
                 </div>
+                <div class="col-12">
+                    <label for="email" class="font-normal">User Level</label>
+                    <q-select  outlined dense v-model="user.role" :options="optrole" placeholder="user level"  lazy-rules hide-bottom-space class="q-mb-md"
+                        :rules="[
+                            val => val !== null && val !== '' || 'User Level tidak boleh kosong',
+                        ]"/>
+                </div>
+                <div class="col-6">
+                    <label for="kode_depo" class="font-normal">Kode Depo</label>
+                    <q-select  outlined dense v-model="user.kode_area" :options="optdepo"  lazy-rules hide-bottom-space class="q-mb-md"  id="kode_depo"
+                        :rules="[
+                            val => val !== null && val !== '' || 'Kode Depo tidak boleh kosong',
+                        ]">
+                    </q-select>
+                </div>
                 <div class="col-5">
-                    <label for="password" class="font-normal">Repeat Password</label>
-                    <q-input v-model="user.confirmpassword"  dense outlined id="password" :type="visibility2 ? 'password' : 'text'" class="q-mb-md"
-                    lazy-rules
+                    <label for="nama_depo" class="font-normal">Nama Depo</label>
+                    <q-input v-model="nama_depo"  dense outlined id="nama_depo" class="q-mb-md"
                     hide-bottom-space
-                    :rules="[
-                        (val) => (val && val.length > 0) || 'Repeat password tidak boleh kosong', val => konfirmasipw(val)
-                    ]"
+                    disable
+                    >
+                    <template v-slot:append>
+                        <q-icon
+                            name="person"
+                        />
+                        </template>
+                    </q-input>
+                </div>
+                <div class="col-6">
+                    <label for="kode_distributor" class="font-normal">Kode Distributor</label>
+                    <q-select  outlined dense v-model="user.kode_distributor" :options="optdistributor"  lazy-rules hide-bottom-space class="q-mb-md"  id="kode_distributor"
+                        :rules="[
+                            val => val !== null && val !== '' || 'Kode Distributor tidak boleh kosong',
+                        ]">
+                    </q-select>
+                </div>
+                <div class="col-5">
+                    <label for="nama_distributor" class="font-normal">Nama Distributor</label>
+                    <q-input v-model="nama_distributor"  dense outlined id="nama_distributor" class="q-mb-md"
+                    hide-bottom-space
+                    disable
                     >
                         <template v-slot:append>
                         <q-icon
-                            :name="visibility2 ? 'visibility' : 'visibility_off'"
-                            @click="visibility2 = !visibility2"
-                            class="cursor-pointer"
+                            name="person"
                         />
                         </template>
                     </q-input>
@@ -113,7 +145,14 @@
             </div>
             
             <div class="row">
-                <q-checkbox v-model="term" label="I agree to all the Term and Privacy Policy " class="col-12"/>
+                <q-checkbox v-model="term" class="col-12">
+                    <div class="d">
+                        I agree to all the <q-btn color="primary" label="Term" no-caps flat @click.stop="onClick" class="q-px-none"/> and 
+                        <q-btn color="primary" label="Privacy Policy" no-caps flat @click.stop="onClick" class="q-px-none"/>
+                    </div> 
+                </q-checkbox>
+                <!-- <div class="g-recaptcha q-mb-md"  data-sitekey="6Le8yDIeAAAAAAFpJytitjjkUbolleNNvvXef4qc"></div> -->
+                <vue-recaptcha :sitekey="recaptchasitekey" class="q-mb-md"/>
                 <q-btn label="Create Account" no-caps type="submit" color="primary" unelevated class="col-12" :disabled="btndisabled" :loading="load">
                     <template v-slot:loading>
                         <div class="row items-center">
@@ -125,43 +164,63 @@
         </q-form>
         <div class="row items-center justify-center">
 
-            <span>sudah bergabung? </span>
-            <q-btn flat no-caps class="text-primary text-bold" label="Login sekarang" @click="$router.push('/login')"/>
+            <span>Already have an account? </span>
+            <q-btn flat no-caps class="text-primary text-bold" label="Login" @click="$router.push('/login')"/>
         </div>
     </div>
 </template>
 
 <script>
 import mixin from 'src/common/mixin'
+import { VueRecaptcha } from 'vue-recaptcha';
 export default {
     mixins:[mixin],
+    components:{
+        VueRecaptcha
+    },
     data(){
         return{
             visibility: true,
-            visibility2: true,
             user:{
-                firstname:'',
-                lastname:'',
-                phone:'',
-                email:'',
-                password:'',
-                confirmpassword:''
+                user_id:'34sf',
+                fullname:'testing',
+                username:'testing',
+                email:'testing@gmail.com',
+                password:'testing',
+                role:'Head Office',
+                kode_distributor:'002',
+                kode_area:'001',
             },
             error:false,
             load:false,
             btndisabled:false,
-            term:false
+            term:false,
+            optrole:['Head Office','Depot','Distributor','Super Admin'],
+            optdepo:['001','002','003'],
+            optdistributor:['001','002','003'],
+            nama_depo:'dummy',
+            nama_distributor:'dummy'
         }
     },
     methods:{
-        konfirmasipw(val){
-            if(val === this.user.password){
-                return true;
-            }else{
-                return 'Password tidak sama';
-            }
+        // filterDepo(val,update){
+        //     if (val === '') {
+        //     update(() => {
+        //         this.optdepo = ['001','002','003']
+        //     })
+        //     return
+        //     }
+
+        //     update(() => {
+        //     const needle = val.toLowerCase()
+        //     console.log("needle",needle)
+        //     this.optdepo.filter(v => v.toLowerCase() === needle)
+        //     })
+        // },
+        onClick(){
+            console.log("testing")
         },
-    }
+    },
 }
 </script>
 

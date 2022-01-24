@@ -37,6 +37,7 @@
     <Sidebar />
 
     <q-page-container class="bg-admin">
+      
       <router-view />
     </q-page-container>
   </q-layout>

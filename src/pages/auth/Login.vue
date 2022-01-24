@@ -6,7 +6,7 @@
         <div class="font-big blackown  text-center">Hi, Selamat datang kembali!</div>
         <div class="font-medium text-grey  text-center">Silahkan login untuk kembali menggunakan layanan</div>
         <q-form
-        @submit.prevent.stop="onSubmit('auth/login',user)" ref="form"
+        @submit.prevent.stop="onAuth('auth/login',user)" ref="form"
             class="q-gutter-sm q-mt-lg "
         >
             <label for="email" class="font-normal">Email Address</label>
@@ -40,6 +40,7 @@
                 </template>
             </q-input>
             <div class="row">
+                <vue-recaptcha :sitekey="recaptchasitekey" class="q-mb-md"/>
                 <q-btn label="Login" no-caps type="submit" color="primary" unelevated class="col-12" :disabled="btndisabled" :loading="load">
                     <template v-slot:loading>
                         <div class="row items-center">
@@ -50,16 +51,20 @@
             </div>
         </q-form>
         <div class="row items-center justify-center">
-            <span>belum bergabung? </span>
-            <q-btn flat no-caps class="text-primary text-bold" label="Daftar sekarang" @click="$router.push('/register')"/>
+            <span>Don't have an account? </span>
+            <q-btn flat no-caps class="text-primary text-bold" label="Register" @click="$router.push('/register')"/>
         </div>
     </div>
 </template>
 
 <script>
 import mixin from 'src/common/mixin'
+import { VueRecaptcha } from 'vue-recaptcha';
 export default {
     mixins:[mixin],
+    components:{
+        VueRecaptcha
+    },
     data(){
         return{
             visibility: true,
@@ -67,11 +72,8 @@ export default {
                 email:'',
                 password:''
             },
-            error:false,
-            load:false,
-            btndisabled:false,
         }
-    }
+    },
 }
 </script>
 
