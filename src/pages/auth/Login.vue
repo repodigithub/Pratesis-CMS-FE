@@ -69,9 +69,12 @@ export default {
         return{
             visibility: true,
             user:{
-                email:'',
-                password:''
+                email:'testing@gmail.com',
+                password:'testing'
             },
+            error:false,
+            load:false,
+            btndisabled:false,
         }
     },
 }

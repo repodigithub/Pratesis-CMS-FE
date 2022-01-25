@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-7">
                     <label for="fullname" class="font-normal">Full Name</label>
-                    <q-input v-model="user.fullname" dense outlined id="fullname" class="q-mb-md" 
+                    <q-input v-model="user.full_name" dense outlined id="fullname" class="q-mb-md" 
                     hide-bottom-space
                     placeholder="Full Name"
                     lazy-rules
@@ -151,7 +151,6 @@
                         <q-btn color="primary" label="Privacy Policy" no-caps flat @click.stop="onClick" class="q-px-none"/>
                     </div> 
                 </q-checkbox>
-                <!-- <div class="g-recaptcha q-mb-md"  data-sitekey="6Le8yDIeAAAAAAFpJytitjjkUbolleNNvvXef4qc"></div> -->
                 <vue-recaptcha :sitekey="recaptchasitekey" class="q-mb-md"/>
                 <q-btn label="Create Account" no-caps type="submit" color="primary" unelevated class="col-12" :disabled="btndisabled" :loading="load">
                     <template v-slot:loading>
@@ -183,7 +182,7 @@ export default {
             visibility: true,
             user:{
                 user_id:'34sf',
-                fullname:'testing',
+                full_name:'testing',
                 username:'testing',
                 email:'testing@gmail.com',
                 password:'testing',
