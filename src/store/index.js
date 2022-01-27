@@ -3,8 +3,6 @@ import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import auth from './auth'
 
-// import example from './module-example'
-
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation;

@@ -32,7 +32,7 @@
                     <div class="row justify-between q-mt-md">
                         <div class="col-4">
                             <label for="userid" class="font-normal">User ID</label>
-                            <q-input v-model="user.userid" dense outlined id="userid" class="q-mb-md" 
+                            <q-input v-model="me.user_id" dense outlined id="userid" class="q-mb-md" 
                             hide-bottom-space
                             placeholder="User ID"
                             >
@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-7">
                             <label for="fullname" class="font-normal">Full Name</label>
-                            <q-input v-model="user.fullname" dense outlined id="fullname" class="q-mb-md" 
+                            <q-input v-model="me.full_name" dense outlined id="fullname" class="q-mb-md" 
                             hide-bottom-space
                             placeholder="Full Name"
                             lazy-rules
@@ -62,12 +62,12 @@
                         </div>
                         <div class="col-12">
                             <label for="email" class="font-normal">Email Address</label>
-                            <q-input v-model="user.email" dense outlined id="email" class="q-mb-md" type="email"
+                            <q-input v-model="me.email" dense outlined id="email" class="q-mb-md" type="email"
                             lazy-rules
                             hide-bottom-space
                             placeholder="your.name@gmail.com"
                             :rules="[
-                            (val) => (val && val.length > 0) || 'Email tidak boleh kosong',val => validemail(val)
+                            (val) => (val && val.length > 0) || 'Email tidak boleh kosong'
                             ]"
                             >
                                 <template v-slot:append>
@@ -79,7 +79,7 @@
                         </div>
                         <div class="col-12">
                             <label for="username" class="font-normal">Username</label>
-                            <q-input v-model="user.username" dense outlined id="username" class="q-mb-md" 
+                            <q-input v-model="me.username" dense outlined id="username" class="q-mb-md" 
                             lazy-rules
                             placeholder="username"
                             hide-bottom-space
@@ -94,9 +94,9 @@
                                 </template>
                             </q-input>
                         </div>
-                        <div class="col-12">
+                        <!-- <div class="col-12">
                             <label for="password" class="font-normal">Password</label>
-                            <q-input v-model="user.password"  dense outlined id="password" :type="visibility ? 'password' : 'text'" class="q-mb-md"
+                            <q-input v-model="me.password"  dense outlined id="password" :type="visibility ? 'password' : 'text'" class="q-mb-md"
                             lazy-rules
                             placeholder="password"
                             hide-bottom-space
@@ -112,17 +112,17 @@
                                 />
                                 </template>
                             </q-input>
-                        </div>
-                        <div class="col-12">
+                        </div> -->
+                        <!-- <div class="col-12">
                             <label for="email" class="font-normal">User Level</label>
-                            <q-select  outlined dense v-model="user.role" :options="optrole" placeholder="user level"  lazy-rules hide-bottom-space class="q-mb-md"
+                            <q-select  outlined dense v-model="me.role" :options="optrole" placeholder="user level"  lazy-rules hide-bottom-space class="q-mb-md"
                                 :rules="[
                                     val => val !== null && val !== '' || 'User Level tidak boleh kosong',
                                 ]"/>
-                        </div>
-                        <div class="col-6">
+                        </div> -->
+                        <!-- <div class="col-6">
                             <label for="kode_depo" class="font-normal">Kode Depo</label>
-                            <q-select  outlined dense v-model="user.depo" :options="optdepo"  lazy-rules hide-bottom-space class="q-mb-md" id="kode_depo"
+                            <q-select  outlined dense v-model="me.depo" :options="optdepo"  lazy-rules hide-bottom-space class="q-mb-md" id="kode_depo"
                                 :rules="[
                                     val => val !== null && val !== '' || 'Kode Depo tidak boleh kosong',
                                 ]">
@@ -130,7 +130,7 @@
                         </div>
                         <div class="col-5">
                             <label for="nama_depo" class="font-normal">Nama Depo</label>
-                            <q-input v-model="user.nama_depo"  dense outlined id="nama_depo" class="q-mb-md"
+                            <q-input v-model="me.nama_depo"  dense outlined id="nama_depo" class="q-mb-md"
                             lazy-rules
                             hide-bottom-space
                             :rules="[
@@ -146,7 +146,7 @@
                         </div>
                         <div class="col-6">
                             <label for="kode_distributor" class="font-normal">Kode Distributor</label>
-                            <q-select  outlined dense v-model="user.distributor" :options="optdistributor"  lazy-rules hide-bottom-space class="q-mb-md" id="kode_distributor"
+                            <q-select  outlined dense v-model="me.distributor" :options="optdistributor"  lazy-rules hide-bottom-space class="q-mb-md" id="kode_distributor"
                                 :rules="[
                                     val => val !== null && val !== '' || 'Kode Depo tidak boleh kosong',
                                 ]">
@@ -154,7 +154,7 @@
                         </div>
                         <div class="col-5">
                             <label for="nama_distributor" class="font-normal">Nama Distributor</label>
-                            <q-input v-model="user.nama_distributor"  dense outlined id="nama_distributor" class="q-mb-md"
+                            <q-input v-model="me.nama_distributor"  dense outlined id="nama_distributor" class="q-mb-md"
                             lazy-rules
                             hide-bottom-space
                             :rules="[
@@ -167,7 +167,7 @@
                                 />
                                 </template>
                             </q-input>
-                        </div>
+                        </div> -->
                     </div>
                 </q-card-section>
                 <q-card-actions align="right" class="q-px-lg q-pb-lg">
@@ -182,22 +182,13 @@
 export default {
     data(){
         return{
-            user:{
-                userid:'00435',
-                fullname:'John Doe',
-                email:'johndoe@gmail.com',
-                username:'johndoe',
-                role:'Head Office',
-                optrole:['Head Office','Depot','Distributor','Super Admin'],
-                depo:'0234',
-                optdepo:['0234','2342','5435'],
-                nama_depo:'PT.lorem ipsum doreum',
-                distributor:'j5345',
-                optdistributor:['j5345','r343','3g456'],
-                nama_distributor:'PT.llorwmdsdf',
-                password:'password',
-            },
-            visibility:true
+            visibility:true,
+            me:''
+        }
+    },
+    mounted(){
+        this.me = {
+            ...this.$store.state.auth.user
         }
     }
 }

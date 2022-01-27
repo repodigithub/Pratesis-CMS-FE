@@ -69,7 +69,7 @@ export default {
         return{
             visibility: true,
             user:{
-                email:'testing@gmail.com',
+                email:'test3@gmail.com',
                 password:'testing'
             },
             error:false,

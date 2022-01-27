@@ -36,6 +36,7 @@ export default{
             .then(valid=>{
                 this.error = ''
                 if(valid){
+                    
                     this.load = true
                     this.btndisabled = true
                     let newData = {
@@ -48,6 +49,9 @@ export default{
                     .then(()=>{
                         this.load = false
                         this.btndisabled = false
+                        if(action === 'auth/register') {
+                            this.rsuccess = true
+                        }
                     })
                     .catch(error=>{
                         this.error = error.response.data.message

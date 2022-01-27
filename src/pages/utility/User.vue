@@ -17,7 +17,7 @@
     </div>
     <div class="row q-pa-lg">
         <div class="col-12">
-            <q-card class="own-card q-mb-lg" flat >
+            <q-card class="own-card q-mb-lg" flat v-if="dtabel === 'DataUser'">
                 <q-card-section class="row items-end q-px-md">
                     <div class="col-5">
                         <div class="font-normal">Pencarian :</div>
@@ -64,11 +64,16 @@
                         <div class="col-2 font-medium">
                             Administrator
                         </div>
-                            <q-btn color="secondary" label="Add User" no-caps unelevated/>
+                            <q-btn color="secondary" label="Add User" no-caps unelevated v-if="dtabel === 'DataUser'"/>
                     </div>
-                    <q-btn :color="dtabel === 'DataUser' ? 'black' : 'primary'" label="Data User" no-caps flat :class="dtabel === 'DataUser' ? 'btnMenu' : ''" @click="dtabel = 'DataUser'"/>
-                    <q-btn :color="dtabel === 'RequestData' ? 'black' : 'primary'" label="Request Data" no-caps flat :class="dtabel === 'RequestData' ? 'btnMenu' : ''" @click="dtabel = 'RequestData'"/>
-                    <component :is="dtabel" class="q-mt-lg"/>
+                    <div class="row">
+                        <div class="d">
+                            <q-btn :color="dtabel === 'DataUser' ? 'black' : 'primary'" label="Data User" no-caps flat :class="dtabel === 'DataUser' ? 'btnMenu' : ''" @click="dtabel = 'DataUser'"/>
+                            <q-btn :color="dtabel === 'RequestData' ? 'black' : 'primary'" label="Request Data" no-caps flat :class="dtabel === 'RequestData' ? 'btnMenu' : ''" @click="dtabel = 'RequestData'"/>
+                        </div>
+                        <q-space />
+                        <component :is="dtabel" class="q-mt-lg"/>
+                    </div>
                 </q-card-section>
             </q-card>
         </div>
@@ -77,11 +82,13 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
+import DataUser from 'components/User/DataUser.vue'
+import RequestData from 'components/User/RequestData.vue'
+
 export default {
     components:{
-        DataUser: defineAsyncComponent(() => import('components/User/Datauser')),
-        RequestData: defineAsyncComponent(() => import('components/User/RequestData')),
+        DataUser,
+        RequestData,
     },
     data(){
         return{
@@ -91,9 +98,11 @@ export default {
             kode:'Kode Pengguna',
             optkode:['Kode Pengguna','Nama Pengguna'],
             status:'one',
-            dtabel:'DataUser'
+            dtabel:'DataUser',
+            
         }
-    }
+    },
+    
 }
 </script>
 

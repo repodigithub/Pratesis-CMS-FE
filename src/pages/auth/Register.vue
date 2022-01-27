@@ -95,17 +95,14 @@
                 </div>
                 <div class="col-12">
                     <label for="email" class="font-normal">User Level</label>
-                    <q-select  outlined dense v-model="user.role" :options="optrole" placeholder="user level"  lazy-rules hide-bottom-space class="q-mb-md"
+                    <q-select  outlined dense v-model="user.user_level" :options="optrole" placeholder="user level"  lazy-rules hide-bottom-space class="q-mb-md"
                         :rules="[
                             val => val !== null && val !== '' || 'User Level tidak boleh kosong',
                         ]"/>
                 </div>
                 <div class="col-6">
                     <label for="kode_depo" class="font-normal">Kode Depo</label>
-                    <q-select  outlined dense v-model="user.kode_area" :options="optdepo"  lazy-rules hide-bottom-space class="q-mb-md"  id="kode_depo"
-                        :rules="[
-                            val => val !== null && val !== '' || 'Kode Depo tidak boleh kosong',
-                        ]">
+                    <q-select  outlined dense v-model="user.kode_area" :options="optdepo"  lazy-rules hide-bottom-space class="q-mb-md"  id="kode_depo">
                     </q-select>
                 </div>
                 <div class="col-5">
@@ -123,10 +120,7 @@
                 </div>
                 <div class="col-6">
                     <label for="kode_distributor" class="font-normal">Kode Distributor</label>
-                    <q-select  outlined dense v-model="user.kode_distributor" :options="optdistributor"  lazy-rules hide-bottom-space class="q-mb-md"  id="kode_distributor"
-                        :rules="[
-                            val => val !== null && val !== '' || 'Kode Distributor tidak boleh kosong',
-                        ]">
+                    <q-select  outlined dense v-model="user.kode_distributor" :options="optdistributor" hide-bottom-space class="q-mb-md"  id="kode_distributor">
                     </q-select>
                 </div>
                 <div class="col-5">
@@ -167,28 +161,32 @@
             <q-btn flat no-caps class="text-primary text-bold" label="Login" @click="$router.push('/login')"/>
         </div>
     </div>
+    <rsuccess v-model:rsuccess="rsuccess" v-if="rsuccess"/>
 </template>
 
 <script>
 import mixin from 'src/common/mixin'
 import { VueRecaptcha } from 'vue-recaptcha';
+import Rsuccess from './Rsuccess.vue';
 export default {
     mixins:[mixin],
     components:{
-        VueRecaptcha
+        VueRecaptcha,
+        Rsuccess
     },
     data(){
         return{
             visibility: true,
             user:{
-                user_id:'34sf',
+                user_id:'grtb',
                 full_name:'testing',
-                username:'testing',
-                email:'testing@gmail.com',
+                username:'test7',
+                email:'tes7@gmail.com',
                 password:'testing',
-                role:'Head Office',
-                kode_distributor:'002',
-                kode_area:'001',
+                user_level:'Head Office',
+                kode_distributor:null,
+                kode_area:null,
+                kode_group:null
             },
             error:false,
             load:false,
@@ -198,7 +196,8 @@ export default {
             optdepo:['001','002','003'],
             optdistributor:['001','002','003'],
             nama_depo:'dummy',
-            nama_distributor:'dummy'
+            nama_distributor:'dummy',
+            rsuccess:false
         }
     },
     methods:{

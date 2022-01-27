@@ -14,7 +14,10 @@ const routes = [
       { path: 'region',name:'Region', component: () => import('pages/master/Region.vue') },
       { path: 'user',name:'User', component: () => import('pages/utility/User.vue') },
       { path: 'ubahprofil',name:'Ubah Profil', component: () => import('pages/laporan/UbahProfil.vue') },
-    ]
+    ],
+    meta:{
+      requireAuth:true,
+    }
   },
   {
     path:'/auth',

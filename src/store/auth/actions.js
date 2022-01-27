@@ -1,12 +1,12 @@
 import { api,header } from 'boot/axios'
 export function login(context,payload) {
     return new Promise((resolve,reject) =>{
-        api.post('login',payload)
+        api.post('auth/login',payload)
         .then(response=>{
             context.commit('setLogin',response.data.data)
-            api.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.data.access_token
+            api.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.data.token
             resolve(response)
-            this.$router.push('/overview')
+            this.$router.push({name : 'Overview'})
         })
         .catch(error=>{
             reject(error)

@@ -17,7 +17,7 @@ const header = token => {
     return config
 }
 
-export default boot(({ app }) => {
+export default boot(({ app,store,redirect }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
   app.config.globalProperties.$axios = axios
@@ -25,6 +25,18 @@ export default boot(({ app }) => {
   //       so you won't necessarily have to import axios in each vue file
 
   app.config.globalProperties.$api = api
+
+  api.interceptors.response.use(response =>{
+    return response
+  },error =>{
+    if(error.response.status === 401){
+      store.dispatch('auth/logout')
+      // store.dispatch('myprofil/logout')
+      delete api.defaults.headers.common['Authorization']
+      redirect({path:'/login'})  
+    }
+    return Promise.reject(error)
+  })
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
 })
