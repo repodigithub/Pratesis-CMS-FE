@@ -105,7 +105,7 @@ components: {
     }
   },
   mounted(){
-    if(this.$route.name === 'User'){
+    if(this.$route.meta.master){
       if(Object.keys(this.masterexpand).length < 0){
         this.masterexpand = {
           1 : true
@@ -113,8 +113,7 @@ components: {
       }else{
         this.masterexpand[1] = true
       }
-    }
-    else if(this.$route.name === 'Ubah Profil'){
+    }else  if(this.$route.meta.utility){
       if(Object.keys(this.masterexpand).length < 0){
         this.masterexpand = {
           2 : true
@@ -122,8 +121,24 @@ components: {
       }else{
         this.masterexpand[2] = true
       }
+    }else if(this.$route.meta.laporan){
+      if(Object.keys(this.masterexpand).length < 0){
+        this.masterexpand = {
+          3 : true
+        }
+      }else{
+        this.masterexpand[3] = true
+      }
     }
-
+    if(this.$route.meta.salesh){
+      if(Object.keys(this.submenuexpand).length < 0){
+        this.submenuexpand = {
+          0 : true
+        }
+      }else{
+        this.submenuexpand[0] = true
+      }
+    }
   },
     computed:{
         activesubmenu(){

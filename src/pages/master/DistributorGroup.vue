@@ -2,7 +2,7 @@
 <q-page>
       <Breadcrumb>
         <template v-slot:leftside>
-            <q-breadcrumbs-el label="Region" style="color:#00000073;"  />
+            <q-breadcrumbs-el label="Distributor Group" style="color:#00000073;"  />
         </template>
         <template v-slot:rightside>
             <q-btn color="secondary" outline no-caps unelevated class="btn-one q-mr-lg" >

@@ -10,9 +10,12 @@
             v-model:pagination="pagination"
             @request="onRequest"
             :loading="loading"
+            :filter="filter"
             binary-state-sort
         >
-        
+        <template v-slot:loading>
+          <q-inner-loading showing color="primary" />
+        </template>
     </q-table>
 </template>
 
@@ -23,18 +26,17 @@ const columns = [
     required: true,
     label: 'Kode Group',
     align: 'left',
-    field: row => 'Ad',
-    format: val => `${val}`,
+    field: 'kode_group',
     sortable: true
   },
   { name: 'name', align: 'left', label: 'Nama', field: 'full_name', sortable: true },
   { name: 'email',  align: 'left',label: 'Email', field: 'email', sortable: true },
 ]
 import { useStore } from 'vuex'
-import { useApi } from 'src/composeables/useApi'
+import { usePratesis } from 'src/composeables/usePratesis'
 export default {
     setup(){
-      const { pagination,rows,loading,init,onRequest } = useApi()
+      const { pagination,rows,loading,init,onRequest } = usePratesis()
       const store = useStore()
       init('user',{
         status: 'approve',
@@ -48,6 +50,8 @@ export default {
           pagination,
       }
     },
+    inject:['filter'],
+
 }
 </script>
 

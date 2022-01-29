@@ -1,19 +1,10 @@
 <template>
 <q-page class="q-pb-lg">
-    <div class="row ">
-        <q-card flat class="col-12">
-            <q-card-section class="q-py-sm">
-                <div class="row justify-between">
-                    <q-breadcrumbs>
-                        <!-- <q-breadcrumbs-el icon="home" to="/" />
-                        <q-breadcrumbs-el label="Docs" icon="widgets"  />
-                        <q-breadcrumbs-el label="Breadcrumbs" icon="navigation" /> -->
-                        <q-breadcrumbs-el label="Ubah Profil" style="color:#00000073;"  />
-                    </q-breadcrumbs>
-                </div>
-            </q-card-section>
-        </q-card>
-    </div>
+    <Breadcrumb>
+        <template v-slot:leftside>
+            <q-breadcrumbs-el label="Ubah Profil" style="color:#00000073;"  />
+        </template>
+    </Breadcrumb >
     <div class="row justify-center">
         <div class="col-12">
             <q-img
@@ -171,7 +162,7 @@
                     </div>
                 </q-card-section>
                 <q-card-actions align="right" class="q-px-lg q-pb-lg">
-                    <q-btn label="Save" no-caps color="secondary" unelevated padding="9px 16px"/>
+                    <q-btn label="Save" no-caps color="secondary" unelevated padding="9px 16px" @click="onSave"/>
                 </q-card-actions>
             </q-card>
     </div>
@@ -179,18 +170,46 @@
 </template>
 
 <script>
+import { useQuasar } from 'quasar'
+import { api,header } from 'boot/axios'
+import { useStore } from 'vuex'
+import { ref,onMounted } from 'vue'
+import { defineAsyncComponent } from 'vue'
 export default {
+    setup(){
+        const store = useStore()
+        const quasar = useQuasar()
+        const me = ref({})
+        function onSave(){
+            quasar.loading.show({
+                message: 'Menyimpan Data User. Please wait...',
+                boxClass: 'bg-grey-2 text-grey-9',
+                spinnerColor: 'primary'
+            })
+            api.put(`user/${me.value.id}`,me.value,header(store.state.auth.token))
+            .then(res=>{
+                console.log("respose",res)
+                quasar.loading.hide()
+            })
+            .catch(err=>console.log("err",err))
+        }
+        onMounted(()=>{
+            me.value = {...store.state.auth.user}
+        })
+        return {
+            me,
+            onSave
+        }
+    },
+    components:{
+        Breadcrumb: defineAsyncComponent(() => import('components/Breadcrumb')),
+    },
     data(){
         return{
             visibility:true,
-            me:''
         }
     },
-    mounted(){
-        this.me = {
-            ...this.$store.state.auth.user
-        }
-    }
+  
 }
 </script>
 

@@ -27,6 +27,9 @@
 .grey1{
     color: $grey;
 }
+.grey2{
+    color: $grey2;
+}
 .grey4{
     background: $grey4;
 }
@@ -67,5 +70,31 @@
 }
 // Table
 
+.btn-one {
+    padding:9px 16px;
+}
+.btn-two {
+    padding:4px 10px;
+}
 
-
+.option-one .q-field__inner .q-field__control {
+    border-top-right-radius:0;
+    border-bottom-right-radius:0;
+    .q-field__control-container .q-field__native span {
+        color:white;
+    }
+    .q-field__append i{
+        color:white;
+    }
+}
+.option-two .q-field__inner .q-field__control  {
+    border:1px solid $primary;
+    border-top-left-radius:0;
+    border-bottom-left-radius:0;
+}
+.option-three  .q-field__inner .q-field__control {
+    border:1px solid $primary;
+    .q-field__append i{
+        color:$primary;
+    }
+}

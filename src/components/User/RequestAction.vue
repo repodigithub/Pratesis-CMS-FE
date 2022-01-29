@@ -1,5 +1,5 @@
 <template>
-    <q-dialog :model-value="daction" @click="$emit('update:daction', $event.target.value)" @hide="$emit('update:daction',false)" persistent>
+    <q-dialog :model-value="daction" @click="$emit('update:daction', $event.target.value)" @hide="$emit('update:daction',false)" :persistent="actionpersistent">
         <q-card style="width:400px">
             <q-card-section class="row items-center">
                 <div class="text-h6 col-12">{{ action }} data</div>
@@ -24,7 +24,7 @@
 <script>
 export default {
     props:['daction','action','dload',
-        'ddisabled'],
+        'ddisabled','actionpersistent'],
     methods:{
         onLoad(){
             this.$parent.onApproval()

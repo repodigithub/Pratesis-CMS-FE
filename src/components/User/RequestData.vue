@@ -1,7 +1,7 @@
 <template>
     <div v-if="multiple">
-      <q-btn color="secondary" icon="close" label="Reject" no-caps @click.stop="onMultiple(selected,'reject')" unelevated class="q-mr-lg q-px-sm" />
-      <q-btn color="positive" icon="check" label="Approve" no-caps @click.stop="onMultiple(selected,'approve')" unelevated class="q-px-sm"/>
+      <q-btn color="secondary" icon="close" label="Reject" no-caps @click.stop="onClick(selected,'reject')" unelevated class="q-mr-lg q-px-sm" />
+      <q-btn color="positive" icon="check" label="Approve" no-caps @click.stop="onClick(selected,'approve')" unelevated class="q-px-sm"/>
     </div>
     <q-table
             class="my-sticky-header-table q-mt-md btn-radius col-12"
@@ -18,12 +18,15 @@
             :selected-rows-label="getSelectedString"
             selection="multiple"
             v-model:selected="selected"
-            @row-click="drequest = true"
+            @row-click="onDetail"
         >
+        <template v-slot:loading>
+          <q-inner-loading showing color="primary" />
+        </template>
         <template v-slot:body-cell-action="props">
           <q-td key="action" :props="props">
-              <q-btn color="secondary" icon="close" label="Reject" no-caps @click.stop="onClick(props.row.id,'reject')" unelevated class="q-mr-lg q-px-sm" />
-              <q-btn color="positive" icon="check" label="Approve" no-caps @click.stop="onClick(props.row.id,'approve')" unelevated class="q-mr-lg q-px-sm"/>
+              <q-btn color="secondary" icon="close" label="Reject" no-caps @click.stop="onClick(props.row.id,'reject')" unelevated class="q-mr-lg btn-two"/>
+              <q-btn color="positive" icon="check" label="Approve" no-caps @click.stop="onClick(props.row.id,'approve')" unelevated class="q-mr-lg btn-two"/>
           </q-td>
         </template>
         <template v-slot:body-cell-requestdate="props">
@@ -32,8 +35,8 @@
           </q-td>
         </template>
     </q-table>
-    <RequestDetail v-model:drequest="drequest" v-if="drequest" />
-    <RequestAction v-model:daction="daction" v-if="daction" v-model:dload="dload" v-model:ddisabled="ddisabled" :action="action"/>
+    <RequestDetail v-model:drequest="drequest" v-if="drequest" v-model:dataDetail="dataDetail"/>
+    <RequestAction v-model:daction="daction" v-if="daction" v-model:dload="dload" v-model:ddisabled="ddisabled" :action="action" v-model:actionpersistent="actionpersistent"/>
 </template>
 
 <script>
@@ -52,21 +55,24 @@ const columns = [
   { name: 'action',  align: 'left',label: 'Actions', field: 'id'},
 ]
 import { useStore } from 'vuex'
-import { useApi } from 'src/composeables/useApi'
+import { usePratesis } from 'src/composeables/usePratesis'
 import RequestDetail from './RequestDetail.vue'
 import RequestAction from './RequestAction.vue'
-import { date } from 'quasar'
 import { ref} from 'vue'
 import { api,header } from 'boot/axios'
+import { useRequestDetail } from 'src/composeables/useRequestDetail'
+
 export default {
     components:{
       RequestDetail,
       RequestAction
     },
     setup(){
-      const { pagination,rows,loading,init,onRequest} = useApi()
+      const { pagination,rows,loading,init,onRequest, successNotif, formatTgl} = usePratesis()
+      const { drequest,onDetail,dataDetail } = useRequestDetail()
       const store = useStore()
       const token = store.state.auth.token
+      const actionpersistent = ref(false)
       init('user',{
         status: 'pending',
         token: token
@@ -84,16 +90,6 @@ export default {
         }
         
       }
-      function onMultiple(index,act){
-        daction.value = true
-        action.value = act
-        let id = []
-        index.forEach((item) => {
-          id.push(item.id)
-        })
-        send.value.ids = id
-        send.value.action = act
-      }
 
       const daction = ref(false)
       const dload = ref(false)
@@ -107,7 +103,14 @@ export default {
         daction.value = true
         action.value = act
         let id = []
-        id.push(index)
+        if(Array.isArray(index)){
+          index.forEach((item) => {
+              id.push(item.id)
+            
+          })
+        }else{
+          id.push(index)
+        }
         send.value.ids = id
         send.value.action = act
       }
@@ -115,18 +118,30 @@ export default {
       function onApproval(){
         dload.value = true
         ddisabled.value = true
+        actionpersistent.value = true
         api.post('user/action',send.value,header(token))
         .then(()=>{
           dload.value = false
           ddisabled.value = false
+          actionpersistent.value = false
           daction.value = false
-          onRequest({filter:undefined,pagination:pagination.value})
+          init('user',{
+            status: 'pending',
+            token: token
+          })
           multiple.value = false
+          drequest.value = false
+          selected.value = []
+          successNotif(`User Berhasil di ${action.value}`)
         })
         .catch(err=>{
           dload.value = false
           ddisabled.value = false
+          actionpersistent.value = false
           daction.value = false
+          multiple.value = false
+          drequest.value = false
+          selected.value = []
         })
       }
       return {
@@ -144,33 +159,16 @@ export default {
           onApproval,
           selected,
           getSelectedString,
-          onMultiple,
-          multiple 
+          multiple ,
+          drequest,
+          onDetail,
+          dataDetail,
+          actionpersistent,
+          successNotif,
+          formatTgl
       }
     },
-    data(){
-      return{
-        drequest:false,
-      }
-    },
-    methods:{
-      onLoading(){
-        this.dload = true
-        this.ddisabled = true
-        setTimeout(() => {
-          this.dload = false
-          this.ddisabled = false
-          console.log("send data",this.send)
-        }, 2000);
-      },
-      onDetail(index){
-        console.log("index",index)
-        this.drequest = true
-      },
-      formatTgl(tgl){
-        return date.formatDate(tgl,'DD/MM/YY')
-      }
-    },
+   
 }
 </script>
 

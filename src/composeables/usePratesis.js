@@ -1,6 +1,7 @@
 import {toRefs, ref, reactive} from 'vue'
 import { api,header } from 'boot/axios'
-export const useApi = () => {
+import { useQuasar,date } from 'quasar'
+export const usePratesis = () => {
     const rows = ref([])
     const state =   reactive({
         error:null,
@@ -12,6 +13,10 @@ export const useApi = () => {
         page:1,
         rowsPerPage:2,
         rowsNumber:1
+    })
+    const filter = ref({
+        kode_pengguna : 1,
+        kode_group:1
     })
     const Response = {
         success : res => {
@@ -30,12 +35,12 @@ export const useApi = () => {
     const init = async (url,option) => {
         state.loading = true
         state.option = option
+        state.url = url
         const { token,status } = option
         if(status){
-            state.url = `${url}?status=${status}`
-        }else{
-            state.url = url
+            state.url += `?status=${status}`
         }
+
         await api.get(`${state.url}`,header(token))
         .then(res=>{
             Response.success(res)
@@ -48,14 +53,27 @@ export const useApi = () => {
     const onRequest = request => {
         state.loading = true
         const {page, rowsPerPage}  = request.pagination
+        let filter  = ''
+        if(request.filter){
+            filter = request.filter.value
+        }
+       
         const { token,status } = state.option
         let paginate = ''
-        if(status){
-            paginate = `&limit=${rowsPerPage}&page=${page}`
-        }else{
-            paginate = `?limit=${rowsPerPage}&page=${page}`
+        let filterKey = ''
+        if(filter.kode_group){
+            filterKey += `&kode_group=${filter.kode_group}`
         }
-        api.get(state.url + paginate,header(token))
+        if(filter.kode_pengguna){
+            filterKey += `&kode_pengguna=${filter.kode_pengguna}`
+        }
+        if(status){
+            paginate += `&`
+        }else{
+            paginate += `?`
+        }
+            paginate += `limit=${rowsPerPage}&page=${page}`
+        api.get(state.url + paginate + filterKey,header(token))
         .then(res=>{
             Response.success(res)
         })
@@ -63,6 +81,20 @@ export const useApi = () => {
             Response.error(err)
         })
     }
+
+    const notif = useQuasar()
+    const successNotif = msg => {
+        notif.notify({
+            message: msg,
+            icon:'check',
+            type: 'positive',
+            position: 'top-right',
+            progress: true
+        })
+    }
+    const formatTgl = tgl => {
+        return date.formatDate(tgl,'DD/MM/YY')
+    }
     
-    return {rows,...toRefs(state),pagination,Response,init,onRequest}
+    return {rows,...toRefs(state),pagination,filter,Response,init,onRequest,successNotif,formatTgl}
 }
