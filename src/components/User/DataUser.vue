@@ -27,9 +27,10 @@ const columns = [
     label: 'Kode Group',
     align: 'left',
     field: 'kode_group',
-    sortable: true
+    sortable: true,
+    style:'width:196px'
   },
-  { name: 'name', align: 'left', label: 'Nama', field: 'full_name', sortable: true },
+  { name: 'name', align: 'left', label: 'Nama', field: 'full_name', sortable: true,style:'width:196px' },
   { name: 'email',  align: 'left',label: 'Email', field: 'email', sortable: true },
 ]
 import { useStore } from 'vuex'

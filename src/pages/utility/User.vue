@@ -22,7 +22,7 @@
                     <div >
                         <div class="font-normal">Pencarian :</div>
                         <div class="row">
-                            <q-select v-model="kode" :options="optkode" dense outlined bg-color="primary" dropdown-icon="expand_more" class="option-one" />
+                            <q-select v-model="dataFilter.kode_pengguna" :options="optkode_pengguna" dense outlined emit-value  map-options bg-color="primary" dropdown-icon="expand_more" class="option-one" />
                             <q-input v-model="text" placeholder="Ex: ASM Medan" dense outlined class="option-two">
                                 <template v-slot:append>
                                     <q-icon
@@ -35,11 +35,12 @@
                     </div>
                     <div class=" q-ml-md">
                         <div class="font-normal">Group Pengguna :</div>
-                        <q-select v-model="role" :options="optrole" dense outlined dropdown-icon="expand_more" class="option-three "/>
+                        <q-select v-model="dataFilter.kode_group" :options="optkode_group"  emit-value  map-options dense outlined dropdown-icon="expand_more" class="option-three "/>
                     </div>
                     
                     <div class=" q-ml-md">
-                        <q-btn :color="reset ? 'negative' :'primary'" :label="reset ? 'Reset' : 'Apply'" no-caps unelevated class="btn-one" @click="onFilter"/>
+                        <q-btn color="primary" label="Apply" no-caps unelevated class="btn-one q-mr-md" @click="onFilter(dataFilter)" />
+                        <q-btn color="negative" label="Reset" no-caps unelevated class="btn-one" @click="onReset" v-if="resetFilter"/>
                     </div>
                 </q-card-section>
             </q-card>
@@ -71,38 +72,76 @@
 import DataUser from 'components/User/DataUser.vue'
 import RequestData from 'components/User/RequestData.vue'
 import { usePratesis } from 'src/composeables/usePratesis'
-import { provide,ref } from 'vue'
+import { provide,ref, defineAsyncComponent } from 'vue'
 import AddUser from 'components/User/AddUser.vue'
-import { defineAsyncComponent } from 'vue'
+import { useStore } from 'vuex'
 export default {
     setup(){
-        const { filter } = usePratesis()
-        const kode = ref(2)
-        const role = ref(2)
-        const reset = ref(false)
-        function onFilter(){
-            if(reset.value){
-                filter.value = {}
-                kode.value = 'Kode Pengguna'
-                role.value = 'Head Office'
-                reset.value = false
-            }else{
-                filter.value = {
-                    kode_pengguna : kode.value,
-                    kode_group : role.value
-                }
-                reset.value = true
+        const { filter, getData,resetFilter,onFilter,
+            onResetFilter
+         } = usePratesis()
+        const store = useStore()
+        const dataFilter = ref({})
+        dataFilter.value.kode_pengguna = null
+        dataFilter.value.kode_group = null
+        const optkode_pengguna = ref([
+            {
+                label : 'Kode Pengguna',
+                value : null
             }
+        ])
+        const datakode_pengguna = ref([])
+        getData('area',store.state.auth.token)
+        .then(res=>{
+            res.data.data.forEach((item)=>{
+                optkode_pengguna.value.push({
+                    label :item.kode_area,
+                    value :item.kode_area,
+                })
+            })
+            datakode_pengguna.value = res.data.data
+            console.log("data area",res.data.data)
+        })
+        .catch(err=>{
+            console.log("error",err)
+        })
+
+        const optkode_group = ref([
+            {
+                label : 'Group Pengguna',
+                value : null
+            }
+        ])
+        getData('usergroup',store.state.auth.token)
+        .then(res=>{
+            res.data.data.forEach((item)=>{
+                optkode_group.value.push({
+                    label : item.nama_group,
+                    value: item.kode_group
+                })
+            })
+            console.log("data usergroup",res.data.data)
+        })
+        .catch(err=>{
+            console.log("error",err)
+        })
+
+        function onReset(){
+            onResetFilter()
+            dataFilter.value.kode_pengguna = null
+            dataFilter.value.kode_group = null
         }
+
         provide('filter',filter)
         return {
             filter,
-            optkode:['Kode Pengguna',1,2,3],
-            optrole:['Head Office',1,2,3,4],
-            kode,
-            role,
+            optkode_pengguna,
+            optkode_group,
+            getData,
+            resetFilter,
             onFilter,
-            reset
+            onReset,
+            dataFilter
         }
     },
     components:{

@@ -8,19 +8,19 @@
             </q-card-section>
             <q-card-section class=" q-pb-none">
                 <label for="user_id">User ID</label>
-                <q-input v-model="send.user_id" type="text" id="user_id"  outlined />
+                <q-input v-model="send.user_id" type="text" id="user_id"  outlined dense/>
             </q-card-section>
             <q-card-section class=" q-pb-none">
                 <label for="full_name">Full Name</label>
-                <q-input v-model="send.full_name" type="text" id="full_name"  outlined />
+                <q-input v-model="send.full_name" type="text" id="full_name"  outlined dense/>
             </q-card-section>
             <q-card-section class=" q-pb-none">
                 <label for="email">Email</label>
-                <q-input v-model="send.email" type="text" id="email"  outlined />
+                <q-input v-model="send.email" type="text" id="email"  outlined dense/>
             </q-card-section>
-            <q-card-section class=" q-pb-none">
+            <q-card-section >
                 <label for="username">Username</label>
-                <q-input v-model="send.username" type="text" id="username"  outlined />
+                <q-input v-model="send.username" type="text" id="username"  outlined dense/>
             </q-card-section>
             <q-card-actions align="between">
                 <q-btn color="secondary" label="Batal"  no-caps unelevated outline v-close-popup class="btn-one"/>

@@ -42,11 +42,22 @@
             </q-card>
             <q-card class="own-card" flat>
                 <q-card-section>
-                    <div class="text-h6">Our Changing Planet</div>
-                    <div class="text-subtitle2">by John Doe</div>
-                </q-card-section>
-                <q-card-section>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                   <q-table
+                            class="my-sticky-header-table q-mt-md btn-radius col-12"
+                            title=""
+                            :rows="rows"
+                            :columns="columns"
+                            row-key="id"
+                            flat
+                            bordered
+                            :loading="loading"
+                            :filter="filter"
+                            binary-state-sort
+                        >
+                        <template v-slot:loading>
+                        <q-inner-loading showing color="primary" />
+                        </template>
+                    </q-table>
                 </q-card-section>
             </q-card>
         </div>
@@ -56,14 +67,35 @@
 
 <script>
 import { defineAsyncComponent,ref } from 'vue'
+const columns = [
+  {
+    name: 'kode',
+    required: true,
+    label: 'Kode Region',
+    align: 'left',
+    field: 'kode_region',
+    sortable: true
+  },
+  { name: 'region',  align: 'left',label: 'Region', field: 'region', sortable: true },
+]
+const rows = [
+    {
+        kode_region:1,
+        region:'Jakarta'
+    }
+]
 export default {
     setup(){
         const kode = ref('Kode Area')
         const search = ref('')
+        const filter = ref('')
         return {
             kode,
             search,
-            optkode:['Kode Area',1,2,3,4,5]
+            optkode:['Kode Area',1,2,3,4,5],
+            filter,
+            columns,
+            rows
         }
     },
     components:{

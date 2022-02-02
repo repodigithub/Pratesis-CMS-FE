@@ -41,7 +41,7 @@
 
 <script>
 const columns = [
-  { name: 'requestdate', align: 'left', label: 'Request Date', field: 'created_at', sortable: true },
+  { name: 'requestdate', align: 'left', label: 'Request Date', field: 'created_at', sortable: true,style:'width:96px' },
   {
     name: 'userid',
     required: true,
