@@ -91,6 +91,15 @@ export const usePratesis = () => {
             progress: true
         })
     }
+    const errorNotif = msg => {
+        notif.notify({
+            message: msg,
+            icon:'close',
+            type: 'negative',
+            position: 'top-right',
+            progress: true
+        })
+    }
     const formatTgl = tgl => {
         return date.formatDate(tgl,'DD/MM/YY')
     }
@@ -126,6 +135,7 @@ export const usePratesis = () => {
         init,
         onRequest,
         successNotif,
+        errorNotif,
         formatTgl,
         getData,
         resetFilter,

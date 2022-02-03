@@ -2,6 +2,7 @@ import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import auth from './auth'
+import uploadfile from './uploadfile'
 
 /*
  * If not building with SSR mode, you can
@@ -15,7 +16,8 @@ import auth from './auth'
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
-      auth
+      auth,
+      uploadfile
     },
     plugins: [createPersistedState()],
     // enable strict mode (adds overhead!)

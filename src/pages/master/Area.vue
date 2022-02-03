@@ -9,7 +9,7 @@
                 <q-icon name="download" style="font-size:15px;"  class="q-mr-sm"/>
                 <div>Download Template</div>
             </q-btn>
-            <q-btn color="secondary" no-caps unelevated class="btn-one" >
+            <q-btn color="secondary" no-caps unelevated class="btn-one" @click="uploadFile" >
                 <q-icon name="upload_file" style="font-size:14px;" class="q-mr-sm"/>
                 <div>Upload</div>
             </q-btn>
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <q-space />
-                        <q-btn color="primary" label="Search" no-caps unelevated class="btn-one" />
+                        <q-btn color="primary" label="Search" no-caps unelevated class="btn-one" @click="uploadFile"/>
                     </div>
                     <!-- <q-btn :color="reset ? 'negative' :'primary'" :label="reset ? 'Reset' : 'Apply'" no-caps unelevated class="btn-one" @click="onFilter"/> -->
                 </q-card-section>
@@ -52,21 +52,40 @@
                             bordered
                             :loading="loading"
                             :filter="filter"
+                            v-model:pagination="pagination"
+                            @request="onRequest"
+                            hide-pagination
                             binary-state-sort
                         >
                         <template v-slot:loading>
                         <q-inner-loading showing color="primary" />
                         </template>
                     </q-table>
+                    <div class="row justify-end q-mt-md">
+                        <q-pagination
+                            v-model="pagination.page"
+                            color="black"
+                            active-color="secondary"
+                            active-text-color="secondary"
+                            :max="pagination.rowsNumber"
+                            size="md"
+                            direction-links
+                            outline
+                           
+                            class="table-pagination"
+                        />
+                    </div>
                 </q-card-section>
             </q-card>
         </div>
     </div>
+    <UploadFile v-model:upload="upload" v-if="upload"/>
 </q-page>
 </template>
 
 <script>
 import { defineAsyncComponent,ref } from 'vue'
+import UploadFile from 'components/Modal/UploadFile'
 const columns = [
   {
     name: 'kode',
@@ -81,29 +100,22 @@ const columns = [
   { name: 'alamat_depo',  align: 'left',label: 'Alamat ', field: 'alamat_depo', sortable: true,style:'max-width:450px',classes: 'ellipsis', },
   { name: 'region',  align: 'left',label: 'Region', field: 'region', sortable: true },
 ]
-
-// const rows = [
-//     {
-//         kode_area:'E40932',
-//         nama_area:'ASM Pekan Baru',
-//         alamat_depo:' Jl. Mayor Suryotomo No.31, Ngupasan, Kec. Gondomanan, Kota Yogyakarta...Jl. Mayor Suryotomo No.31, Ngupasan, Kec. Gondomanan, Kota Yogyakarta...',
-//         region:'East'
-//     }
-// ]
+import { useStore } from 'vuex'
+import { usePratesis } from 'src/composeables/usePratesis'
 export default {
     setup(){
+        const { pagination,rows,loading,init,onRequest } = usePratesis()
+        const store = useStore()
+        init('area',{
+            token: store.state.auth.token
+        })
         const kode = ref('Kode Area')
         const search = ref('')
         const filter = ref('')
-        const rows = ref([])
-        for(let i=0; i<=30; i++){
-            let test = {
-                kode_area:`E40932e${i}`,
-                nama_area:'ASM Pekan Baru',
-                alamat_depo:' Jl. Mayor Suryotomo No.31, Ngupasan, Kec. Gondomanan, Kota Yogyakarta Jl. Mayor Suryotomo No.31, Ngupasan, Kec. Gondomanan, Kota Yogyakarta...',
-                region:'East'
-            }
-            rows.value.push(test)
+
+        const upload = ref(false)
+        function uploadFile(){
+            upload.value = true
         }
         return {
             kode,
@@ -111,12 +123,19 @@ export default {
             optkode:['Kode Area',1,2,3,4,5],
             filter,
             columns,
-            rows
+            rows,
+            pagination,
+            loading,
+            onRequest,
+            upload,
+            uploadFile
         }
     },
     components:{
         Breadcrumb: defineAsyncComponent(() => import('components/Breadcrumb')),
-    }
+        UploadFile
+    },
+    
 }
 </script>
 

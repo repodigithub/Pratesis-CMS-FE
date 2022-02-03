@@ -68,13 +68,25 @@
         color: rgba(74, 75, 104, 1);
     }
 }
+
+.table-pagination {
+    button {
+        border: 1px solid #D9D9D9;
+    }
+    div{
+        margin-right:8px;
+        button {
+            margin-left:8px;
+        }
+    }
+}
 // Table
 
 .btn-one {
-    padding:9px 16px;
+    padding:9px 16px !important;
 }
 .btn-two {
-    padding:4px 10px;
+    padding:4px 10px !important;
 }
 
 .option-one .q-field__inner .q-field__control {
@@ -97,4 +109,16 @@
     .q-field__append i{
         color:$primary;
     }
+}
+
+.box-upload{
+    height:250px;
+    width:400px;
+    border:2px dashed $primary;
+    &:hover{
+        cursor:pointer;
+    }
+}
+.input-upload:hover {
+    cursor:pointer;
 }

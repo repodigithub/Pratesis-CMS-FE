@@ -12,11 +12,27 @@
             :loading="loading"
             :filter="filter"
             binary-state-sort
+            hide-pagination
         >
         <template v-slot:loading>
           <q-inner-loading showing color="primary" />
         </template>
     </q-table>
+    <div class="col-12 row justify-end q-mt-md">
+      <q-pagination
+        v-model="pagination.page"
+        color="black"
+        active-color="secondary"
+        active-text-color="secondary"
+        :max="pagination.rowsNumber"
+        size="md"
+        direction-links
+        outline
+        :max-pages="6"
+        boundary-numbers
+        class="table-pagination"
+      />
+    </div>
 </template>
 
 <script>
