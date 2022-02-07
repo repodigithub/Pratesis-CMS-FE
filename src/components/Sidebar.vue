@@ -139,6 +139,15 @@ components: {
         this.submenuexpand[0] = true
       }
     }
+    if(this.$route.meta.producth){
+      if(Object.keys(this.submenuexpand).length < 0){
+        this.submenuexpand = {
+          1 : true
+        }
+      }else{
+        this.submenuexpand[1] = true
+      }
+    }
   },
     computed:{
         activesubmenu(){

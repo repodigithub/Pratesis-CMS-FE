@@ -2,7 +2,7 @@
 <q-page>
       <Breadcrumb>
         <template v-slot:leftside>
-            <q-breadcrumbs-el label="Document Claim" style="color:#00000073;"  />
+            <q-breadcrumbs-el label="Pajak" style="color:#00000073;"  />
         </template>
         <template v-slot:rightside>
             <q-btn color="secondary" outline no-caps unelevated class="btn-one q-mr-lg" >
@@ -79,7 +79,7 @@
             </q-card>
         </div>
     </div>
-    <UploadFile v-model:upload="modalUpload" v-if="modalUpload" menu="document-claim"/>
+    <UploadFile v-model:upload="modalUpload" v-if="modalUpload" menu="pajak"/>
 </q-page>
 </template>
 
@@ -90,12 +90,15 @@ const columns = [
   {
     name: 'kode',
     required: true,
-    label: 'Kode Dokumen',
+    label: 'Kode Pajak',
     align: 'left',
     field: 'kode_region',
     sortable: true
   },
-  { name: 'region',  align: 'left',label: 'Nama', field: 'nama_region', sortable: true },
+  { name: 'region',  align: 'left',label: 'Nama Pajak', field: 'nama_region', sortable: true },
+  { name: 'fund',  align: 'left',label: 'Tipe Pajak', field: 'nama_region', sortable: true },
+  { name: 'reference',  align: 'left',label: 'Presentasi Pajak', field: 'nama_region', sortable: true },
+  { name: 'condition',  align: 'left',label: 'Reference Pajak(CBT)', field: 'nama_region', sortable: true },
 ]
 export default {
     setup(){

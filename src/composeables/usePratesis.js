@@ -1,8 +1,11 @@
-import {toRefs, ref, reactive} from 'vue'
+import {toRefs, ref, reactive,computed} from 'vue'
 import { api,header } from 'boot/axios'
 import { useQuasar,date } from 'quasar'
 import { useStore } from 'vuex'
 export const usePratesis = () => {
+    const store = useStore()
+    let token = store.state.auth.token
+    const modalUpload = ref(false)
     const rows = ref([])
     const state =   reactive({
         error:null,
@@ -10,42 +13,43 @@ export const usePratesis = () => {
         url:null,
         option:null
     })
-    const pagination = ref({
-        page:1,
-        rowsPerPage:2,
-        rowsNumber:1
+    const pagination = ref({})
+    const pagesNumber = computed(()=>{
+        return Math.ceil(pagination.value.rowsNumber / pagination.value.rowsPerPage)
     })
-    const filter = ref({})
-    const resetFilter = ref(false)
-    const Response = {
-        success : res => {
-            pagination.value.page = res.data.data.current_page
-            pagination.value.rowsPerPage = res.data.data.per_page
-            pagination.value.rowsNumber = res.data.data.total
-            rows.value = res.data.data.data
-            state.loading = false
-        },
-        error : err => {
-            state.error = err
-            state.loading = false
-        }
+
+    const success = res => {
+        pagination.value.page = res.data.data.current_page
+        pagination.value.rowsPerPage = res.data.data.per_page
+        pagination.value.rowsNumber = res.data.data.total
+        rows.value = res.data.data.data
+        state.loading = false
+    }
+    const error = err => {
+        state.error = err
+        state.loading = false
     }
 
     const init = async (url,option) => {
         state.loading = true
-        state.option = option
         state.url = url
-        const { token,status } = option
-        if(status){
-            state.url += `?status=${status}`
+        if(option){
+            state.option = option
+            const { status,include } = option
+            if(status){
+                state.url += `?status=${status}`
+            }
+            if(include){
+                state.url += `?include=${include}`
+            }
         }
 
         await api.get(`${state.url}`,header(token))
         .then(res=>{
-            Response.success(res)
+            success(res)
         })
         .catch(err=>{
-            Response.error(err)
+            error(err)
         })
     }
 
@@ -53,31 +57,50 @@ export const usePratesis = () => {
         state.loading = true
         const {page, rowsPerPage}  = request.pagination
         let filter  = ''
-        if(request.filter){
-            filter = request.filter.value
-        }
-       
-        const { token,status } = state.option
-        let paginate = ''
         let filterKey = ''
-        if(filter.kode_group){
-            filterKey += `&kode_group=${filter.kode_group}`
+        if(request.filter){
+            filter = request.filter
+            if(filter.value){
+                if(filter.value.kode_group){
+                    filterKey += `&kode_group=${filter.value.kode_group}`
+                }
+                if(filter.value.kode_pengguna){
+                    filterKey += `&kode_pengguna=${filter.value.kode_pengguna}`
+                }
+            }
+
+            if(filter.searchKey){
+                filterKey += `&search=${filter.searchKey}`
+            }
         }
-        if(filter.kode_pengguna){
-            filterKey += `&kode_pengguna=${filter.kode_pengguna}`
-        }
-        if(status){
+        const { status,include } = state.option
+        let paginate = ''
+        
+        if(status || include ){
             paginate += `&`
         }else{
             paginate += `?`
         }
-            paginate += `limit=${rowsPerPage}&page=${page}`
+        if(page){
+            paginate +=`page=${page}`
+        }
+        if(rowsPerPage){
+            paginate += `&limit=${rowsPerPage}`
+        }
         api.get(state.url + paginate + filterKey,header(token))
         .then(res=>{
-            Response.success(res)
+            success(res)
         })
         .catch(err=>{
-            Response.error(err)
+            error(err)
+        })
+    }
+
+    const gotoPage = page =>{
+        onRequest({
+            pagination : {
+                page : page
+            }
         })
     }
 
@@ -104,9 +127,9 @@ export const usePratesis = () => {
         return date.formatDate(tgl,'DD/MM/YY')
     }
 
-    const getData = async (url,option) => {
+    const getData = async (url) => {
         return await new Promise((resolve,reject)=>{
-            api.get(`${url}`,header(option))
+            api.get(`${url}`,header(token))
             .then(res=>{
                 resolve(res)
             })
@@ -115,31 +138,57 @@ export const usePratesis = () => {
             })
         })
     }
-    
+
+    const postData = async (url,data) =>{
+        return await new Promise((resolve,reject)=>{
+            console.log("data",data)
+            let kirim = new FormData()
+            kirim.append('file',data)
+            console.log("kirim",kirim)
+            api.post(`${url}`,kirim,header(token))
+            .then(res=>{
+                resolve(res.data.data)
+            })
+            .catch(err=>{
+                reject(err)
+                console.log('error',err)
+            })
+        })
+    }
+
+
+    const filter = ref({})
+    const resetFilter = ref(false)
     const onFilter = dataFilter => {
         filter.value = dataFilter
         resetFilter.value = true
     }
-
     const onResetFilter = () => {
-        filter.value = {}
+        filter.value = null
         resetFilter.value = false
     }
-
     return {
         rows,
         ...toRefs(state),
-        pagination,
-        filter,
-        Response,
+        pagination, //table
         init,
         onRequest,
+
         successNotif,
         errorNotif,
-        formatTgl,
+
+        formatTgl, //general function
         getData,
+        postData,
+
+        filter, //filtering
         resetFilter,
         onFilter,
-        onResetFilter
+        onResetFilter,
+
+        gotoPage, //pagination
+        pagesNumber,
+
+        modalUpload
     }
 }

@@ -24,14 +24,52 @@ const routes = [
             salesh:true
         }
       },
+      { path: 'distributor',name:'Distributor', component: () => import('pages/master/Distributor.vue'),
+        meta:{
+            master:true,
+            salesh:true
+        }
+      },
       // Master - Sales Hierarchy-end
       { path: 'promo',name:'Promo', component: () => import('pages/master/Promo.vue'),
         meta:{
           master:true
         }
       },
-      { path: 'documentclaim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue') },
-      
+      { path: 'documentclaim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue'),
+        meta:{
+            master:true
+        }
+      },
+      { path: 'investmenttype',name:'Investment Type', component: () => import('pages/master/InvestmentType.vue'),
+        meta:{
+            master:true
+        }
+      },
+      { path: 'spendtype',name:'Spend Type', component: () => import('pages/master/SpendType.vue'),
+        meta:{
+            master:true
+        }
+      },
+      { path: 'pajak',name:'Pajak', component: () => import('pages/master/Pajak.vue'),
+        meta:{
+            master:true
+        }
+      },
+      // Start Produk Hierarchy
+      { path: 'divisi',name:'Divisi', component: () => import('pages/master/Divisi.vue'),
+        meta:{
+            master:true,
+            producth:true
+        }
+      },
+      { path: 'category',name:'Category', component: () => import('pages/master/Category.vue'),
+        meta:{
+            master:true,
+            producth:true
+        }
+      },
+      // End Produk Hierarchy
       { path: 'user',name:'User', component: () => import('pages/utility/User.vue'),
         meta:{
             utility:true

@@ -2,14 +2,14 @@
 <q-page>
       <Breadcrumb>
         <template v-slot:leftside>
-            <q-breadcrumbs-el label="Document Claim" style="color:#00000073;"  />
+            <q-breadcrumbs-el label="Distributor" style="color:#00000073;"  />
         </template>
         <template v-slot:rightside>
             <q-btn color="secondary" outline no-caps unelevated class="btn-one q-mr-lg" >
                 <q-icon name="download" style="font-size:15px;"  class="q-mr-sm"/>
                 <div>Download Template</div>
             </q-btn>
-            <q-btn color="secondary" no-caps unelevated class="btn-one" @click="modalUpload = true">
+            <q-btn color="secondary" no-caps unelevated class="btn-one" @click="modalUpload = true" >
                 <q-icon name="upload_file" style="font-size:14px;" class="q-mr-sm"/>
                 <div>Upload</div>
             </q-btn>
@@ -37,7 +37,6 @@
                         <q-space />
                         <q-btn color="primary" label="Search" no-caps unelevated class="btn-one" />
                     </div>
-                    <!-- <q-btn :color="reset ? 'negative' :'primary'" :label="reset ? 'Reset' : 'Apply'" no-caps unelevated class="btn-one" @click="onFilter"/> -->
                 </q-card-section>
             </q-card>
             <q-card class="own-card" flat>
@@ -52,13 +51,13 @@
                             bordered
                             :loading="loading"
                             :filter="filter"
-                             v-model:pagination="pagination"
+                            v-model:pagination="pagination"
                             @request="onRequest"
                             hide-pagination
                             binary-state-sort
                         >
                         <template v-slot:loading>
-                            <q-inner-loading showing color="primary" />
+                        <q-inner-loading showing color="primary" />
                         </template>
                     </q-table>
                     <div class="row justify-end q-mt-md" v-if="Object.keys(pagination).length > 0">
@@ -79,7 +78,7 @@
             </q-card>
         </div>
     </div>
-    <UploadFile v-model:upload="modalUpload" v-if="modalUpload" menu="document-claim"/>
+    <UploadFile v-model:upload="modalUpload" v-if="modalUpload" menu="distributor"/>
 </q-page>
 </template>
 
@@ -90,19 +89,22 @@ const columns = [
   {
     name: 'kode',
     required: true,
-    label: 'Kode Dokumen',
+    label: 'Kode Distributor ',
     align: 'left',
-    field: 'kode_region',
-    sortable: true
+    field: 'kode_distributor',
   },
-  { name: 'region',  align: 'left',label: 'Nama', field: 'nama_region', sortable: true },
+  { name: 'nama_distributor', align: 'left', label: 'Nama Distributor ', field: 'nama_distributor' },
+  { name: 'kode_distributor_group', align: 'left', label: 'Distributor Group', field: 'kode_distributor_group' },
+  { name: 'kode_area', align: 'left', label: 'Area', field: 'kode_area' },
+  { name: 'alamat', align: 'left', label: 'Region', field: 'alamat' },
+  { name: 'status', align: 'left', label: 'Status', field: 'status_distributor' },
 ]
+
 export default {
     setup(){
-        const { pagination,rows,loading,init,onRequest,gotoPage,pagesNumber,getData,onFilter,filter,resetFilter,
+         const { pagination,rows,loading,init,onRequest,gotoPage,pagesNumber,getData,onFilter,filter,resetFilter,
             onResetFilter,modalUpload} = usePratesis()
-        init('region')
-
+            init('distributor')
         const kode = ref('Kode Area')
         const search = ref('')
         return {
@@ -110,6 +112,7 @@ export default {
             search,
             optkode:['Kode Area',1,2,3,4,5],
             filter,
+
 
             columns, // start untuk table
             rows,
@@ -119,8 +122,7 @@ export default {
             gotoPage,
             pagesNumber,
 
-            modalUpload,
-            
+            modalUpload
         }
     },
     components:{

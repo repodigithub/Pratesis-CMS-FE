@@ -9,7 +9,7 @@
                 <q-icon name="download" style="font-size:15px;"  class="q-mr-sm"/>
                 <div>Download Template</div>
             </q-btn>
-            <q-btn color="secondary" no-caps unelevated class="btn-one" >
+            <q-btn color="secondary" no-caps unelevated class="btn-one" @click="modalUpload = true">
                 <q-icon name="upload_file" style="font-size:14px;" class="q-mr-sm"/>
                 <div>Upload</div>
             </q-btn>
@@ -52,21 +52,40 @@
                             bordered
                             :loading="loading"
                             :filter="filter"
+                            v-model:pagination="pagination"
+                            @request="onRequest"
+                            hide-pagination
                             binary-state-sort
                         >
                         <template v-slot:loading>
                         <q-inner-loading showing color="primary" />
                         </template>
                     </q-table>
+                    <div class="row justify-end q-mt-md" v-if="Object.keys(pagination).length > 0">
+                        <q-pagination
+                            v-model="pagination.page"
+                            color="black"
+                            active-color="secondary"
+                            active-text-color="secondary"
+                            :max="pagesNumber"
+                            size="md"
+                            direction-links
+                            outline
+                            class="table-pagination"
+                            @update:model-value="gotoPage"
+                        />
+                    </div>
                 </q-card-section>
             </q-card>
         </div>
     </div>
+    <UploadFile v-model:upload="modalUpload" v-if="modalUpload" menu="distributor-group"/>
 </q-page>
 </template>
 
 <script>
 import { defineAsyncComponent,ref } from 'vue'
+import { usePratesis } from 'src/composeables/usePratesis'
 const columns = [
   {
     name: 'kode',
@@ -78,28 +97,35 @@ const columns = [
   },
   { name: 'nama_distributor_group', align: 'left', label: 'Nama Distributor Group', field: 'nama_distributor_group', sortable: true },
 ]
-const rows = [
-    {
-        kode_distributor_group:1,
-        nama_distributor_group:'Test area',
-    }
-]
+
 export default {
     setup(){
+         const { pagination,rows,loading,init,onRequest,gotoPage,pagesNumber,getData,onFilter,filter,resetFilter,
+            onResetFilter,modalUpload} = usePratesis()
+            init('distributor-group')
         const kode = ref('Kode Area')
         const search = ref('')
-        const filter = ref('')
         return {
             kode,
             search,
             optkode:['Kode Area',1,2,3,4,5],
             filter,
-            columns,
-            rows
+
+
+            columns, // start untuk table
+            rows,
+            pagination,
+            loading,
+            onRequest,
+            gotoPage,
+            pagesNumber,
+
+            modalUpload
         }
     },
     components:{
         Breadcrumb: defineAsyncComponent(() => import('components/Breadcrumb')),
+        UploadFile: defineAsyncComponent(() => import('components/Modal/UploadFile'))
     }
 }
 </script>

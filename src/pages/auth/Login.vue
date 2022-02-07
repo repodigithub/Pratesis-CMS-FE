@@ -14,7 +14,7 @@
             lazy-rules
             hide-bottom-space
             :rules="[
-            (val) => (val && val.length > 0) || 'Email tidak boleh kosong',val => validemail(val)
+            (val) => (val && val.length > 0) || 'Email tidak boleh kosong'
             ]"
             >
                 <template v-slot:append>
@@ -69,8 +69,8 @@ export default {
         return{
             visibility: true,
             user:{
-                email:'test3@gmail.com',
-                password:'testing'
+                email:'admin@local.host',
+                password:'password'
             },
             error:false,
             load:false,

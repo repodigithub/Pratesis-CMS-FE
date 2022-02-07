@@ -9,7 +9,7 @@
                 <q-icon name="download" style="font-size:15px;"  class="q-mr-sm"/>
                 <div>Download Template</div>
             </q-btn>
-            <q-btn color="secondary" no-caps unelevated class="btn-one" >
+            <q-btn color="secondary" no-caps unelevated class="btn-one" @click="modalUpload = true">
                 <q-icon name="upload_file" style="font-size:14px;" class="q-mr-sm"/>
                 <div>Upload</div>
             </q-btn>
@@ -52,21 +52,40 @@
                             bordered
                             :loading="loading"
                             :filter="filter"
+                             v-model:pagination="pagination"
+                            @request="onRequest"
+                            hide-pagination
                             binary-state-sort
                         >
                         <template v-slot:loading>
-                        <q-inner-loading showing color="primary" />
+                            <q-inner-loading showing color="primary" />
                         </template>
                     </q-table>
+                    <div class="row justify-end q-mt-md" v-if="Object.keys(pagination).length > 0">
+                        <q-pagination
+                            v-model="pagination.page"
+                            color="black"
+                            active-color="secondary"
+                            active-text-color="secondary"
+                            :max="pagesNumber"
+                            size="md"
+                            direction-links
+                            outline
+                            class="table-pagination"
+                            @update:model-value="gotoPage"
+                        />
+                    </div>
                 </q-card-section>
             </q-card>
         </div>
     </div>
+    <UploadFile v-model:upload="modalUpload" v-if="modalUpload" menu="region"/>
 </q-page>
 </template>
 
 <script>
 import { defineAsyncComponent,ref } from 'vue'
+import { usePratesis } from 'src/composeables/usePratesis'
 const columns = [
   {
     name: 'kode',
@@ -76,30 +95,37 @@ const columns = [
     field: 'kode_region',
     sortable: true
   },
-  { name: 'region',  align: 'left',label: 'Region', field: 'region', sortable: true },
-]
-const rows = [
-    {
-        kode_region:1,
-        region:'Jakarta'
-    }
+  { name: 'region',  align: 'left',label: 'Region', field: 'nama_region', sortable: true },
 ]
 export default {
     setup(){
+        const { pagination,rows,loading,init,onRequest,gotoPage,pagesNumber,getData,onFilter,filter,resetFilter,
+            onResetFilter,modalUpload} = usePratesis()
+        init('region')
+
         const kode = ref('Kode Area')
         const search = ref('')
-        const filter = ref('')
         return {
             kode,
             search,
             optkode:['Kode Area',1,2,3,4,5],
             filter,
-            columns,
-            rows
+
+            columns, // start untuk table
+            rows,
+            pagination,
+            loading,
+            onRequest,
+            gotoPage,
+            pagesNumber,
+
+            modalUpload,
+            
         }
     },
     components:{
         Breadcrumb: defineAsyncComponent(() => import('components/Breadcrumb')),
+        UploadFile: defineAsyncComponent(() => import('components/Modal/UploadFile'))
     }
 }
 </script>

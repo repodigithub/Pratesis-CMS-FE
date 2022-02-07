@@ -36,27 +36,27 @@ const menu = [
                     headoffice:true
                 }
             },
-            // {
-            //     title:'Product Hierarchy',
-            //     submenu:[
-            //         {title : 'Divisi'},
-            //         {title : 'Category'},
-            //         {title : 'Brand'},
-            //         {title : 'Sub Brand'},
-            //         {title : 'Product'},
-            //     ],
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
-            // {
-            //     title:'Document Claim',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
+            {
+                title:'Product Hierarchy',
+                submenu:[
+                    {title : 'Divisi'},
+                    {title : 'Category'},
+                    // {title : 'Brand'},
+                    // {title : 'Sub Brand'},
+                    // {title : 'Product'},
+                ],
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Document Claim',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
             // {
             //     title:'Alasan',
             //     access:{
@@ -64,20 +64,20 @@ const menu = [
             //         headoffice:true
             //     }
             // },
-            // {
-            //     title:'Tax',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
-            // {
-            //     title:'Spend Type',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
+            {
+                title:'Pajak',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Spend Type',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
             // {
             //     title:'Type Promo',
             //     access:{
@@ -85,13 +85,13 @@ const menu = [
             //         headoffice:true
             //     }
             // },
-            // {
-            //     title:'Investment',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
+            {
+                title:'Investment Type',
+                access:{
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
             // {
             //     title:'Budget Holder',
             //     access:{

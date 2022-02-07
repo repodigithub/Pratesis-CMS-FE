@@ -21,7 +21,7 @@
                         </q-chip>
                     </label>
                     <!-- <input type="file" id="inputfile" @change="onFileSelected" ref="file"/> -->
-                    <q-file borderless v-model="filesupload" label="Borderless" accept=".xls" max-file-size="15000048"  @rejected="onRejected" for="inputfile" style="display:none;"/>
+                    <q-file borderless v-model="filesupload" label="Borderless" accept=".xlsx" max-file-size="15000048"  @rejected="onRejected" for="inputfile" style="display:none;"/>
                 </div>
             </q-card-section>
             <q-card-section v-if="uploading && !result">
@@ -69,78 +69,90 @@
 
 <script>
 import { usePratesis } from 'src/composeables/usePratesis'
+import { ref } from 'vue'
 export default {
-    setup(){
-        const { errorNotif } = usePratesis()
+    setup(props){
+        const { errorNotif,postData } = usePratesis()
         function onRejected(reject){
             if(reject[0].failedPropValidation === 'accept') {
-                errorNotif('File harus berupa file berekstensi .xls')
+                errorNotif('File harus berupa file berekstensi .xlsx')
             }
             else if (reject[0].failedPropValidation === 'max-file-size'){
                 errorNotif('File maksimal berukuran 15MB')
             }
         }
-        return {
-            errorNotif,
-            onRejected
-        }
-    },
-    props: ['upload'],
-    data(){
-        return{
-            uploading:false,
-            result:false,
-            waiting:'',
-            filesupload:null
-        }
-    },
-    methods:{
-        onUpload(){
-            if(this.uploading){
-                clearTimeout(this.waiting);
-                this.uploading = false
-                this.result = false
+
+        const uploading = ref(false)
+        const result = ref(false)
+        const waiting = ref(null)
+        const filesupload = ref(null)
+
+        function drop(event) {
+            event.preventDefault();
+            let dropfile = event.dataTransfer.files[0]
+            let panjangkata = dropfile.name.length
+            let ekstensi = dropfile.name.substr(panjangkata-4,panjangkata-1)
+            if(ekstensi !== 'xlsx'){
+                errorNotif('File harus berupa file berekstensi .xlsx')
+            }else  if(dropfile.size >= 15000000 ){
+                errorNotif('File maksimal berukuran 15MB')
             }else{
-                this.uploading = true
-                this.waiting = setTimeout(() => {
-                    this.uploading = false
-                    this.result = true
-                }, 5000);
+                filesupload.value = event.dataTransfer.files[0]
             }
-            console.log("data",this.filesupload)
-        },
-        dragover(event) {
-        event.preventDefault();
-        // Add some visual fluff to show the user can drop its files
-        if (!event.currentTarget.classList.contains('bg-light-blue-2')) {
-            event.currentTarget.classList.remove('bg-primary4');
-            event.currentTarget.classList.add('bg-light-blue-2');
+
+            // Clean up
+            event.currentTarget.classList.add('bg-primary4')
+            event.currentTarget.classList.remove('bg-light-blue-2')
         }
-        },
-        dragleave(event) {
-        // Clean up
-        event.currentTarget.classList.add('bg-primary4');
-        event.currentTarget.classList.remove('bg-light-blue-2');
-        },
-        drop(event) {
-        event.preventDefault();
-        let dropfile = event.dataTransfer.files[0]
-        let panjangkata = dropfile.name.length
-        let ekstensi = dropfile.name.substr(panjangkata-3,panjangkata-1)
-        if(ekstensi !== 'xls'){
-            this.errorNotif('File harus berupa file berekstensi .xls')
-        }else  if(dropfile.size >= 15000000 ){
-            this.errorNotif('File maksimal berukuran 15MB')
-        }else{
-            this.filesupload = event.dataTransfer.files[0]
+        function removeFile(){
+            filesupload.value = null
         }
 
-        // Clean up
-        event.currentTarget.classList.add('bg-primary4')
-        event.currentTarget.classList.remove('bg-light-blue-2')
+        function onUpload(){
+            if(uploading.value){ //when cancel uploading
+                clearTimeout(waiting.value)
+                uploading.value = false
+                result.value = false
+            }else{ //when uploding
+                uploading.value = true
+                postData(`${props.menu}/upload`,filesupload.value)
+                .then(res=>{
+                    console.log("sukses upload",res)
+                    waiting.value = setTimeout(() => {
+                        uploading.value = false
+                        result.value = true
+                    }, 100);
+                })
+            }
+        }
+        return {
+            errorNotif,
+            onRejected,
+
+            uploading,
+            result,
+            waiting,
+            filesupload,
+            drop,
+            removeFile,
+            onUpload,
+
+        }
+    },
+    props: ['upload','menu'],
+    methods:{
+        dragover(event) {
+            event.preventDefault();
+            // Add some visual fluff to show the user can drop its files
+            if (!event.currentTarget.classList.contains('bg-light-blue-2')) {
+                event.currentTarget.classList.remove('bg-primary4');
+                event.currentTarget.classList.add('bg-light-blue-2');
+            }
         },
-        removeFile(){
-            this.filesupload = null
+        dragleave(event) {
+            // Clean up
+            event.currentTarget.classList.add('bg-primary4');
+            event.currentTarget.classList.remove('bg-light-blue-2');
         },
     }
 }
