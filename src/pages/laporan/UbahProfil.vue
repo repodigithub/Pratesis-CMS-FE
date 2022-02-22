@@ -1,14 +1,10 @@
 <template>
 <q-page class="q-pb-lg">
-    <Breadcrumb>
-        <template v-slot:leftside>
-            <q-breadcrumbs-el label="Ubah Profil" style="color:#00000073;"  />
-        </template>
-    </Breadcrumb >
+    <breadcrumb  :rightside="false"/>
     <div class="row justify-center">
         <div class="col-12">
             <q-img
-                src="~assets/dashboard/gradient.svg"
+                src="~assets/dashboard/gradientpolos.svg"
                 spinner-color="primary"
                 spinner-size="50px"
             />
@@ -17,7 +13,7 @@
                 <q-card-section >
                     <div class="row justify-center">
                         <div class="bg-primary own-card text-white text-center" style="width:140px;height:140px;margin-top:-70px;border:8px solid white;border-radius:40px; font-size:60px;line-height:140px;">
-                            J
+                            {{name.charAt(0)}}
                         </div>
                     </div>
                     <div class="row justify-between q-mt-md">
@@ -175,10 +171,12 @@ import { api,header } from 'boot/axios'
 import { useStore } from 'vuex'
 import { ref,onMounted } from 'vue'
 import { defineAsyncComponent } from 'vue'
+import {usePratesis} from 'src/composeables/usePratesis'
 export default {
     setup(){
         const store = useStore()
         const quasar = useQuasar()
+        const {name} = usePratesis()
         const me = ref({})
         function onSave(){
             quasar.loading.show({
@@ -188,7 +186,6 @@ export default {
             })
             api.put(`user/${me.value.id}`,me.value,header(store.state.auth.token))
             .then(res=>{
-                console.log("respose",res)
                 quasar.loading.hide()
             })
             .catch(err=>console.log("err",err))
@@ -198,11 +195,12 @@ export default {
         })
         return {
             me,
-            onSave
+            onSave,
+            name
         }
     },
     components:{
-        Breadcrumb: defineAsyncComponent(() => import('components/Breadcrumb')),
+        'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
     },
     data(){
         return{

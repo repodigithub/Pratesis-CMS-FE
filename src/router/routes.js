@@ -36,22 +36,37 @@ const routes = [
           master:true
         }
       },
-      { path: 'documentclaim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue'),
+      { path: 'document-claim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue'),
         meta:{
             master:true
         }
       },
-      { path: 'investmenttype',name:'Investment Type', component: () => import('pages/master/InvestmentType.vue'),
+      { path: 'investment',name:'Investment', component: () => import('pages/master/InvestmentType.vue'),
         meta:{
             master:true
         }
       },
-      { path: 'spendtype',name:'Spend Type', component: () => import('pages/master/SpendType.vue'),
+      { path: 'spend',name:'Spend Type', component: () => import('pages/master/SpendType.vue'),
         meta:{
             master:true
         }
       },
-      { path: 'pajak',name:'Pajak', component: () => import('pages/master/Pajak.vue'),
+      { path: 'tax',name:'Pajak', component: () => import('pages/master/Pajak.vue'),
+        meta:{
+            master:true
+        }
+      },
+      { path: 'alasan',name:'Alasan', component: () => import('pages/master/Alasan.vue'),
+        meta:{
+            master:true
+        }
+      },
+      { path: 'budget-holder',name:'Budget Holder', component: () => import('pages/master/BudgetHolder.vue'),
+        meta:{
+            master:true
+        }
+      },
+      { path: 'tipe-promo',name:'Type Promo', component: () => import('pages/master/TypePromo.vue'),
         meta:{
             master:true
         }
@@ -64,6 +79,24 @@ const routes = [
         }
       },
       { path: 'category',name:'Category', component: () => import('pages/master/Category.vue'),
+        meta:{
+            master:true,
+            producth:true
+        }
+      },
+      { path: 'sub-brand',name:'Sub Brand', component: () => import('pages/master/SubBrand.vue'),
+        meta:{
+            master:true,
+            producth:true
+        }
+      },
+      { path: 'brand',name:'Brand', component: () => import('pages/master/Brand.vue'),
+        meta:{
+            master:true,
+            producth:true
+        }
+      },
+      { path: 'product',name:'Product', component: () => import('pages/master/Produk.vue'),
         meta:{
             master:true,
             producth:true

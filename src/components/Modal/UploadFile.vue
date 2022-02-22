@@ -51,28 +51,48 @@
                             width="100px"
                             height="100px"
                         />
-                        <div style="margin-top:30px;" class="text-h6">Your document has been uploaded </div>
-                        <div class="text-grey" style="margin-top:14px;font-size:12px;">Your file is correct, Please proceed to the next step </div>
+                        <div v-if="error">
+                            <div style="margin-top:30px;" class="text-h6">Your document failed to upload </div>
+                            <div class="font-medium q-mb-md">Message : {{error.message}} </div>
+                            <div class="row justify-center items-center" v-for="(n,key) in error.data" :key="key">
+                                <q-icon name="close" class="text-secondary" size="md" />
+                                <div class="text-grey" style="font-size:12px;" v-for="(err,index) in n" :key="index">
+                                    {{err}}
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div style="margin-top:30px;" class="text-h6">Your document has been uploaded </div>
+                            <div class="text-grey" style="margin-top:14px;font-size:12px;">Your file is correct, Please proceed to the next step </div>
+                        </div>
                     </div>
                 </div>
             </q-card-section>
             <q-card-actions align="center" style="margin-top:71px;margin-bottom:30px;" v-if="!result">
                 <q-btn :label="uploading ? 'Cancel' : 'Upload'" no-caps color="secondary" class="btn-one" unelevated @click="onUpload" :outline="uploading ? true : false"/>
             </q-card-actions>
-            <q-card-actions align="between" style="margin-top:71px;margin-bottom:30px;padding-left:20px;padding-right:20px;" v-if="result && !uploading">
-                <q-btn label="Cancel" no-caps color="secondary" class="btn-one" unelevated @click="onUpload" outline/>
-                <q-btn label="Submit" no-caps color="secondary" class="btn-one" unelevated @click="onUpload"/>
+            <q-card-actions align="center" style="margin-top:71px;margin-bottom:30px;padding-left:20px;padding-right:20px;" v-if="result && !uploading && error">
+                <q-btn label="Reupload File" no-caps color="secondary" class="btn-one" unelevated @click="reUpload"/>
+            </q-card-actions>
+            <q-card-actions align="between" style="margin-top:71px;margin-bottom:30px;padding-left:20px;padding-right:20px;" v-if="result && !uploading && error === null">
+                <q-btn label="Cancel" no-caps color="secondary" class="btn-one" unelevated v-close-popup outline/>
+                <q-btn label="Submit" no-caps color="secondary" class="btn-one" unelevated v-close-popup/>
             </q-card-actions>
         </q-card>
     </q-dialog>
 </template>
 
 <script>
-import { usePratesis } from 'src/composeables/usePratesis'
+// import { usePratesis } from 'src/composeables/usePratesis'
+import { useService } from 'src/composeables/useService'
+import { useCustom } from 'src/composeables/useCustom'
 import { ref } from 'vue'
 export default {
-    setup(props){
-        const { errorNotif,postData } = usePratesis()
+    name:'upload-file',
+    props: ['upload','menu'],
+    setup(props, { emit }){
+        const { postData } = useService()
+        const { errorNotif } = useCustom()
         function onRejected(reject){
             if(reject[0].failedPropValidation === 'accept') {
                 errorNotif('File harus berupa file berekstensi .xlsx')
@@ -86,6 +106,7 @@ export default {
         const result = ref(false)
         const waiting = ref(null)
         const filesupload = ref(null)
+        const error = ref(null)
 
         function drop(event) {
             event.preventDefault();
@@ -113,21 +134,47 @@ export default {
                 clearTimeout(waiting.value)
                 uploading.value = false
                 result.value = false
+                filesupload.value = null
             }else{ //when uploding
                 uploading.value = true
-                postData(`${props.menu}/upload`,filesupload.value)
-                .then(res=>{
-                    console.log("sukses upload",res)
+                let kirim = new FormData()
+                kirim.append('file',filesupload.value)
+                postData(`${props.menu}/upload`,kirim)
+                .then(()=>{
                     waiting.value = setTimeout(() => {
                         uploading.value = false
                         result.value = true
+                        emit('onUploadSuccess',{
+                            pagination : {
+                                page : 1
+                            }
+                        })
                     }, 100);
+                    filesupload.value = null
+                })
+                .catch(err=>{
+                    uploading.value = false
+                    result.value = true
+                    filesupload.value = null
+                    console.log("error",err.response)
+                    console.log("error",err.response.data.message)
+                    error.value = {
+                        message :err.response.data.message,
+                        data: err.response.data.data
+                    }
                 })
             }
+        }
+
+        function reUpload(){
+            uploading.value = false
+            result.value = false
+            error.value = null
         }
         return {
             errorNotif,
             onRejected,
+            error,
 
             uploading,
             result,
@@ -136,10 +183,10 @@ export default {
             drop,
             removeFile,
             onUpload,
+            reUpload
 
         }
     },
-    props: ['upload','menu'],
     methods:{
         dragover(event) {
             event.preventDefault();
@@ -157,7 +204,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>

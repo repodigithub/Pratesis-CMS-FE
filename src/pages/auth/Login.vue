@@ -1,16 +1,18 @@
 <template>
     <div class="col-8">
-        <q-banner inline-actions class="text-white bg-red btn-radius" v-if="error">
-            Email/password yang anda masukkan salah
-        </q-banner>
         <div class="font-big blackown  text-center">Hi, Selamat datang kembali!</div>
         <div class="font-medium text-grey  text-center">Silahkan login untuk kembali menggunakan layanan</div>
+        <div v-if="error">
+            <q-banner inline-actions class="text-white bg-red btn-radius" v-if="error.auth">
+                {{error.auth}}
+            </q-banner>
+        </div>
         <q-form
-        @submit.prevent.stop="onAuth('auth/login',user)" ref="form"
+        @submit.prevent.stop="onSave" ref="form"
             class="q-gutter-sm q-mt-lg "
         >
             <label for="email" class="font-normal">Email Address</label>
-            <q-input v-model="user.email" dense outlined id="email" class="q-mb-md" type="email"
+            <q-input v-model="dataSend.email" dense outlined id="email" class="q-mb-md" type="email"
             lazy-rules
             hide-bottom-space
             :rules="[
@@ -24,7 +26,7 @@
                 </template>
             </q-input>
             <label for="password" class="font-normal">Password</label>
-            <q-input v-model="user.password"  dense outlined id="password" :type="visibility ? 'password' : 'text'" class="q-mb-md"
+            <q-input v-model="dataSend.password"  dense outlined id="password" :type="visibility ? 'password' : 'text'" class="q-mb-md"
             lazy-rules
             hide-bottom-space
             :rules="[
@@ -40,14 +42,9 @@
                 </template>
             </q-input>
             <div class="row">
-                <vue-recaptcha :sitekey="recaptchasitekey" class="q-mb-md"/>
-                <q-btn label="Login" no-caps type="submit" color="primary" unelevated class="col-12" :disabled="btndisabled" :loading="load">
-                    <template v-slot:loading>
-                        <div class="row items-center">
-                            <q-spinner-facebook />  
-                        </div>
-                    </template>
-                </q-btn>
+                <vue-recaptcha :sitekey="recaptchasitekey" :class="error ? error.recaptcha ? '' : 'q-mb-md' : 'q-mb-md'"/>
+                <span v-if="error" :class="error ? 'q-my-md' : ''" class="text-secondary"> {{error.recaptcha}} </span>
+                <q-btn label="Login" no-caps type="submit" color="primary" unelevated class="col-12" />
             </div>
         </q-form>
         <div class="row items-center justify-center">
@@ -58,23 +55,61 @@
 </template>
 
 <script>
-import mixin from 'src/common/mixin'
 import { VueRecaptcha } from 'vue-recaptcha';
+import { ref } from 'vue'
+import { useCustom } from 'src/composeables/useCustom'
+import { useStore } from 'vuex'
 export default {
-    mixins:[mixin],
     components:{
         VueRecaptcha
     },
-    data(){
-        return{
-            visibility: true,
-            user:{
-                email:'admin@local.host',
-                password:'password'
-            },
-            error:false,
-            load:false,
-            btndisabled:false,
+    setup(){
+        const dataSend = ref({})
+        const form = ref('')
+        const { showLoading,hideLoading } = useCustom()
+        const error = ref(null)
+        // dataSend.value = {
+            // email:'admin@local.host',
+            // password:'password'
+            // email:'fajarilhamrosi@gmail.com',
+            // password:'testing'
+        // }
+        const visibility = ref(true)
+        const store = useStore()
+
+        function onSave(){
+            form.value.validate()
+            .then(valid=>{
+                if(valid){
+                    let recaptcha = grecaptcha.getResponse()
+                    if(recaptcha.length === 0){
+                        error.value ={
+                            recaptcha : 'You cant leave Captcha Code empty'
+                        } 
+                    }else{
+                        dataSend.value = {
+                            ...dataSend.value, "g-recaptcha-response" : recaptcha
+                        }
+                        showLoading()
+                        store.dispatch('auth/login',dataSend.value)
+                        .then(()=>{
+                            hideLoading()
+                        })
+                        .catch(err=>{
+                            hideLoading()
+                            error.value = {
+                                auth : `${err.response.data.message}`
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        return {
+            dataSend,form,
+            error,
+            visibility,
+            onSave
         }
     },
 }

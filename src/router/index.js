@@ -25,13 +25,13 @@ export default route(function ({ store }) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE)
   })
-  // Router.beforeEach((to,from,next) => {
-  //   if (to.matched.some(record => record.meta.requireAuth) && !store.getters['auth/isAuthenticated']) {
-  //     next({ name: 'login' })
-  //   }else{
-  //       next()
-  //   }
-  // })
+  Router.beforeEach((to,from,next) => {
+    if (to.matched.some(record => record.meta.requireAuth) && !store.getters['auth/isAuthenticated']) {
+      next({ name: 'login' })
+    }else{
+        next()
+    }
+  })
 
   return Router
 })

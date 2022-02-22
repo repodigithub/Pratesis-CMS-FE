@@ -1,18 +1,18 @@
 <template>
     <div class="col-8">
-        <q-banner inline-actions class="text-white bg-red btn-radius" v-if="error">
+        <!-- <q-banner inline-actions class="text-white bg-red btn-radius" v-if="error">
             Email/password yang anda masukkan salah
-        </q-banner>
+        </q-banner> -->
         <div class="font-big blackown">Register</div>
         <div class="font-medium text-grey">Bergabung untuk terhubung dengan layanan kami</div>
         <q-form
-        @submit.prevent.stop="onAuth('auth/register',user)" ref="form"
+        @submit.prevent.stop="onSave" ref="form"
             class="q-gutter-sm q-mt-lg "
         >
             <div class="row justify-between">
                 <div class="col-4">
                     <label for="user_id" class="font-normal">User ID</label>
-                    <q-input v-model="user.user_id" dense outlined id="user_id" class="q-mb-md" 
+                    <q-input v-model="dataSend.user_id" dense outlined id="user_id" class="q-mb-md" 
                     hide-bottom-space
                     placeholder="User ID"
                     >
@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-7">
                     <label for="fullname" class="font-normal">Full Name</label>
-                    <q-input v-model="user.full_name" dense outlined id="fullname" class="q-mb-md" 
+                    <q-input v-model="dataSend.full_name" dense outlined id="fullname" class="q-mb-md" 
                     hide-bottom-space
                     placeholder="Full Name"
                     lazy-rules
@@ -42,12 +42,12 @@
                 </div>
                 <div class="col-12">
                     <label for="email" class="font-normal">Email Address</label>
-                    <q-input v-model="user.email" dense outlined id="email" class="q-mb-md" type="email"
+                    <q-input v-model="dataSend.email" dense outlined id="email" class="q-mb-md" type="email"
                     lazy-rules
                     hide-bottom-space
                     placeholder="your.name@gmail.com"
                     :rules="[
-                    (val) => (val && val.length > 0) || 'Email tidak boleh kosong',val => validemail(val)
+                    (val) => (val && val.length > 0) || 'Email tidak boleh kosong'
                     ]"
                     >
                         <template v-slot:append>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="col-6">
                     <label for="username" class="font-normal">Username</label>
-                    <q-input v-model="user.username" dense outlined id="username" class="q-mb-md" 
+                    <q-input v-model="dataSend.username" dense outlined id="username" class="q-mb-md" 
                     lazy-rules
                     placeholder="username"
                     hide-bottom-space
@@ -76,7 +76,7 @@
                 </div>
                 <div class="col-5">
                     <label for="password" class="font-normal">Password</label>
-                    <q-input v-model="user.password"  dense outlined id="password" :type="visibility ? 'password' : 'text'" class="q-mb-md"
+                    <q-input v-model="dataSend.password"  dense outlined id="password" :type="visibility ? 'password' : 'text'" class="q-mb-md"
                     lazy-rules
                     placeholder="password"
                     hide-bottom-space
@@ -94,47 +94,43 @@
                     </q-input>
                 </div>
                 <div class="col-12">
-                    <label for="email" class="font-normal">User Level</label>
-                    <q-select  outlined dense v-model="user.user_level" :options="optrole" placeholder="user level"  lazy-rules hide-bottom-space class="q-mb-md"
-                        :rules="[
-                            val => val !== null && val !== '' || 'User Level tidak boleh kosong',
-                        ]"/>
+                    <select-dropdown url="user-group" v-model:selected="dataSend.kode_group" :islogin="false" :master="false" class="q-mb-md" nameLabel="User Level"/>
                 </div>
-                <div class="col-6">
-                    <label for="kode_depo" class="font-normal">Kode Depo</label>
-                    <q-select  outlined dense v-model="user.kode_area" :options="optdepo"  lazy-rules hide-bottom-space class="q-mb-md"  id="kode_depo">
-                    </q-select>
-                </div>
-                <div class="col-5">
-                    <label for="nama_depo" class="font-normal">Nama Depo</label>
-                    <q-input v-model="nama_depo"  dense outlined id="nama_depo" class="q-mb-md"
-                    hide-bottom-space
-                    disable
-                    >
-                    <template v-slot:append>
-                        <q-icon
-                            name="person"
-                        />
-                        </template>
-                    </q-input>
-                </div>
-                <div class="col-6">
-                    <label for="kode_distributor" class="font-normal">Kode Distributor</label>
-                    <q-select  outlined dense v-model="user.kode_distributor" :options="optdistributor" hide-bottom-space class="q-mb-md"  id="kode_distributor">
-                    </q-select>
-                </div>
-                <div class="col-5">
-                    <label for="nama_distributor" class="font-normal">Nama Distributor</label>
-                    <q-input v-model="nama_distributor"  dense outlined id="nama_distributor" class="q-mb-md"
-                    hide-bottom-space
-                    disable
-                    >
+                <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI') || dataSend.kode_group.includes('SA')">
+                    <div class="col-6">
+                        <select-dropdown url="area" v-model:selected="dataSend.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo"/>
+                    </div>
+                    <div class="col-5">
+                        <label for="nama_depo" class="font-normal">Nama Depo</label>
+                        <q-input v-model="nama_area"  dense outlined id="nama_depo" class="q-mb-md"
+                        hide-bottom-space
+                        disable
+                        >
                         <template v-slot:append>
-                        <q-icon
-                            name="person"
-                        />
-                        </template>
-                    </q-input>
+                            <q-icon
+                                name="person"
+                            />
+                            </template>
+                        </q-input>
+                    </div>
+                </div>
+                <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI')">
+                    <div class="col-6">
+                        <select-dropdown url="distributor" v-model:selected="dataSend.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor"/> 
+                    </div>
+                    <div class="col-5">
+                        <label for="nama_distributor" class="font-normal">Nama Distributor</label>
+                        <q-input v-model="nama_distributor"  dense outlined id="nama_distributor" class="q-mb-md"
+                        hide-bottom-space
+                        disable
+                        >
+                            <template v-slot:append>
+                            <q-icon
+                                name="person"
+                            />
+                            </template>
+                        </q-input>
+                    </div>
                 </div>
             </div>
             
@@ -145,14 +141,9 @@
                         <q-btn color="primary" label="Privacy Policy" no-caps flat @click.stop="onClick" class="q-px-none"/>
                     </div> 
                 </q-checkbox>
-                <vue-recaptcha :sitekey="recaptchasitekey" class="q-mb-md"/>
-                <q-btn label="Create Account" no-caps type="submit" color="primary" unelevated class="col-12" :disabled="btndisabled" :loading="load">
-                    <template v-slot:loading>
-                        <div class="row items-center">
-                            <q-spinner-facebook />  
-                        </div>
-                    </template>
-                </q-btn>
+                <vue-recaptcha :sitekey="recaptchasitekey" :class="error ? '' : 'q-mb-md'"/>
+                <span v-if="error" :class="error ? 'q-my-md' : ''" class="text-secondary"> {{error.recaptcha}} </span>
+                <q-btn label="Create Account" no-caps type="submit" color="primary" unelevated class="col-12" />
             </div>
         </q-form>
         <div class="row items-center justify-center">
@@ -161,60 +152,100 @@
             <q-btn flat no-caps class="text-primary text-bold" label="Login" @click="$router.push('/login')"/>
         </div>
     </div>
-    <rsuccess v-model:rsuccess="rsuccess" v-if="rsuccess"/>
+    <rsuccess v-model:rsuccess="registerSuccess" v-if="registerSuccess"/>
 </template>
 
 <script>
-import mixin from 'src/common/mixin'
 import { VueRecaptcha } from 'vue-recaptcha';
 import Rsuccess from './Rsuccess.vue';
+import { ref,watch,defineAsyncComponent } from 'vue'
+import { useStore } from  'vuex'
+import { useCustom } from 'src/composeables/useCustom'
 export default {
-    mixins:[mixin],
     components:{
         VueRecaptcha,
-        Rsuccess
+        Rsuccess,
+        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown'))
+    },
+    setup(){
+        const dataSend = ref({})
+        const form = ref('')
+        const registerSuccess = ref(false)
+        const store = useStore()
+        const error = ref('')
+        const { showLoading,hideLoading } = useCustom()
+
+        dataSend.value = {
+                user_id:'',
+                full_name:'',
+                username:'',
+                email:'',
+                password:'',
+                kode_distributor:null,
+                kode_area:null,
+                kode_group:''
+        }
+        const visibility = ref(true)
+        const kodedepo = ref('')
+        const nama_area = ref('')
+
+        const kodedistributor = ref('')
+        const nama_distributor = ref('')
+        
+        function onSave(){
+            form.value.validate()
+            .then(valid=>{
+                if(valid){
+                    let recaptcha = grecaptcha.getResponse()
+                    if(recaptcha.length === 0){
+                        error.value ={
+                            recaptcha : 'You cant leave Captcha Code empty'
+                        } 
+                    }else{
+                        dataSend.value = {
+                            ...dataSend.value, "g-recaptcha-response" : recaptcha
+                        }
+                        showLoading()
+                        store.dispatch('auth/register',dataSend.value)
+                        .then(()=>{
+                            registerSuccess.value = true
+                            hideLoading()
+                        })
+                        .catch(()=>{
+                            hideLoading()
+                        })
+                    }
+                }
+            })
+        }
+
+        watch(()=>dataSend.value.kode_area,val=>{
+            let a = kodedepo.value.options.filter(f=>f.value === val)
+            nama_area.value = a[0].label
+        })
+
+        watch(()=>dataSend.value.kode_distributor,val=>{
+            let b = kodedistributor.value.options.filter(f=>f.value === val)
+            nama_distributor.value = b[0].label
+        })
+        return {
+            visibility,
+            error,
+            dataSend,form,registerSuccess,
+            onSave,
+
+            kodedepo,
+            nama_area,
+            kodedistributor,
+            nama_distributor
+        }
     },
     data(){
         return{
-            visibility: true,
-            user:{
-                user_id:'grtb',
-                full_name:'testing',
-                username:'test7',
-                email:'tes7@gmail.com',
-                password:'testing',
-                user_level:'Head Office',
-                kode_distributor:null,
-                kode_area:null,
-                kode_group:null
-            },
-            error:false,
-            load:false,
-            btndisabled:false,
             term:false,
-            optrole:['Head Office','Depot','Distributor','Super Admin'],
-            optdepo:['001','002','003'],
-            optdistributor:['001','002','003'],
-            nama_depo:'dummy',
-            nama_distributor:'dummy',
-            rsuccess:false
         }
     },
     methods:{
-        // filterDepo(val,update){
-        //     if (val === '') {
-        //     update(() => {
-        //         this.optdepo = ['001','002','003']
-        //     })
-        //     return
-        //     }
-
-        //     update(() => {
-        //     const needle = val.toLowerCase()
-        //     console.log("needle",needle)
-        //     this.optdepo.filter(v => v.toLowerCase() === needle)
-        //     })
-        // },
         onClick(){
             console.log("testing")
         },

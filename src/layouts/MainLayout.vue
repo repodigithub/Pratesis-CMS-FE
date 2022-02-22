@@ -12,25 +12,35 @@
         /> -->
 
         <q-toolbar-title>
-          <q-btn color="primary" icon-right="expand_more" label="Head Office" no-caps flat dense  class="font-normal"/>
-          <q-menu style="max-width:150px">
-          <q-list >
-            <q-item clickable>
-              <q-item-section>Profil</q-item-section>
-            </q-item>
-            <q-item clickable>
-              <q-item-section>Setting</q-item-section>
-            </q-item>
-            <q-separator />
-            <q-item clickable>
-              <q-item-section>Logout</q-item-section>
-            </q-item>
-            
-          </q-list>
-        </q-menu>
+          <div class="text-primary font-normal">
+            {{roles}}
+            <q-icon name="expand_more" size="18px"/>
+          </div>
+          <!-- <q-btn color="primary" icon-right="expand_more" :label="roles" no-caps flat dense  class="font-normal"/> -->
         </q-toolbar-title>
-        <div class="font-normal q-mr-sm">Hi, Joko</div>
-        <q-avatar class="btn-radius" color="primary" text-color="white">J</q-avatar>
+        <div class="row items-center cursor-pointer" @click="showing != showing">
+          <div class="font-normal q-mr-sm">Hi, {{name}}</div>
+          <q-avatar class="btn-radius" color="primary" text-color="white">{{name.charAt(0)}}</q-avatar>
+          <q-menu style="width:150px;" v-model="showing">
+            <q-list >
+              <q-item>
+                <q-item-section class="text-bold">{{name}} </q-item-section>
+              </q-item>
+              <q-item clickable @click="$router.push( {name: 'Ubah Profil'} )">
+                <q-item-section>Profile </q-item-section>
+                <q-item-section side center>
+                  <q-item-label class="text-primary">Edit</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item clickable @click="$store.dispatch('auth/logout')">
+                <q-item-section class="text-warning">Logout</q-item-section>
+                <q-item-section side center>
+                  <q-icon name="logout" color="warning" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -46,11 +56,32 @@
 <script>
 import Sidebar from 'components/Sidebar.vue'
 
-import { defineComponent} from 'vue'
-
+import { defineComponent,ref,onMounted } from 'vue'
+import { usePratesis } from 'src/composeables/usePratesis'
+import { useService } from 'src/composeables/useService'
+import { useStore } from 'vuex'
 export default defineComponent({
   name: 'MainLayout',
-
+  setup(){
+    const showing = ref(false)
+    const { name } = usePratesis()
+    const { getData } = useService()
+    const roles = ref('Loading..')
+    const store = useStore()
+    onMounted(()=>{
+      getData('user-group',false)
+      .then(response=>{
+        let userrole = store.state.auth.user.kode_group.split(" ")[0]
+        let result = response.data.data.data.find(f=> f.kode_group.includes(userrole) )
+        roles.value = result.nama_group
+      })
+    })
+    return {
+      showing,
+      name,
+      roles
+    }
+  },
   components: {
     Sidebar
   },

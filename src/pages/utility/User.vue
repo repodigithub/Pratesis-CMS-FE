@@ -1,20 +1,6 @@
 <template>
 <q-page >
-    <Breadcrumb>
-        <template v-slot:leftside>
-            <q-breadcrumbs-el label="User" style="color:#00000073;"  />
-        </template>
-        <template v-slot:rightside>
-            <q-btn color="secondary" outline no-caps unelevated class="btn-one q-mr-lg" >
-                <q-icon name="download" style="font-size:15px;"  class="q-mr-sm"/>
-                <div>Download Template</div>
-            </q-btn>
-            <q-btn color="secondary" no-caps unelevated class="btn-one" >
-                <q-icon name="upload_file" style="font-size:14px;" class="q-mr-sm"/>
-                <div>Upload</div>
-            </q-btn>
-        </template>
-    </Breadcrumb >
+    <breadcrumb  :rightside="false"/>
     <div class="row q-pa-lg">
         <div class="col-12">
             <q-card class="own-card q-mb-lg" flat v-if="dtabel === 'DataUser'">
@@ -22,7 +8,7 @@
                     <div >
                         <div class="font-normal">Pencarian :</div>
                         <div class="row">
-                            <q-select v-model="dataFilter.kode_pengguna" :options="optkode_pengguna" dense outlined emit-value  map-options bg-color="primary" dropdown-icon="expand_more" class="option-one" />
+                            <q-select v-model="dataFilter.kode_pengguna" :options="optkode_pengguna" dense outlined bg-color="primary" dropdown-icon="expand_more" class="option-one" />
                             <q-input v-model="text" placeholder="Ex: ASM Medan" dense outlined class="option-two">
                                 <template v-slot:append>
                                     <q-icon
@@ -34,8 +20,7 @@
                         </div>
                     </div>
                     <div class=" q-ml-md">
-                        <div class="font-normal">Group Pengguna :</div>
-                        <q-select v-model="dataFilter.kode_group" :options="optkode_group"  emit-value  map-options dense outlined dropdown-icon="expand_more" class="option-three "/>
+                        <select-dropdown url="user-group" v-model:selected="dataFilter.kode_group" :islogin="false" :master="false" nameLabel="Group Pengguna :"/>
                     </div>
                     
                     <div class=" q-ml-md">
@@ -74,57 +59,16 @@ import RequestData from 'components/User/RequestData.vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 import { provide,ref, defineAsyncComponent } from 'vue'
 import AddUser from 'components/User/AddUser.vue'
-import { useStore } from 'vuex'
 export default {
     setup(){
-        const { filter, getData,resetFilter,onFilter,
+        const { filter, resetFilter,onFilter,
             onResetFilter
-         } = usePratesis()
-        const store = useStore()
-        const dataFilter = ref({})
-        dataFilter.value.kode_pengguna = null
-        dataFilter.value.kode_group = null
-        const optkode_pengguna = ref([
-            {
-                label : 'Kode Pengguna',
-                value : null
-            }
-        ])
-        const datakode_pengguna = ref([])
-        getData('area',store.state.auth.token)
-        .then(res=>{
-            res.data.data.forEach((item)=>{
-                optkode_pengguna.value.push({
-                    label :item.kode_area,
-                    value :item.kode_area,
-                })
-            })
-            datakode_pengguna.value = res.data.data
-            console.log("data area",res.data.data)
-        })
-        .catch(err=>{
-            console.log("error",err)
-        })
+        } = usePratesis()
 
-        const optkode_group = ref([
-            {
-                label : 'Group Pengguna',
-                value : null
-            }
-        ])
-        getData('usergroup',store.state.auth.token)
-        .then(res=>{
-            res.data.data.forEach((item)=>{
-                optkode_group.value.push({
-                    label : item.nama_group,
-                    value: item.kode_group
-                })
-            })
-            console.log("data usergroup",res.data.data)
-        })
-        .catch(err=>{
-            console.log("error",err)
-        })
+        const dataFilter = ref({})
+        dataFilter.value.kode_pengguna = 'Kode Pengguna'
+        dataFilter.value.kode_group = null
+        const optkode_pengguna = ref(['Kode Pengguna','Nama','Email'])
 
         function onReset(){
             onResetFilter()
@@ -136,8 +80,6 @@ export default {
         return {
             filter,
             optkode_pengguna,
-            optkode_group,
-            getData,
             resetFilter,
             onFilter,
             onReset,
@@ -148,7 +90,8 @@ export default {
         DataUser,
         RequestData,
         AddUser,
-        Breadcrumb: defineAsyncComponent(() => import('components/Breadcrumb')),
+        'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
+        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown')),
         
     },
     data(){

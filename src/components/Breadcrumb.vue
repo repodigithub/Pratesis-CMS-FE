@@ -2,15 +2,23 @@
     <div class="row">
         <q-card flat class="col-12">
             <q-card-section class="q-py-sm">
-                <div class="row justify-between">
+                <div class="row justify-between items-center">
                     <q-breadcrumbs>
                         <!-- <q-breadcrumbs-el icon="home" to="/" />
                         <q-breadcrumbs-el label="Docs" icon="widgets"  />
                         <q-breadcrumbs-el label="Breadcrumbs" icon="navigation" /> -->
+                        <q-breadcrumbs-el :label="$route.name" style="color:#00000073;"  />
                         <slot name="leftside"></slot>
                     </q-breadcrumbs>
-                    <div>
-                        <slot name="rightside" ></slot>
+                    <div v-if="rightside">
+                        <q-btn color="secondary" outline no-caps unelevated class="btn-one q-mr-lg" type="a" :href="'template/'+url" download >
+                            <q-icon name="download" style="font-size:15px;"  class="q-mr-sm"/>
+                            <div>Download Template</div>
+                        </q-btn>
+                        <q-btn color="secondary" no-caps unelevated class="btn-one" @click="openNow" >
+                            <q-icon name="upload_file" style="font-size:14px;" class="q-mr-sm"/>
+                            <div>Upload</div>
+                        </q-btn>
                     </div>
                 </div>
             </q-card-section>
@@ -20,7 +28,26 @@
 
 <script>
 export default {
+    name:'breadcrumb',
+    props: {
+        rightside: {
+            type: Boolean,
+            default: true
+        },
+        url: {
+            type: String,
+            default: '#'
+        },
+    },
+    setup(props,{ emit }){
 
+        function openNow(){
+            emit('openModal')
+        }
+        return {
+            openNow
+        }
+    }
 }
 </script>
 

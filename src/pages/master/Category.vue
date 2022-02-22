@@ -1,131 +1,95 @@
 <template>
-<q-page>
-      <Breadcrumb>
-        <template v-slot:leftside>
-            <q-breadcrumbs-el label="Category" style="color:#00000073;"  />
+    <core-simple-page :columns="columns" placeholder="Ex: Nama Category" :filteroption="option" filetemplate="MSTCATEGORY.xlsx" ref="coresimple">
+        <template v-slot:toptable>
+            <div class="row justify-end">
+                <q-btn color="secondary"  no-caps class="btn-one" unelevated @click="openAdd">
+                    <q-icon name="add" />
+                    Add New
+                </q-btn>
+            </div>
         </template>
-        <template v-slot:rightside>
-            <q-btn color="secondary" outline no-caps unelevated class="btn-one q-mr-lg" >
-                <q-icon name="download" style="font-size:15px;"  class="q-mr-sm"/>
-                <div>Download Template</div>
-            </q-btn>
-            <q-btn color="secondary" no-caps unelevated class="btn-one" @click="modalUpload = true">
-                <q-icon name="upload_file" style="font-size:14px;" class="q-mr-sm"/>
-                <div>Upload</div>
-            </q-btn>
+        <template v-slot:detail-content="props">
+            <div v-if="!props.edit">
+                <div class="row items-center">
+                    <div>Kode Kategori</div>
+                    <q-space />
+                    <div >{{props.tampil.kode_kategori}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>Nama Kategori</div>
+                    <q-space />
+                    <div >{{props.tampil.nama_kategori}}</div>
+                </div>
+            </div>
+            <div v-else>
+                <label for="Kode kategori">Kode Kategori</label>
+                <q-input v-model="props.send.kode_kategori" type="text" id="Kode kategori" outlined dense lazy-rules
+                :rules="[
+                    val => val !== null && val !== '' || 'Kode kategori tidak boleh kosong',
+                ]"/>
+                <label for="nama kategori">Nama Kategori</label>
+                <q-input v-model="props.send.nama_kategori" type="text" id="nama kategori" outlined dense lazy-rules
+                :rules="[
+                    val => val !== null && val !== '' || 'Nama kategori tidak boleh kosong',
+                ]"/>
+            </div>
         </template>
-    </Breadcrumb >
-    <div class="row q-pa-lg">
-        <div class="col-12">
-            <q-card class="own-card q-mb-lg" flat>
-                <q-card-section>
-                    <div class="row items-end">
-                        <div class="col-10">
-                            <div class="font-normal">Pencarian :</div>
-                            <div class="row">
-                                    <q-select v-model="kode" :options="optkode" dense outlined bg-color="primary" dropdown-icon="expand_more" class="option-one col-3" />
-                                    <q-input v-model="search" placeholder="Ex: ASM Medan" dense outlined class="option-two col-9">
-                                        <template v-slot:append>
-                                            <q-icon
-                                                name="search"
-                                                class="grey2"
-                                            />
-                                        </template>
-                                    </q-input>
-                            </div>
-                        </div>
-                        <q-space />
-                        <q-btn color="primary" label="Search" no-caps unelevated class="btn-one" />
-                    </div>
-                    <!-- <q-btn :color="reset ? 'negative' :'primary'" :label="reset ? 'Reset' : 'Apply'" no-caps unelevated class="btn-one" @click="onFilter"/> -->
-                </q-card-section>
-            </q-card>
-            <q-card class="own-card" flat>
-                <q-card-section>
-                   <q-table
-                            class="my-sticky-header-table q-mt-md btn-radius col-12"
-                            title=""
-                            :rows="rows"
-                            :columns="columns"
-                            row-key="id"
-                            flat
-                            bordered
-                            :loading="loading"
-                            :filter="filter"
-                             v-model:pagination="pagination"
-                            @request="onRequest"
-                            hide-pagination
-                            binary-state-sort
-                        >
-                        <template v-slot:loading>
-                            <q-inner-loading showing color="primary" />
-                        </template>
-                    </q-table>
-                    <div class="row justify-end q-mt-md" v-if="Object.keys(pagination).length > 0">
-                        <q-pagination
-                            v-model="pagination.page"
-                            color="black"
-                            active-color="secondary"
-                            active-text-color="secondary"
-                            :max="pagesNumber"
-                            size="md"
-                            direction-links
-                            outline
-                            class="table-pagination"
-                            @update:model-value="gotoPage"
-                        />
-                    </div>
-                </q-card-section>
-            </q-card>
-        </div>
-    </div>
-    <UploadFile v-model:upload="modalUpload" v-if="modalUpload" menu="category"/>
-</q-page>
+    </core-simple-page>
+    <add-data v-model:modalAdd="modalAdd" v-if="modalAdd" @reloadTable="reloadTable">
+        <template v-slot:add-content="props">
+            <div class="row justify-between">
+                <div class="col-5">
+                     <label for="Kode Category">Kode Category</label>
+                    <q-input v-model="props.send.kode_kategori"  id="Kode Category" outlined dense lazy-rules
+                    :rules="[
+                        val => val !== null && val !== '' || 'Kode Category tidak boleh kosong',
+                    ]" placeholder="Kode Category"/>
+                </div>
+                <div class="col-6">
+                    <label for="Nama Category">Nama Category</label>
+                    <q-input v-model="props.send.nama_kategori" id="Nama Category" outlined dense lazy-rules
+                    :rules="[
+                        val => val !== null && val !== '' || 'Nama Category tidak boleh kosong',
+                    ]" placeholder="Nama Category"/>
+                </div>
+            </div>
+        </template>
+    </add-data>
 </template>
 
 <script>
 import { defineAsyncComponent,ref } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 const columns = [
-  {
-    name: 'kode',
-    required: true,
-    label: 'Kode Category',
-    align: 'left',
-    field: 'kode_region',
-    sortable: true
-  },
-  { name: 'region',  align: 'left',label: 'Category', field: 'nama_region', sortable: true },
+    { name: 'kode',align: 'left', label: 'Kode Category', field: 'kode_kategori'},
+    { name: 'nama_category', align: 'left', label: 'Nama Category', field: 'nama_kategori'},
 ]
 export default {
     setup(){
-        const { pagination,rows,loading,init,onRequest,gotoPage,pagesNumber,getData,onFilter,filter,resetFilter,
-            onResetFilter,modalUpload} = usePratesis()
-        init('region')
+        //MSTCATEGORY
+        const option = ref(['Kode Category','Nama Category'])
+        const coresimple = ref('')
 
-        const kode = ref('Kode Area')
-        const search = ref('')
+        const { modalAdd,openAdd } = usePratesis()
+
+        function reloadTable(val) {
+            coresimple.value.reloadTable(val)
+        }
         return {
-            kode,
-            search,
-            optkode:['Kode Area',1,2,3,4,5],
-            filter,
+            option,
+            columns,
 
-            columns, // start untuk table
-            rows,
-            pagination,
-            loading,
-            onRequest,
-            gotoPage,
-            pagesNumber,
+            modalAdd,
+            openAdd,
 
-            modalUpload,
-            
+            reloadTable,
+
+            coresimple
         }
     },
     components:{
-        Breadcrumb: defineAsyncComponent(() => import('components/Breadcrumb')),
-        UploadFile: defineAsyncComponent(() => import('components/Modal/UploadFile'))
+        'core-simple-page': defineAsyncComponent(() => import('components/CoreSimplePage')),
+        'add-data': defineAsyncComponent(() => import('components/Modal/AddData')),
     }
 }
 </script>

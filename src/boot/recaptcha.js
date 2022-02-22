@@ -7,7 +7,7 @@ export default boot(async ({ app }) => {
       id = 'recaptcha-google',
       url = 'https://www.google.com/recaptcha/api.js'
   let promise = null
-  app.config.globalProperties.recaptchasitekey = '6Le8yDIeAAAAAAFpJytitjjkUbolleNNvvXef4qc'
+  app.config.globalProperties.recaptchasitekey = '6LcPB5QeAAAAAIZwz-rzXFU9OomQms0v8oe_Mj8s'
   app.config.globalProperties.recaptcha = () => {
     if (!promise) {
       promise = new Promise((resolve, reject) => {

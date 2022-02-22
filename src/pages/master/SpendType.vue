@@ -1,135 +1,126 @@
 <template>
-<q-page>
-      <Breadcrumb>
-        <template v-slot:leftside>
-            <q-breadcrumbs-el label="Spend Type" style="color:#00000073;"  />
-        </template>
-        <template v-slot:rightside>
-            <q-btn color="secondary" outline no-caps unelevated class="btn-one q-mr-lg" >
-                <q-icon name="download" style="font-size:15px;"  class="q-mr-sm"/>
-                <div>Download Template</div>
-            </q-btn>
-            <q-btn color="secondary" no-caps unelevated class="btn-one" @click="modalUpload = true">
-                <q-icon name="upload_file" style="font-size:14px;" class="q-mr-sm"/>
-                <div>Upload</div>
-            </q-btn>
-        </template>
-    </Breadcrumb >
-    <div class="row q-pa-lg">
-        <div class="col-12">
-            <q-card class="own-card q-mb-lg" flat>
-                <q-card-section>
-                    <div class="row items-end">
-                        <div class="col-10">
-                            <div class="font-normal">Pencarian :</div>
-                            <div class="row">
-                                    <q-select v-model="kode" :options="optkode" dense outlined bg-color="primary" dropdown-icon="expand_more" class="option-one col-3" />
-                                    <q-input v-model="search" placeholder="Ex: ASM Medan" dense outlined class="option-two col-9">
-                                        <template v-slot:append>
-                                            <q-icon
-                                                name="search"
-                                                class="grey2"
-                                            />
-                                        </template>
-                                    </q-input>
+    <breadcrumb  url="MSTSPENDTYPE" @openModal="openUpload" />
+        <div class="row q-pa-lg">
+            <div class="col-12">
+                <filter-table :option="option" placeholder="ex: Investment Type" @onFiltering="onFilter" @onReseting="onResetFilter"/>
+                <core-table :url="$route.path.substr(1)" v-model:filter="filter" :columns="columns" v-model:requesting="reload">
+                    <template v-slot:toptable>
+                        <div class="font-normal q-mb-sm">Spend Type :</div>
+                        <q-btn-group outline>
+                            <q-btn :outline="status === 'RA' ? false : true " color="primary" label="RA" unelevated @click="filterStatus('RA')" :class="status === 'RA' ? '' : 'bg-primary4'"/>
+                            <q-btn :outline="status === 'FO' ? false : true " color="primary" label="FO" unelevated @click="filterStatus('FO')" :class="status === 'FO' ? '' : 'bg-primary4'"/>
+                            <q-btn :outline="status === 'OA' ? false : true " color="primary" label="OA" unelevated @click="filterStatus('OA')" :class="status === 'OA' ? '' : 'bg-primary4'"/>
+                            <q-btn :outline="status === 'PA' ? false : true " color="primary" label="PA" unelevated @click="filterStatus('PA')" :class="status === 'PA' ? '' : 'bg-primary4'"/>
+                        </q-btn-group>
+                    </template>
+                    <template v-slot:body-cell-kode="props">
+                        <q-td key="kode" :props="props">
+                            <q-badge outline :label="props.row.kode_spend_type" :class="active ? randomColor() : ''"/>
+                        </q-td>
+                    </template>
+                    <template v-slot:detail-content="props">
+                        <div v-if="!props.edit">
+                            <div class="row items-center">
+                                <div>Kode Spend Type</div>
+                                <q-space />
+                                <div >{{props.tampil.kode_spend_type}}</div>
+                            </div>
+                            <div class="row items-center q-mt-md">
+                                <div>Investment Type</div>
+                                <q-space />
+                                <div >{{props.tampil.kode_investment}}</div>
+                            </div>
+                            <div class="row items-center q-mt-md">
+                                <div>Fund Type</div>
+                                <q-space />
+                                <div >{{props.tampil.fund_type}}</div>
+                            </div>
+                            <div class="row items-center q-mt-md">
+                                <div>Reference Pajak (CBT)</div>
+                                <q-space />
+                                <div >{{props.tampil.reference_tax}}</div>
+                            </div>
+                            <div class="row items-center q-mt-md">
+                                <div>Condition Type</div>
+                                <q-space />
+                                <div >{{props.tampil.condition_type}}</div>
                             </div>
                         </div>
-                        <q-space />
-                        <q-btn color="primary" label="Search" no-caps unelevated class="btn-one" />
-                    </div>
-                    <!-- <q-btn :color="reset ? 'negative' :'primary'" :label="reset ? 'Reset' : 'Apply'" no-caps unelevated class="btn-one" @click="onFilter"/> -->
-                </q-card-section>
-            </q-card>
-            <q-card class="own-card" flat>
-                <q-card-section>
-                   <q-table
-                            class="my-sticky-header-table q-mt-md btn-radius col-12"
-                            title=""
-                            :rows="rows"
-                            :columns="columns"
-                            row-key="id"
-                            flat
-                            bordered
-                            :loading="loading"
-                            :filter="filter"
-                             v-model:pagination="pagination"
-                            @request="onRequest"
-                            hide-pagination
-                            binary-state-sort
-                        >
-                        <template v-slot:loading>
-                            <q-inner-loading showing color="primary" />
-                        </template>
-                    </q-table>
-                    <div class="row justify-end q-mt-md" v-if="Object.keys(pagination).length > 0">
-                        <q-pagination
-                            v-model="pagination.page"
-                            color="black"
-                            active-color="secondary"
-                            active-text-color="secondary"
-                            :max="pagesNumber"
-                            size="md"
-                            direction-links
-                            outline
-                            class="table-pagination"
-                            @update:model-value="gotoPage"
-                        />
-                    </div>
-                </q-card-section>
-            </q-card>
+                        <div v-else>
+                            <label for="Kode spend_type">Kode Spend Type</label>
+                            <q-input v-model="props.send.kode_spend_type" type="text" id="Kode spend_type" outlined dense lazy-rules
+                            :rules="[
+                                val => val !== null && val !== '' || 'Kode spend_type tidak boleh kosong',
+                            ]"/>
+                            <label for="Investment Type">Investment Type</label>
+                            <select-dropdown url="investment" v-model:selected="props.send.kode_investment" class="q-mb-md" :master="false"/>
+                            <label for="Fund Type">Fund Type</label>
+                            <q-input v-model="props.send.fund_type" type="text" id="Fund Type" outlined dense lazy-rules
+                            :rules="[
+                                val => val !== null && val !== '' || 'Fund Type tidak boleh kosong',
+                            ]"/>
+                            <label for="Reference Pajak (CBT)">Reference Pajak (CBT)</label>
+                            <q-input v-model="props.send.reference_tax" type="text" id="Reference Pajak (CBT)" outlined dense lazy-rules
+                            :rules="[
+                                val => val !== null && val !== '' || 'Reference Pajak (CBT) tidak boleh kosong',
+                            ]"/>
+                            <label for="Condition Type">Condition Type</label>
+                            <q-input v-model="props.send.condition_type" type="text" id="Condition Type" outlined dense lazy-rules
+                            :rules="[
+                                val => val !== null && val !== '' || 'Condition Type tidak boleh kosong',
+                            ]"/>
+                        </div>
+                    </template>
+                </core-table>
+            </div>
         </div>
-    </div>
-    <UploadFile v-model:upload="modalUpload" v-if="modalUpload" menu="investment-type"/>
-</q-page>
+        <upload-file v-model:upload="modalUpload" v-if="modalUpload" :menu="$route.path.substr(1)" @onUploadSuccess="reloadTable"/>
 </template>
 
 <script>
 import { defineAsyncComponent,ref } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 const columns = [
-  {
-    name: 'kode',
-    required: true,
-    label: 'Kode ',
-    align: 'left',
-    field: 'kode_region',
-    sortable: true
-  },
-  { name: 'region',  align: 'left',label: 'Investment Type', field: 'nama_region', sortable: true },
-  { name: 'fund',  align: 'left',label: 'Fund Type', field: 'nama_region', sortable: true },
-  { name: 'reference',  align: 'left',label: 'Reference', field: 'nama_region', sortable: true },
-  { name: 'condition',  align: 'left',label: 'Condition Type', field: 'nama_region', sortable: true },
+    { name: 'kode', label: 'Kode', align: 'left', field: 'kode_spend_type' },
+    { name: 'investment_type',  align: 'left',label: 'Investment Type', field: 'kode_investment'},
+    { name: 'fund_type',  align: 'left',label: 'Fund Type', field: 'fund_type'},
+    { name: 'reference',  align: 'left',label: 'Reference', field: 'reference_tax'},
+    { name: 'condition_type',  align: 'left',label: 'Condition Type', field: 'condition_type'},
 ]
 export default {
     setup(){
-        const { pagination,rows,loading,init,onRequest,gotoPage,pagesNumber,getData,onFilter,filter,resetFilter,
-            onResetFilter,modalUpload} = usePratesis()
-        init('region')
+        //MSTSPENDTYPE
+        const option = ref(['Kode','Investment Type','Fund Type','Reference','Condition Type'])
+        const { onFilter,filter,onResetFilter,modalUpload,openUpload,reload,reloadTable,randomColor} = usePratesis()
+        const status = ref('RA')
+        function filterStatus(key){
+            status.value = key
+            filter.value = {
+                "kode_spend_type" : key
+            }
+        }
 
-        const kode = ref('Kode Area')
-        const search = ref('')
+        const active = ref(true)
+    
         return {
-            kode,
-            search,
-            optkode:['Kode Area',1,2,3,4,5],
-            filter,
+            status,
+            filterStatus,
 
-            columns, // start untuk table
-            rows,
-            pagination,
-            loading,
-            onRequest,
-            gotoPage,
-            pagesNumber,
+            option,
+            columns,
+            onFilter,filter,onResetFilter,modalUpload,openUpload,reload,reloadTable,
 
-            modalUpload,
-            
+            randomColor,
+            active
         }
     },
     components:{
-        Breadcrumb: defineAsyncComponent(() => import('components/Breadcrumb')),
-        UploadFile: defineAsyncComponent(() => import('components/Modal/UploadFile'))
-    }
+        'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
+        'upload-file': defineAsyncComponent(() => import('components/Modal/UploadFile')),
+        'core-table': defineAsyncComponent(() => import('components/CoreTable')),
+        'filter-table': defineAsyncComponent(() => import('components/FilterTable')),
+        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown'))
+    },
 }
 </script>
 

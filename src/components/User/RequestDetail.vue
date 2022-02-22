@@ -112,36 +112,37 @@
 
 <script>
 import { ref,onMounted } from 'vue'
-import { usePratesis } from 'src/composeables/usePratesis'
-import { useQuasar } from 'quasar'
-import { api,header } from 'boot/axios'
-import { useStore } from 'vuex'
+import { useCustom } from 'src/composeables/useCustom'
+import { useService } from 'src/composeables/useService'
 export default {
     props:['drequest','dataDetail'],
-    setup(props){
+    setup(props,{emit}){
         const edit = ref(false)
         const send = ref({})
         const disable = ref(false)
         const loading = ref(false)
-        const { formatTgl } = usePratesis()
-        const quasar = useQuasar()
-        const store = useStore()
+        const { formatTgl,showLoading,hideLoading } = useCustom()
+        const { putData } = useService()
         function onEdit(){
             edit.value = true
         }
         function onSave(){
-            quasar.loading.show({
-                message: 'Menyimpan Data User. Please wait...',
-                boxClass: 'bg-grey-2 text-grey-9',
-                spinnerColor: 'primary'
-            })
-            api.put(`user/${send.value.id}`,send.value,header(store.state.auth.token))
+            showLoading()
+            putData(`user/${send.value.id}`,send.value)
             .then(res=>{
-                console.log("respose",res)
-                quasar.loading.hide()
+                hideLoading()
                 edit.value = false
+                send.value = res.data.data
+                emit('update:dataDetail',res.data.data)
+                emit('reloadTable',{
+                    pagination : {
+                        page : 1
+                    }
+                })
             })
-            .catch(err=>console.log("err",err))
+            .catch(()=>{
+                hideLoading()
+            })
         }
         onMounted(()=>{
             send.value = {...props.dataDetail}

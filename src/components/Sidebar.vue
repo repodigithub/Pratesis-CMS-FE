@@ -80,7 +80,7 @@
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
 import { menu } from 'src/common/menu'
-import { ref } from 'vue'
+import { ref} from 'vue'
 export default {
 components: {
     EssentialLink
@@ -88,17 +88,15 @@ components: {
 
   setup () {
     const leftDrawerOpen = ref(true)
-
     return {
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      },
     }
   },
   data(){
     return{
-      role:'headoffice',
       menu:menu,
       masterexpand:{},
       submenuexpand:{}
@@ -150,6 +148,10 @@ components: {
     }
   },
     computed:{
+        role(){
+          let x = this.$store.state.auth.user.kode_group
+          return x ? x.split(" ")[0] : ''
+        },  
         activesubmenu(){
             return val => val.filter(m => m.access[this.role])
         },

@@ -3,10 +3,11 @@ const menu = [
         title:'Overview',
         icon: 'overview',
         access:{
-            superadmin:true,
-            distributor:true,
-            headoffice:true,
-            depot:true
+            AD:true,
+            DI:true,
+            GA:true,
+            HO:true,
+            SA:true
         },
     },
     {
@@ -32,8 +33,9 @@ const menu = [
                     {title : 'Distributor'},
                 ],
                 access:{
-                    superadmin:true,
-                    headoffice:true
+                    AD:true,
+                    GA:true,
+                    HO:true
                 }
             },
             {
@@ -41,69 +43,78 @@ const menu = [
                 submenu:[
                     {title : 'Divisi'},
                     {title : 'Category'},
-                    // {title : 'Brand'},
-                    // {title : 'Sub Brand'},
-                    // {title : 'Product'},
+                    {title : 'Brand'},
+                    {title : 'Sub Brand'},
+                    {title : 'Product'},
                 ],
                 access:{
-                    superadmin:true,
-                    headoffice:true
+                    AD:true,
+                    GA:true,
+                    HO:true
                 }
             },
             {
                 title:'Document Claim',
                 access:{
-                    superadmin:true,
-                    headoffice:true
+                    AD:true,
+                    GA:true,
+                    HO:true
                 }
             },
-            // {
-            //     title:'Alasan',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
+            {
+                title:'Alasan',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true
+                }
+            },
             {
                 title:'Pajak',
                 access:{
-                    superadmin:true,
-                    headoffice:true
+                    AD:true,
+                    GA:true,
+                    HO:true
                 }
             },
             {
                 title:'Spend Type',
                 access:{
-                    superadmin:true,
-                    headoffice:true
+                    AD:true,
+                    GA:true,
+                    HO:true
                 }
             },
-            // {
-            //     title:'Type Promo',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
             {
-                title:'Investment Type',
+                title:'Type Promo',
                 access:{
-                    superadmin:true,
-                    headoffice:true
+                    AD:true,
+                    GA:true,
+                    HO:true
                 }
             },
-            // {
-            //     title:'Budget Holder',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
+            {
+                title:'Investment',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true
+                }
+            },
+            {
+                title:'Budget Holder',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true
+                }
+            },
         ],
         access:{
-            superadmin:true,
-            distributor:true,
-            headoffice:true
+            AD:true,
+            GA:true,
+            HO:true,
+            DI:true,
         },
     },
     {
@@ -148,8 +159,9 @@ const menu = [
             {
                 title:'User',
                 access:{
-                    superadmin:true,
-                    headoffice:true
+                    AD:true,
+                    GA:true,
+                    HO:true
                 }
             },
             // {
@@ -161,10 +173,9 @@ const menu = [
             // },
         ],
         access:{
-            superadmin:true,
-            distributor:true,
-            headoffice:true,
-            depot:true
+            AD:true,
+            GA:true,
+            HO:true
         },
     },
     {
@@ -181,8 +192,10 @@ const menu = [
             {
                 title:'Ubah Profil',
                 access:{
-                    superadmin:true,
-                    headoffice:true
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true
                 }
             },
             // {
@@ -222,47 +235,47 @@ const menu = [
             // },
         ],
         access:{
-            superadmin:true,
-            distributor:true,
-            headoffice:true,
-            depot:true
+            AD:true,
+            GA:true,
+            HO:true,
+            DI:true
         },
     },
-    {
-        title:'Transaksi',
-        icon:'transaksi',
-        submenu:[
-            {
-                title: 'Klaim Promo',
-                access:{
-                    superadmin:true,
-                }
-            },
-            {
-                title: 'Edit Budget',
-                access:{
-                    superadmin:true,
-                }
-            },
-            {
-                title: 'Verifikasi',
-                access:{
-                    superadmin:true,
-                }
-            },
-            {
-                title: 'Cetak Ulang BPP',
-                access:{
-                    superadmin:true,
-                }
-            },
-        ],
-        access:{
-            superadmin:true,
-            distributor:true,
-            depot:true
-        },
-    }
+    // {
+    //     title:'Transaksi',
+    //     icon:'transaksi',
+    //     submenu:[
+    //         {
+    //             title: 'Klaim Promo',
+    //             access:{
+    //                 superadmin:true,
+    //             }
+    //         },
+    //         {
+    //             title: 'Edit Budget',
+    //             access:{
+    //                 superadmin:true,
+    //             }
+    //         },
+    //         {
+    //             title: 'Verifikasi',
+    //             access:{
+    //                 superadmin:true,
+    //             }
+    //         },
+    //         {
+    //             title: 'Cetak Ulang BPP',
+    //             access:{
+    //                 superadmin:true,
+    //             }
+    //         },
+    //     ],
+    //     access:{
+    //         superadmin:true,
+    //         distributor:true,
+    //         depot:true
+    //     },
+    // }
 ]
 
 export { menu }

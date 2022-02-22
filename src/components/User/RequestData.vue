@@ -35,7 +35,7 @@
           </q-td>
         </template>
     </q-table>
-    <RequestDetail v-model:drequest="drequest" v-if="drequest" v-model:dataDetail="dataDetail"/>
+    <RequestDetail v-model:drequest="drequest" v-if="drequest" v-model:dataDetail="dataDetail" @reloadTable="onRequest"/>
     <RequestAction v-model:daction="daction" v-if="daction" v-model:dload="dload" v-model:ddisabled="ddisabled" :action="action" v-model:actionpersistent="actionpersistent"/>
 </template>
 
@@ -61,6 +61,8 @@ import RequestAction from './RequestAction.vue'
 import { ref} from 'vue'
 import { api,header } from 'boot/axios'
 import { useRequestDetail } from 'src/composeables/useRequestDetail'
+import { useCustom } from 'src/composeables/useCustom'
+import { useService } from 'src/composeables/useService'
 
 export default {
     components:{
@@ -68,14 +70,15 @@ export default {
       RequestAction
     },
     setup(){
-      const { pagination,rows,loading,init,onRequest, successNotif, formatTgl} = usePratesis()
+      const { formatTgl,successNotif } = useCustom()
+      const { postData } = useService()
+      const { pagination,rows,loading,init,onRequest} = usePratesis()
       const { drequest,onDetail,dataDetail } = useRequestDetail()
-      const store = useStore()
-      const token = store.state.auth.token
+      // const store = useStore()
+      // const token = store.state.auth.token
       const actionpersistent = ref(false)
       init('user',{
-        status: 'pending',
-        token: token
+        status: 'waiting_approval',
       })
       
 
@@ -119,15 +122,14 @@ export default {
         dload.value = true
         ddisabled.value = true
         actionpersistent.value = true
-        api.post('user/action',send.value,header(token))
+        postData('user/action',send.value)
         .then(()=>{
           dload.value = false
           ddisabled.value = false
           actionpersistent.value = false
           daction.value = false
           init('user',{
-            status: 'pending',
-            token: token
+            status: 'waiting_approval',
           })
           multiple.value = false
           drequest.value = false

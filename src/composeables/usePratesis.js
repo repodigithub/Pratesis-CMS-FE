@@ -1,22 +1,25 @@
 import {toRefs, ref, reactive,computed} from 'vue'
-import { api,header } from 'boot/axios'
-import { useQuasar,date } from 'quasar'
+// import { api,header } from 'boot/axios'
+// import { useQuasar,date } from 'quasar'
 import { useStore } from 'vuex'
+import { useService } from './useService'
 export const usePratesis = () => {
     const store = useStore()
-    let token = store.state.auth.token
-    const modalUpload = ref(false)
+    // let token = store.state.auth.token
     const rows = ref([])
     const state =   reactive({
         error:null,
         loading:false,
         url:null,
-        option:null
+        option:null,
     })
+
     const pagination = ref({})
     const pagesNumber = computed(()=>{
         return Math.ceil(pagination.value.rowsNumber / pagination.value.rowsPerPage)
     })
+
+    const userLogin = ref(true)
 
     const success = res => {
         pagination.value.page = res.data.data.current_page
@@ -30,9 +33,16 @@ export const usePratesis = () => {
         state.loading = false
     }
 
-    const init = async (url,option) => {
+    const { getData } = useService()
+
+    // const localheader = (url,islogin = true) => {
+    //     return islogin ? header(token,islogin) : header(url,islogin)
+    // }
+
+    const init =  (url,option,islogin = true) => {
         state.loading = true
         state.url = url
+        userLogin.value = islogin
         if(option){
             state.option = option
             const { status,include } = option
@@ -44,13 +54,20 @@ export const usePratesis = () => {
             }
         }
 
-        await api.get(`${state.url}`,header(token))
+        getData(state.url,islogin)
         .then(res=>{
             success(res)
         })
         .catch(err=>{
             error(err)
         })
+        // await api.get(state.url,localheader(url,islogin))
+        // .then(res=>{
+        //     success(res)
+        // })
+        // .catch(err=>{
+        //     error(err)
+        // })
     }
 
     const onRequest = request => {
@@ -72,22 +89,50 @@ export const usePratesis = () => {
             if(filter.searchKey){
                 filterKey += `&search=${filter.searchKey}`
             }
+            if(filter.status){
+                filterKey += `&status=${filter.status}`
+            }
+            if(filter.status_distributor){
+                filterKey += `&status_distributor=${filter.status_distributor}`
+            }
+            if(filter.kode_distributor_group){
+                filterKey += `&kode_distributor_group=${filter.kode_distributor_group}`
+            }
+            if(filter.kode_area){
+                filterKey += `&kode_area=${filter.kode_area}`
+            }
+            if(filter.kode_divisi){
+                filterKey += `&kode_divisi=${filter.kode_divisi}`
+            }
+            if(filter.kode_kategori){
+                filterKey += `&kode_kategori=${filter.kode_kategori}`
+            }
+            if(filter.kode_sub_brand){
+                filterKey += `&kode_sub_brand=${filter.kode_sub_brand}`
+            }
+            if(filter.kode_spend_type){
+                filterKey += `&kode_spend_type=${filter.kode_spend_type}`
+            }
+
         }
-        const { status,include } = state.option
         let paginate = ''
-        
-        if(status || include ){
-            paginate += `&`
+        if(state.option){
+            const { status,include } = state.option
+            if(status || include ){
+                paginate += `&`
+            }
         }else{
             paginate += `?`
         }
+        
         if(page){
             paginate +=`page=${page}`
         }
         if(rowsPerPage){
             paginate += `&limit=${rowsPerPage}`
         }
-        api.get(state.url + paginate + filterKey,header(token))
+        getData(state.url+paginate+filterKey,userLogin.value)
+        // api.get(state.url + paginate + filterKey,localheader(state.urlmurni,userLogin.value))
         .then(res=>{
             success(res)
         })
@@ -96,99 +141,139 @@ export const usePratesis = () => {
         })
     }
 
-    const gotoPage = page =>{
-        onRequest({
-            pagination : {
-                page : page
-            }
-        })
+    const gotoPage = page => {
+        if(!state.loading){
+            onRequest({
+                pagination : {
+                    page : page
+                }
+            })
+        } 
     }
 
-    const notif = useQuasar()
-    const successNotif = msg => {
-        notif.notify({
-            message: msg,
-            icon:'check',
-            type: 'positive',
-            position: 'top-right',
-            progress: true
-        })
-    }
-    const errorNotif = msg => {
-        notif.notify({
-            message: msg,
-            icon:'close',
-            type: 'negative',
-            position: 'top-right',
-            progress: true
-        })
-    }
-    const formatTgl = tgl => {
-        return date.formatDate(tgl,'DD/MM/YY')
-    }
+    // const notif = useQuasar()
+    // const successNotif = msg => {
+    //     notif.notify({
+    //         message: msg,
+    //         icon:'check',
+    //         type: 'positive',
+    //         position: 'top-right',
+    //         progress: true
+    //     })
+    // }
+    // const errorNotif = msg => {
+    //     notif.notify({
+    //         message: msg,
+    //         icon:'close',
+    //         type: 'negative',
+    //         position: 'top-right',
+    //         progress: true
+    //     })
+    // }
+    // const formatTgl = tgl => {
+    //     return date.formatDate(tgl,'DD/MM/YY')
+    // }
 
-    const getData = async (url) => {
-        return await new Promise((resolve,reject)=>{
-            api.get(`${url}`,header(token))
-            .then(res=>{
-                resolve(res)
-            })
-            .catch(err=>{
-                reject(err)
-            })
-        })
-    }
+    // const getData = async (url,islogin = true) => {
+    //     return await new Promise((resolve,reject)=>{
+    //         api.get(`${url}`,localheader(url,islogin))
+    //         .then(res=>{
+    //             resolve(res)
+    //         })
+    //         .catch(err=>{
+    //             reject(err)
+    //         })
+    //     })
+    // }
 
-    const postData = async (url,data) =>{
-        return await new Promise((resolve,reject)=>{
-            console.log("data",data)
-            let kirim = new FormData()
-            kirim.append('file',data)
-            console.log("kirim",kirim)
-            api.post(`${url}`,kirim,header(token))
-            .then(res=>{
-                resolve(res.data.data)
-            })
-            .catch(err=>{
-                reject(err)
-                console.log('error',err)
-            })
-        })
-    }
-
+    // const postData = async (url,data) =>{
+    //     return await new Promise((resolve,reject)=>{
+    //         api.post(url,data,header(token))
+    //         .then(res=>{
+    //             resolve(res)
+    //         })
+    //         .catch(err=>{
+    //             reject(err)
+    //         })
+    //     })
+    // }
 
     const filter = ref({})
-    const resetFilter = ref(false)
     const onFilter = dataFilter => {
         filter.value = dataFilter
-        resetFilter.value = true
     }
     const onResetFilter = () => {
         filter.value = null
-        resetFilter.value = false
     }
+
+    const modalUpload = ref(false)
+    const openUpload = () =>{
+        modalUpload.value = true
+    }
+    const reload = ref(null)
+    const reloadTable = (data) =>{
+        reload.value = data
+    }
+
+    const modalDetail = ref(false)
+    const dataDetail = ref({})
+    const openDetail = (evt,row) => {
+        modalDetail.value = true
+        dataDetail.value = row
+    }
+
+    const modalAdd = ref(false)
+    const openAdd = () => {
+        modalAdd.value = true
+    }
+
+    const name = computed(()=>{
+        let fullname = store.state.auth.user.full_name 
+        return fullname ? fullname : ''
+    })
+
+    const randomColor = () =>{
+        const arrayColor = ['text-red-7','text-pink-7','text-purple-7','text-deep-purple-7','text-indigo-7','text-blue-7','text-light-blue-7','text-cyan-7','text-teal-7','text-green-7','text-light-green-7','text-lime-7','text-yellow-7','text-amber-7','text-orange-7','text-deep-orange-7','text-brown-7']
+        let random = Math.floor(Math.random() * 16)
+        return arrayColor[random]
+    }
+
     return {
+        // localheader,
+
         rows,
         ...toRefs(state),
         pagination, //table
         init,
         onRequest,
 
-        successNotif,
-        errorNotif,
+        // successNotif,
+        // errorNotif,
 
-        formatTgl, //general function
-        getData,
-        postData,
+        // formatTgl,
+        // getData,
+        // postData,
 
-        filter, //filtering
-        resetFilter,
+        filter, //filtering table
         onFilter,
         onResetFilter,
 
         gotoPage, //pagination
         pagesNumber,
 
-        modalUpload
+        modalUpload,//for upload and reload table
+        openUpload,
+        reload,
+        reloadTable,
+
+        modalDetail,//for detail data
+        openDetail,
+        dataDetail,
+
+        modalAdd, //for add data
+        openAdd,
+
+        name,
+        randomColor
     }
 }
