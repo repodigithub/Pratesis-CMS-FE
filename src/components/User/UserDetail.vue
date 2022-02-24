@@ -12,7 +12,9 @@
                 </q-card-section>
                 <q-scroll-area class="fit" v-if="valid">
                     <q-card-section class="q-pb-none" >
-                        <slot name="detail-content" :tampil="dataDetail" :send="dataModal" :edit="edit"/>
+                        <slot name="detail-content" :tampil="dataModal" :send="dataModal" :edit="edit" :namaarea="nama_area" 
+                        :namadistributor="nama_distributor"
+                        />
                     </q-card-section>
                 </q-scroll-area>
                 <q-card-section class="row justify-center" v-else>
@@ -22,6 +24,11 @@
                 <q-card-section class="row items-center " v-if="canEdit">
                     <q-btn color="primary" icon="edit" label="Edit" no-caps unelevated class="q-px-sm btn-one" outline v-if="!edit" @click="onEdit" />
                     <q-btn color="primary" icon="save" label="Simpan" no-caps unelevated class="q-px-sm btn-one" outline v-else type="submit"/>
+                    <q-space />
+                    <div class="d" v-if="isRequest">
+                        <q-btn color="secondary" label="Reject" no-caps unelevated class="q-px-sm btn-one q-mr-sm" outline @click="onLoad(dataDetail.id,'reject')"/>
+                        <q-btn color="secondary" label="Approve" no-caps unelevated class="q-px-sm btn-one" @click="onLoad(dataDetail.id,'approve')"/>
+                    </div>
                 </q-card-section>
             </div>
             </q-form>
@@ -30,12 +37,12 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref,watch } from 'vue'
 import {  useRoute } from 'vue-router'
 import { useService } from 'src/composeables/useService'
 import { useCustom } from 'src/composeables/useCustom'
 export default {
-    name:'detail-table',
+    name:'user-detail',
     props:{
         modalDetail: {
             type: Boolean,
@@ -54,7 +61,10 @@ export default {
             type: Boolean,
             default: true
         },
-        
+        isRequest:{
+            type:Boolean,
+            default: false
+        }
     },
     setup(props, { emit }){
         const { putData,getData } = useService()
@@ -80,18 +90,44 @@ export default {
             url.value += `?include=${x.include}`
         }
 
-        getData(url.value,props.islogin)
+        getData(url.value)
         .then(res=>{
-            emit('update:dataDetail',res.data.data)
             dataModal.value = res.data.data
-            console.log("dataModal",dataModal.value)
             valid.value = true
+        })
+
+        const nama_area = ref('undefined')
+        watch(()=>dataModal.value.kode_area,val=>{
+            console.log("val dari props",val)
+            if(val !== null){
+                getData(`area?search=${val}`)
+                .then(res=>{
+                    nama_area.value = res.data.data.data[0].nama_area
+                })
+            }
+        })
+
+        const nama_distributor = ref('undefined')
+        watch(()=>dataModal.value.kode_distributor,val=>{
+            console.log("val dari props",val)
+            if(val !== null){
+                getData(`distributor?search=${val}`)
+                .then(res=>{
+                    nama_distributor.value = res.data.data.data[0].nama_distributor
+                })
+            }
         })
 
         function onSave(){
             form.value.validate()
             .then(valid=>{
                 if(valid){
+                    if(dataModal.value.kode_group.includes('SA')){
+                        dataModal.value.kode_distributor = null
+                    }else if(!dataModal.value.kode_group.includes('DI')){
+                        dataModal.value.kode_distributor = null
+                        dataModal.value.kode_area = null
+                    }
                     showLoading()
                     putData(url.value.split("?")[0],dataModal.value)
                     .then(()=>{
@@ -121,9 +157,16 @@ export default {
             successNotif,
             getData,putData,
 
-            valid
+            valid,
+            nama_area,
+            nama_distributor
         }
     },
+    methods:{
+        onLoad(index,action){
+            this.$parent.onClick(index,action)
+        },
+    }
 }
 </script>
 

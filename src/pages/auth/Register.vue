@@ -213,6 +213,7 @@ export default {
                         })
                         .catch(()=>{
                             hideLoading()
+                            grecaptcha.reset()
                         })
                     }
                 }
@@ -250,6 +251,11 @@ export default {
             console.log("testing")
         },
     },
+    beforeCreate(){
+        if(this.$store.getters['auth/isAuthenticated']){
+            this.$router.push({ name : 'Overview'})
+        }
+    }
 }
 </script>
 

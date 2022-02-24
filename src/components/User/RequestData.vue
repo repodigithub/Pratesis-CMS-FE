@@ -12,13 +12,14 @@
             flat
             bordered
             v-model:pagination="pagination"
+            hide-pagination
             @request="onRequest"
             :loading="loading"
             binary-state-sort
             :selected-rows-label="getSelectedString"
             selection="multiple"
             v-model:selected="selected"
-            @row-click="onDetail"
+            @row-click="openDetail"
         >
         <template v-slot:loading>
           <q-inner-loading showing color="primary" />
@@ -29,53 +30,177 @@
               <q-btn color="positive" icon="check" label="Approve" no-caps @click.stop="onClick(props.row.id,'approve')" unelevated class="q-mr-lg btn-two"/>
           </q-td>
         </template>
-        <template v-slot:body-cell-requestdate="props">
+        <!-- <template v-slot:body-cell-requestdate="props">
           <q-td key="requestdate" :props="props" >
                 {{ formatTgl(props.row.created_at) }}
           </q-td>
-        </template>
+        </template> -->
     </q-table>
-    <RequestDetail v-model:drequest="drequest" v-if="drequest" v-model:dataDetail="dataDetail" @reloadTable="onRequest"/>
+    <div class="col-12 row justify-end q-mt-md">
+      <q-pagination
+            v-model="pagination.page"
+            color="black"
+            active-color="secondary"
+            active-text-color="secondary"
+            :max="pagesNumber"
+            size="md"
+            direction-links
+            outline
+            class="table-pagination"
+            @update:model-value="gotoPage"
+            :max-pages="4"
+            :boundary-numbers="false"
+        />
+    </div>
+    <!-- <RequestDetail v-model:drequest="drequest" v-if="drequest" v-model:dataDetail="dataDetail" @reloadTable="onRequest"/> -->
     <RequestAction v-model:daction="daction" v-if="daction" v-model:dload="dload" v-model:ddisabled="ddisabled" :action="action" v-model:actionpersistent="actionpersistent"/>
+     <user-detail v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :options="{ include : 'usergroup;area;distributor'}" v-model:dataForm="dataForm" isRequest>
+      <template v-slot:detail-content="props">
+            <div v-if="!props.edit">
+                <div class="row items-center">
+                    <div>Request Date</div>
+                    <q-space />
+                    <div >{{formatTgl(props.tampil.created_at)}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>User ID</div>
+                    <q-space />
+                    <div >{{props.tampil.user_id}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>Full Name</div>
+                    <q-space />
+                    <div >{{props.tampil.full_name}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>Email</div>
+                    <q-space />
+                    <div >{{props.tampil.email}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>Username</div>
+                    <q-space />
+                    <div >{{props.tampil.username}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>User Level</div>
+                    <q-space />
+                    <div>{{props.tampil.usergroup.nama_group}}</div>
+                </div>
+                <div class="row items-center q-mt-md" v-if="props.tampil.kode_area">
+                    <div>Kode Depo</div>
+                    <q-space />
+                    <div >{{props.tampil.kode_area}}</div>
+                </div>
+                <div class="row items-center q-mt-md" v-if="props.tampil.kode_area">
+                    <div>Nama Depo</div>
+                    <q-space />
+                    <div >{{props.tampil.area.nama_area}}</div>
+                </div>
+                <div class="row items-center q-mt-md" v-if="props.tampil.kode_distributor">
+                    <div>Kode Distributor</div>
+                    <q-space />
+                    <div >{{props.tampil.kode_distributor}}</div>
+                </div>
+                <div class="row items-center q-mt-md" v-if="props.tampil.kode_distributor">
+                    <div>Nama Distributor</div>
+                    <q-space />
+                    <div >{{props.tampil.distributor.nama_distributor}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>Status</div>
+                    <q-space />
+                    <q-badge outline  label="Waiting for Approval" class="alert3 alert1 q-px-md q-py-sm btn-two" />
+                </div>
+            </div>
+            <div v-else>
+              <!-- <edit-user v-model:dataForm="dataForm"/> -->
+              <div class="row items-center">
+                    <div>Request Date</div>
+                    <q-space />
+                    <div >{{formatTgl(props.send.created_at)}}</div>
+                </div>
+                <label for="User ID">User ID</label>
+                <q-input v-model="props.send.user_id" type="text" id="User ID" outlined dense lazy-rules
+                :rules="[
+                    val => val !== null && val !== '' || 'User ID tidak boleh kosong',
+                ]"/>
+                <label for="Full Name">Full Name</label>
+                <q-input v-model="props.send.full_name" type="text" id="Full Name" outlined dense lazy-rules
+                :rules="[
+                    val => val !== null && val !== '' || 'Full Name tidak boleh kosong',
+                ]"/>
+                <label for="Email">Email</label>
+                <q-input v-model="props.send.email" type="text" id="Email" outlined dense lazy-rules
+                :rules="[
+                    val => val !== null && val !== '' || 'Email tidak boleh kosong',
+                ]"/>
+                <label for="Username">Username</label>
+                <q-input v-model="props.send.username" type="text" id="Username" outlined dense lazy-rules
+                :rules="[
+                    val => val !== null && val !== '' || 'Username tidak boleh kosong',
+                ]"/>
+                <select-dropdown url="user-group" v-model:selected="props.send.kode_group" :islogin="false" :master="false" class="q-mb-md" nameLabel="User Level"/>
+
+                <div v-if="props.send.kode_group.includes('DI') || props.send.kode_group.includes('SA')">
+                    <select-dropdown url="area" v-model:selected="props.send.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo"/>
+                    <label for="nama_depo" class="font-normal">Nama Depo</label>
+                    <q-input v-model="props.namaarea"  dense outlined id="nama_depo" class="q-mb-md"
+                    hide-bottom-space
+                    disable
+                    >
+                    <template v-slot:append>
+                        <q-icon
+                            name="person"
+                        />
+                        </template>
+                    </q-input>
+                </div>
+                <div  v-if="props.send.kode_group.includes('DI')">
+                    <select-dropdown url="distributor" v-model:selected="props.send.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor"/> 
+                    <label for="nama_distributor" class="font-normal">Nama Distributor</label>
+                      <q-input v-model="dataForm.distributor.nama_distributor"  dense outlined id="nama_distributor" class="q-mb-md"
+                      hide-bottom-space
+                      disable
+                      >
+                          <template v-slot:append>
+                          <q-icon
+                              name="person"
+                          />
+                          </template>
+                      </q-input>
+                </div>
+            </div>
+        </template>
+    </user-detail>
 </template>
 
 <script>
-const columns = [
-  { name: 'requestdate', align: 'left', label: 'Request Date', field: 'created_at', sortable: true,style:'width:96px' },
-  {
-    name: 'userid',
-    required: true,
-    label: 'User ID',
-    align: 'left',
-    field: 'user_id',
-    sortable: true
-  },
-  { name: 'name', align: 'left', label: 'Name', field: 'full_name', sortable: true },
-  { name: 'email',  align: 'left',label: 'Email', field: 'email', sortable: true },
-  { name: 'action',  align: 'left',label: 'Actions', field: 'id'},
-]
-import { useStore } from 'vuex'
+
 import { usePratesis } from 'src/composeables/usePratesis'
-import RequestDetail from './RequestDetail.vue'
 import RequestAction from './RequestAction.vue'
-import { ref} from 'vue'
-import { api,header } from 'boot/axios'
-import { useRequestDetail } from 'src/composeables/useRequestDetail'
+import { ref, defineAsyncComponent} from 'vue'
 import { useCustom } from 'src/composeables/useCustom'
 import { useService } from 'src/composeables/useService'
+import UserDetail from './UserDetail.vue'
 
 export default {
     components:{
-      RequestDetail,
-      RequestAction
+      RequestAction,
+      'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown')),
+      UserDetail
     },
     setup(){
       const { formatTgl,successNotif } = useCustom()
+      const columns = [
+        { name: 'requestdate', align: 'left', label: 'Request Date', field: row => formatTgl(row.created_at), style:'width:96px' },
+        { name: 'userid',label: 'User ID',align: 'left',field: 'user_id'},
+        { name: 'name', align: 'left', label: 'Name', field: 'full_name', },
+        { name: 'email',  align: 'left',label: 'Email', field: 'email', },
+        { name: 'action',  align: 'left',label: 'Actions', field: 'id'},
+      ]
       const { postData } = useService()
-      const { pagination,rows,loading,init,onRequest} = usePratesis()
-      const { drequest,onDetail,dataDetail } = useRequestDetail()
-      // const store = useStore()
-      // const token = store.state.auth.token
+      const { pagination,rows,loading,init,onRequest,pagesNumber,gotoPage,modalDetail,openDetail,dataDetail} = usePratesis()
       const actionpersistent = ref(false)
       init('user',{
         status: 'waiting_approval',
@@ -132,7 +257,7 @@ export default {
             status: 'waiting_approval',
           })
           multiple.value = false
-          drequest.value = false
+          modalDetail.value = false
           selected.value = []
           successNotif(`User Berhasil di ${action.value}`)
         })
@@ -142,7 +267,7 @@ export default {
           actionpersistent.value = false
           daction.value = false
           multiple.value = false
-          drequest.value = false
+          modalDetail.value = false
           selected.value = []
         })
       }
@@ -151,7 +276,7 @@ export default {
           rows,
           loading,
           onRequest,
-          pagination,
+          pagination,pagesNumber,gotoPage,
           daction,
           action,
           send,
@@ -162,15 +287,13 @@ export default {
           selected,
           getSelectedString,
           multiple ,
-          drequest,
-          onDetail,
-          dataDetail,
           actionpersistent,
           successNotif,
-          formatTgl
+          formatTgl,
+
+          modalDetail,openDetail,dataDetail
       }
     },
-   
 }
 </script>
 

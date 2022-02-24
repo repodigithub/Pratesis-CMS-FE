@@ -8,8 +8,8 @@
                     <div >
                         <div class="font-normal">Pencarian :</div>
                         <div class="row">
-                            <q-select v-model="dataFilter.kode_pengguna" :options="optkode_pengguna" dense outlined bg-color="primary" dropdown-icon="expand_more" class="option-one" />
-                            <q-input v-model="text" placeholder="Ex: ASM Medan" dense outlined class="option-two">
+                            <q-select v-model="kode_pengguna" emit-value  map-options :options="optkode_pengguna" dense outlined bg-color="primary" dropdown-icon="expand_more" class="option-one" />
+                            <q-input v-model="searchKey" placeholder="Ex: ASM Medan" dense outlined class="option-two">
                                 <template v-slot:append>
                                     <q-icon
                                         name="search"
@@ -24,8 +24,8 @@
                     </div>
                     
                     <div class=" q-ml-md">
-                        <q-btn color="primary" label="Apply" no-caps unelevated class="btn-one q-mr-md" @click="onFilter(dataFilter)" />
-                        <q-btn color="negative" label="Reset" no-caps unelevated class="btn-one" @click="onReset" v-if="resetFilter"/>
+                        <q-btn color="primary" label="Apply" no-caps unelevated class="btn-one q-mr-md" @click="onSearching" />
+                        <q-btn color="negative" label="Reset" no-caps unelevated class="btn-one" @click="onReset" v-if="reset"/>
                     </div>
                 </q-card-section>
             </q-card>
@@ -61,29 +61,61 @@ import { provide,ref, defineAsyncComponent } from 'vue'
 import AddUser from 'components/User/AddUser.vue'
 export default {
     setup(){
-        const { filter, resetFilter,onFilter,
+        const { filter,onFilter,
             onResetFilter
         } = usePratesis()
 
         const dataFilter = ref({})
-        dataFilter.value.kode_pengguna = 'Kode Pengguna'
+        const kode_pengguna = ref('kode_pengguna')
         dataFilter.value.kode_group = null
-        const optkode_pengguna = ref(['Kode Pengguna','Nama','Email'])
+        const optkode_pengguna = ref([
+            { 
+                label : 'Kode Pengguna',
+                value : 'kode_pengguna'
+            },
+            {
+                label : 'Email',
+                value:'email'
+            },
+            {
+                label : 'Nama',
+                value:'nama'
+            }
+        ])
+        const searchKey = ref('')
+        const reset = ref(false)
+
+        function onSearching(){
+            dataFilter.value[kode_pengguna.value] = searchKey.value
+            console.log('dataFilter',dataFilter.value)
+            onFilter(dataFilter.value)
+            reset.value = true
+        }
 
         function onReset(){
             onResetFilter()
-            dataFilter.value.kode_pengguna = null
-            dataFilter.value.kode_group = null
+            dataFilter.value = {
+                kode_group : null
+            }
+            kode_pengguna.value = 'kode_pengguna'
+            searchKey.value = ''
+            reset.value = false
         }
 
         provide('filter',filter)
+
         return {
             filter,
             optkode_pengguna,
-            resetFilter,
+
             onFilter,
             onReset,
-            dataFilter
+            dataFilter,
+            onSearching,
+            reset,
+
+            kode_pengguna,
+            searchKey
         }
     },
     components:{

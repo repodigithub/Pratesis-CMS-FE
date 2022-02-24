@@ -3,7 +3,7 @@
         <q-card style="width:400px;height:100%;">
             <div class="request-detail">
                 <q-card-section class="row items-center q-pb-none">
-                    <div class="text-h6">Request Data Detail</div>
+                    <div class="text-h6">Request User Detail</div>
                     <q-space />
                     <q-btn icon="close" flat round dense v-close-popup />
                 </q-card-section>

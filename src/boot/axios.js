@@ -17,7 +17,7 @@ const header = (token,islogin = true) => {
     auth =`Bearer ${token}`
   }else{
     basestring =`${process.env.BASE_URL}${token}|${Math.floor(s.getTime()/1000)}`
-    auth =CryptoJS.HmacSHA256(basestring,process.env.HMAC_SECRET).toString()
+    auth =CryptoJS.HmacSHA256(basestring,process.env.HMAC_SECRET).toString(CryptoJS.enc.Hex)
   }
 
   let config = {
@@ -28,27 +28,19 @@ const header = (token,islogin = true) => {
     return config
 }
 
+
 export default boot(({ app,store }) => {
-  // for use inside Vue files (Options API) through this.$axios and this.$api
-
-  app.config.globalProperties.$axios = api
-  // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
-  //       so you won't necessarily have to import axios in each vue file
-
-  app.config.globalProperties.$api = api
-
+  app.config.globalProperties.recaptchasitekey = process.env.RECAPTCHA
+  
   api.interceptors.response.use(response =>{
     return response
   },error =>{
     if(error.response.status === 401){
       store.dispatch('auth/logout')
-      // store.dispatch('myprofil/logout')
-      delete api.defaults.headers.common['Authorization']
     }
     return Promise.reject(error)
   })
-  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
-  //       so you can easily perform requests against your app's API
+  
 })
 
 export { api,header }

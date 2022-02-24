@@ -77,12 +77,19 @@ export const usePratesis = () => {
         let filterKey = ''
         if(request.filter){
             filter = request.filter
+            console.log("filter",filter)
             if(filter.value){
                 if(filter.value.kode_group){
                     filterKey += `&kode_group=${filter.value.kode_group}`
                 }
                 if(filter.value.kode_pengguna){
                     filterKey += `&kode_pengguna=${filter.value.kode_pengguna}`
+                }
+                if(filter.value.nama){
+                    filterKey += `&nama=${filter.value.nama}`
+                }
+                if(filter.value.email){
+                    filterKey += `&email=${filter.value.email}`
                 }
             }
 

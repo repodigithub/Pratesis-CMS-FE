@@ -100,6 +100,7 @@ export default {
                             error.value = {
                                 auth : `${err.response.data.message}`
                             }
+                            grecaptcha.reset()
                         })
                     }
                 }
@@ -112,6 +113,11 @@ export default {
             onSave
         }
     },
+    beforeCreate(){
+        if(this.$store.getters['auth/isAuthenticated']){
+            this.$router.push({ name : 'Overview'})
+        }
+    }
 }
 </script>
 

@@ -22,7 +22,7 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-      'axios','recaptcha'
+      'axios'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -51,7 +51,10 @@ module.exports = configure(function (ctx) {
         BASE_URL: ctx.dev
           ? 'http://localhost:8000/api/v1/'
           : 'http://103.28.219.71//api/v1/',
-          HMAC_SECRET: 'WQ1hraPvqrdIAuGUHETz3PH8Auf3NrXJ8kwEEJfymUfvoZXTAlEBhFcZvDAAq6YU'
+        HMAC_SECRET: 'WQ1hraPvqrdIAuGUHETz3PH8Auf3NrXJ8kwEEJfymUfvoZXTAlEBhFcZvDAAq6YU',
+        RECAPTCHA: ctx.dev
+          ? '6Le8yDIeAAAAAAFpJytitjjkUbolleNNvvXef4qc'
+          : '6LcPB5QeAAAAAIZwz-rzXFU9OomQms0v8oe_Mj8s',
       },
 
       // transpile: false,
