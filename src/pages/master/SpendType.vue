@@ -3,7 +3,7 @@
         <div class="row q-pa-lg">
             <div class="col-12">
                 <filter-table :option="option" placeholder="ex: Investment Type" @onFiltering="onFilter" @onReseting="onResetFilter"/>
-                <core-table :url="$route.path.substr(1)" v-model:filter="filter" :columns="columns" v-model:requesting="reload">
+                <core-table :url="$route.path.substr(1)" v-model:filter="filter" :columns="columns" v-model:requesting="reload" :optionsDetail="{ include : 'investment'}">
                     <template v-slot:toptable>
                         <div class="font-normal q-mb-sm">Spend Type :</div>
                         <q-btn-group outline>
@@ -28,7 +28,7 @@
                             <div class="row items-center q-mt-md">
                                 <div>Investment Type</div>
                                 <q-space />
-                                <div >{{props.tampil.kode_investment}}</div>
+                                <div >{{props.tampil.kode_investment}} - {{props.tampil.investment.nama_investment}}</div>
                             </div>
                             <div class="row items-center q-mt-md">
                                 <div>Fund Type</div>

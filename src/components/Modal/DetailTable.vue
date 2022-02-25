@@ -12,7 +12,7 @@
                 </q-card-section>
                 <q-scroll-area class="fit" v-if="valid">
                     <q-card-section class="q-pb-none" >
-                        <slot name="detail-content" :tampil="dataDetail" :send="dataModal" :edit="edit"/>
+                        <slot name="detail-content" :tampil="dataModal" :send="dataModal" :edit="edit"/>
                     </q-card-section>
                 </q-scroll-area>
                 <q-card-section class="row justify-center" v-else>
@@ -84,7 +84,7 @@ export default {
         .then(res=>{
             emit('update:dataDetail',res.data.data)
             dataModal.value = res.data.data
-            console.log("dataModal",dataModal.value)
+            // console.log("dataModal",dataModal.value)
             valid.value = true
         })
 

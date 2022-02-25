@@ -57,6 +57,7 @@ export const usePratesis = () => {
         getData(state.url,islogin)
         .then(res=>{
             success(res)
+            // console.log("dari init",res.data.data.data)
         })
         .catch(err=>{
             error(err)
@@ -77,7 +78,7 @@ export const usePratesis = () => {
         let filterKey = ''
         if(request.filter){
             filter = request.filter
-            console.log("filter",filter)
+            // console.log("filter",filter)
             if(filter.value){
                 if(filter.value.kode_group){
                     filterKey += `&kode_group=${filter.value.kode_group}`

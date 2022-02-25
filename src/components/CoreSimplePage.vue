@@ -4,7 +4,7 @@
         <div class="row q-pa-lg">
             <div class="col-12">
                 <filter-table :option="filteroption" :placeholder="placeholder" @onFiltering="onFilter" @onReseting="onResetFilter"/>
-                <core-table :url="$route.path.substr(1)" :option="urloption" v-model:filter="filter" :columns="columns" v-model:requesting="reload" :canEdit="canEdit">
+                <core-table :url="$route.path.substr(1)" :option="urloption" v-model:filter="filter" :columns="columns" v-model:requesting="reload" :canEdit="canEdit" :optionsDetail="optionsDetail">
                     <template v-for="(_, slot) in $slots" v-slot:[slot]="props">
                         <slot :name="slot" v-bind="props" />
                     </template>
@@ -21,7 +21,7 @@ import { usePratesis } from 'src/composeables/usePratesis'
 
 export default {
     name:'core-simple-page',
-    props:['columns','urloption','placeholder','filteroption','filetemplate','canEdit'],
+    props:['columns','urloption','placeholder','filteroption','filetemplate','canEdit','optionsDetail'],
     setup(){
         const { onFilter,filter,onResetFilter,modalUpload,openUpload,reload,reloadTable} = usePratesis()
         return {

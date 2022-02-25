@@ -1,5 +1,5 @@
 <template>
-    <core-simple-page :columns="columns" placeholder="Ex: Nama Kegiatan" :filteroption="option" filetemplate="MSTTIPE_PROMO_HEADER.xlsx" :canEdit="false">
+    <core-simple-page :columns="columns" placeholder="Ex: Nama Kegiatan" :filteroption="option" filetemplate="MSTTIPE_PROMO_HEADER.xlsx" :canEdit="false" :optionsDetail="{ include : 'spendTypes.investment;documents'}">
         <template v-slot:body-cell-spend_type="props" style="width:200px!important;">
             <q-td key="kode" :props="props" style="max-width:200px!important;">
                 <div class="row" style="max-width:250px;">
@@ -27,7 +27,7 @@
                 <div class="row items-center q-mt-md">
                     <div>PPN%</div>
                     <q-space />
-                    <div >{{props.tampil.kode_ppn}}</div>
+                    <div >{{props.tampil.persentase_ppn}}</div>
                 </div>
                 <div class="row items-center q-mt-md">
                     <div>Kode PPH</div>
@@ -37,7 +37,7 @@
                 <div class="row items-center q-mt-md">
                     <div>PPH%</div>
                     <q-space />
-                    <div >{{props.tampil.kode_pph}}</div>
+                    <div >{{props.tampil.persentase_pph}}</div>
                 </div>
                 <div class="row items-center q-mt-md">
                     <div class="col-12">Deskripsi Kegiatan</div>
@@ -50,6 +50,7 @@
                 row-key="id"
                 flat
                 bordered
+                :pagination="{rowsPerPage:0}"
                 hide-pagination
                 binary-state-sort
                 />
@@ -60,6 +61,7 @@
                 row-key="id"
                 flat
                 bordered
+                :pagination="{rowsPerPage:0}"
                 hide-pagination
                 binary-state-sort
                 />
@@ -79,14 +81,14 @@ const columns = [
     // { name: 'investment_code',  align: 'left',label: 'Investment Code', field: 'investment_code'},
     // { name: 'investment_name',  align: 'left',label: 'Investment Name', field: 'investment_name'},
     { name: 'kode_ppn',  align: 'left',label: 'Kode PPN', field: 'kode_ppn'},
-    { name: 'ppn',  align: 'left',label: 'PPN%', field: 'ppn'},
+    { name: 'ppn',  align: 'left',label: 'PPN%', field: 'persentase_ppn'},
     { name: 'kode_pph',  align: 'left',label: 'Kode PPH', field: 'kode_pph'},
-    { name: 'pph',  align: 'left',label: 'PPH%', field: 'pph'},
+    { name: 'pph',  align: 'left',label: 'PPH%', field: 'persentase_pph'},
 ]
 
 const spend = [
     { name: 'kode', label: 'Spend Type', align: 'left', field: 'kode_spend_type' },
-    { name: 'investment', label: 'Nama Investment', align: 'left', field: 'kode_investment' },
+    { name: 'investment', label: 'Nama Investment', align: 'left', field:row=> row.investment.nama_investment },
 ]
 
 const document = [

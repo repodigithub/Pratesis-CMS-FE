@@ -65,12 +65,12 @@
                             <div class="row items-center q-mt-md">
                                 <div>Distributor Group</div>
                                 <q-space />
-                                <div >{{props.tampil.kode_distributor_group}}</div>
+                                <div >{{props.tampil.nama_distributor_group}}</div>
                             </div>
                             <div class="row items-center q-mt-md">
                                 <div>Area</div>
                                 <q-space />
-                                <div >{{props.tampil.kode_area}}</div>
+                                <div >{{props.tampil.nama_area}}</div>
                             </div>
                             <div class="row items-center q-mt-md">
                                 <div>Alamat</div>
@@ -124,8 +124,8 @@ import { usePratesis } from 'src/composeables/usePratesis'
 const columns = [
     { name: 'kode', label: 'Kode Distributor', align: 'left', field: 'kode_distributor',style:'width:5%' },
     { name: 'nama',  align: 'left',label: 'Nama Distributor', field: 'nama_distributor'},
-    { name: 'distributor_group',  align: 'left',label: 'Distributor Group', field: 'kode_distributor_group',style:'width:5%'},
-    { name: 'area',  align: 'left',label: 'Area', field: 'kode_area'},
+    { name: 'distributor_group',  align: 'left',label: 'Distributor Group', field: 'nama_distributor_group',style:'width:5%'},
+    { name: 'area',  align: 'left',label: 'Area', field: 'nama_area'},
     { name: 'region',  align: 'left',label: 'Region', field: 'nama_region',style:'width:10%'},
     { name: 'status',  align: 'center',label: 'Status', field: 'status_distributor'},
 ]

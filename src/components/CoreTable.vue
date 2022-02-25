@@ -42,7 +42,7 @@
             </div>
         </q-card-section>
     </q-card>
-    <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :canEdit="canEdit">
+    <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :canEdit="canEdit" :options="optionsDetail">
         <template v-for="(_, slot) in $slots" v-slot:[slot]="props">
             <slot :name="slot" v-bind="props" />
         </template>
@@ -77,6 +77,9 @@ export default {
         canEdit:{
             type:Boolean,
             default: true
+        },
+        optionsDetail:{
+            type:Object
         }
     },
     setup(props, { emit }){

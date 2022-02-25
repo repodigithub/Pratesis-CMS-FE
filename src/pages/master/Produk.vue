@@ -61,22 +61,22 @@
                             <div class="row items-center q-mt-md">
                                 <div>Nama Sub Brand</div>
                                 <q-space />
-                                <div >{{props.tampil.kode_sub_brand}}</div>
+                                <div >{{props.tampil.nama_sub_brand}}</div>
                             </div>
                             <div class="row items-center q-mt-md">
                                 <div>Nama Brand</div>
                                 <q-space />
-                                <div >{{props.tampil.kode_brand}}</div>
+                                <div >{{props.tampil.nama_brand}}</div>
                             </div>
                             <div class="row items-center q-mt-md">
                                 <div>Category</div>
                                 <q-space />
-                                <div >{{props.tampil.kode_kategori}}</div>
+                                <div >{{props.tampil.nama_kategori}}</div>
                             </div>
                             <div class="row items-center q-mt-md">
                                 <div>Divisi</div>
                                 <q-space />
-                                <div >{{props.tampil.kode_divisi}}</div>
+                                <div >{{props.tampil.nama_divisi}}</div>
                             </div>
                         </div>
                         <div v-else>
@@ -121,10 +121,10 @@ const columns = [
     { name: 'kode', label: 'Kode Produk', align: 'left', field: 'kode_produk',style:'width:5%' },
     { name: 'nama',  align: 'left',label: 'Nama Produk', field: 'nama_produk'},
     { name: 'sub_brand',  align: 'left',label: 'Sub Brand', field: 'kode_sub_brand',style:'width:5%'},
-    { name: 'nama_sub_brand',  align: 'left',label: 'Nama Sub Brand', field: 'kode_sub_brand'},
-    { name: 'nama_brand',  align: 'left',label: 'Nama Brand', field: 'kode_sub_brand'},
-    { name: 'category',  align: 'left',label: 'Category', field: 'kode_kategori'},
-    { name: 'divisi',  align: 'left',label: 'Divisi', field: 'kode_divisi'},
+    { name: 'nama_sub_brand',  align: 'left',label: 'Nama Sub Brand', field: 'nama_sub_brand'},
+    { name: 'nama_brand',  align: 'left',label: 'Nama Brand', field: 'nama_brand'},
+    { name: 'category',  align: 'left',label: 'Category', field: 'nama_kategori'},
+    { name: 'divisi',  align: 'left',label: 'Divisi', field: 'nama_divisi'},
 ]
 
 export default {
