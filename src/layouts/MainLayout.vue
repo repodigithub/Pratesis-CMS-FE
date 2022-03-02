@@ -13,7 +13,7 @@
 
         <q-toolbar-title>
           <div class="text-primary font-normal">
-            {{roles}}
+            {{role}}
             <q-icon name="expand_more" size="18px"/>
           </div>
           <!-- <q-btn color="primary" icon-right="expand_more" :label="roles" no-caps flat dense  class="font-normal"/> -->
@@ -56,7 +56,7 @@
 <script>
 import Sidebar from 'components/Sidebar.vue'
 
-import { defineComponent,ref,onMounted } from 'vue'
+import { defineComponent,ref,onMounted,computed } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 import { useService } from 'src/composeables/useService'
 import { useStore } from 'vuex'
@@ -66,20 +66,21 @@ export default defineComponent({
     const showing = ref(false)
     const { name } = usePratesis()
     const { getData } = useService()
-    const roles = ref('Loading..')
     const store = useStore()
     onMounted(()=>{
-      getData('user-group',false)
+      getData(`user-group?search=${store.state.auth.user.kode_group}`,false)
       .then(response=>{
-        let userrole = store.state.auth.user.kode_group.split(" ")[0]
-        let result = response.data.data.data.find(f=> f.kode_group.includes(userrole) )
-        roles.value = result.nama_group
+        store.dispatch('auth/changeRole',response.data.data.data[0].nama_group)
       })
+    })
+
+    const role = computed(()=>{
+      return store.state.auth.role
     })
     return {
       showing,
       name,
-      roles
+      role
     }
   },
   components: {

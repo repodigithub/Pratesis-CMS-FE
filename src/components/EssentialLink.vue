@@ -2,7 +2,7 @@
   <q-item
     clickable
     :to="{name: title}"
-    exact
+    
     style="padding-left:30px;"
     active-class="bg-primary4"
   >

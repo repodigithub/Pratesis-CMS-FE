@@ -271,6 +271,8 @@ export default {
           selected.value = []
         })
       }
+
+      const isSelect = ref(false)
       return {
           columns,
           rows,
@@ -291,7 +293,8 @@ export default {
           successNotif,
           formatTgl,
 
-          modalDetail,openDetail,dataDetail
+          modalDetail,openDetail,dataDetail,
+          isSelect
       }
     },
 }

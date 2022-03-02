@@ -98,23 +98,36 @@ export default {
 
         const nama_area = ref('undefined')
         watch(()=>dataModal.value.kode_area,val=>{
-            console.log("val dari props",val)
+            // console.log("val dari props",val)
             if(val !== null){
                 getData(`area?search=${val}`)
                 .then(res=>{
                     nama_area.value = res.data.data.data[0].nama_area
                 })
+            }else{
+                nama_area.value = 'undefined'
             }
         })
 
         const nama_distributor = ref('undefined')
         watch(()=>dataModal.value.kode_distributor,val=>{
-            console.log("val dari props",val)
+            // console.log("val dari props",val)
             if(val !== null){
                 getData(`distributor?search=${val}`)
                 .then(res=>{
                     nama_distributor.value = res.data.data.data[0].nama_distributor
                 })
+            }else{
+                nama_distributor.value = 'undefined'
+            }
+        })
+
+        watch(()=>dataModal.value.kode_group,val=>{
+            if(val.includes('SA')){
+                dataModal.value.kode_distributor = null
+            }else if (!val.includes('DI')){
+                dataModal.value.kode_distributor = null
+                dataModal.value.kode_area = null
             }
         })
 
@@ -122,12 +135,6 @@ export default {
             form.value.validate()
             .then(valid=>{
                 if(valid){
-                    if(dataModal.value.kode_group.includes('SA')){
-                        dataModal.value.kode_distributor = null
-                    }else if(!dataModal.value.kode_group.includes('DI')){
-                        dataModal.value.kode_distributor = null
-                        dataModal.value.kode_area = null
-                    }
                     showLoading()
                     putData(url.value.split("?")[0],dataModal.value)
                     .then(()=>{

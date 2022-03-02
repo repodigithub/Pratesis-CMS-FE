@@ -124,8 +124,9 @@ const menu = [
             // {
             //     title:'Master Data',
             //     access:{
-            //         superadmin:true,
-            //         headoffice:true
+            //         AD:true,
+            //         GA:true,
+            //         HO:true
             //     }
             // },
             // {
@@ -195,7 +196,8 @@ const menu = [
                     AD:true,
                     GA:true,
                     HO:true,
-                    DI:true
+                    DI:true,
+                    SA:true,
                 }
             },
             // {

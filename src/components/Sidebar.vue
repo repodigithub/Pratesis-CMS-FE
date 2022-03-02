@@ -180,6 +180,19 @@ components: {
           }
         }
       }
+    },
+    watch:{
+      '$route' (to,from){
+        if(to.meta.laporan){
+          if(Object.keys(this.masterexpand).length < 0){
+            this.masterexpand = {
+              3 : true
+            }
+          }else{
+            this.masterexpand[3] = true
+          }
+        }
+      }
     }
 }
 </script>

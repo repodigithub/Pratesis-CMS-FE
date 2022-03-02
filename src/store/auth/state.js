@@ -1,6 +1,7 @@
 export default function () {
   return {
     token:'',
-    user:''
+    user:'',
+    role:'Loading...'
   }
 }

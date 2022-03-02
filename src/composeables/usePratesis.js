@@ -35,10 +35,6 @@ export const usePratesis = () => {
 
     const { getData } = useService()
 
-    // const localheader = (url,islogin = true) => {
-    //     return islogin ? header(token,islogin) : header(url,islogin)
-    // }
-
     const init =  (url,option,islogin = true) => {
         state.loading = true
         state.url = url
@@ -57,7 +53,7 @@ export const usePratesis = () => {
         getData(state.url,islogin)
         .then(res=>{
             success(res)
-            // console.log("dari init",res.data.data.data)
+            // console.table(res.data.data.data)
         })
         .catch(err=>{
             error(err)
@@ -159,53 +155,6 @@ export const usePratesis = () => {
         } 
     }
 
-    // const notif = useQuasar()
-    // const successNotif = msg => {
-    //     notif.notify({
-    //         message: msg,
-    //         icon:'check',
-    //         type: 'positive',
-    //         position: 'top-right',
-    //         progress: true
-    //     })
-    // }
-    // const errorNotif = msg => {
-    //     notif.notify({
-    //         message: msg,
-    //         icon:'close',
-    //         type: 'negative',
-    //         position: 'top-right',
-    //         progress: true
-    //     })
-    // }
-    // const formatTgl = tgl => {
-    //     return date.formatDate(tgl,'DD/MM/YY')
-    // }
-
-    // const getData = async (url,islogin = true) => {
-    //     return await new Promise((resolve,reject)=>{
-    //         api.get(`${url}`,localheader(url,islogin))
-    //         .then(res=>{
-    //             resolve(res)
-    //         })
-    //         .catch(err=>{
-    //             reject(err)
-    //         })
-    //     })
-    // }
-
-    // const postData = async (url,data) =>{
-    //     return await new Promise((resolve,reject)=>{
-    //         api.post(url,data,header(token))
-    //         .then(res=>{
-    //             resolve(res)
-    //         })
-    //         .catch(err=>{
-    //             reject(err)
-    //         })
-    //     })
-    // }
-
     const filter = ref({})
     const onFilter = dataFilter => {
         filter.value = dataFilter
@@ -246,21 +195,21 @@ export const usePratesis = () => {
         return arrayColor[random]
     }
 
-    return {
-        // localheader,
+    const changeData = (val,isCapital = true) => {
+        if(isCapital){
+            return val.replace(/-/g," ").replace(/(?:^|\s)\S/g,function(a){ return a.toUpperCase()})
+        }else{
+            return val.replace(/ /g,"-").toLowerCase()
+        }
+    }
 
+    return {
         rows,
         ...toRefs(state),
         pagination, //table
         init,
         onRequest,
 
-        // successNotif,
-        // errorNotif,
-
-        // formatTgl,
-        // getData,
-        // postData,
 
         filter, //filtering table
         onFilter,
@@ -282,6 +231,7 @@ export const usePratesis = () => {
         openAdd,
 
         name,
-        randomColor
+        randomColor,
+        changeData
     }
 }

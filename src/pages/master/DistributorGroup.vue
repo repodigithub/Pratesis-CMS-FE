@@ -38,7 +38,7 @@ const columns = [
 
 export default {
     setup(){
-        const option = ref(['Kode Distributor Group','Nama Distributor Group'])
+        const option = ref(['Kode ','Nama '])
         return {
             option,
             columns

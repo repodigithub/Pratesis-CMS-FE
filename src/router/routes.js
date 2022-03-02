@@ -2,9 +2,10 @@
 const routes = [
   {
     path: '/',
+    redirect:{name:'Overview'},
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '',name:'Overview', component: () => import('pages/Index.vue')},
+      { path: 'overview',name:'Overview', component: () => import('pages/Index.vue')},
       // Master - Sales Hierarchy
       { path: 'area',name:'Area', component: () => import('pages/master/Area.vue'),
         meta:{
@@ -104,6 +105,16 @@ const routes = [
       },
       // End Produk Hierarchy
       { path: 'user',name:'User', component: () => import('pages/utility/User.vue'),
+        meta:{
+            utility:true
+          }
+      },
+      { path: 'master-data',name:'masterdata', component: () => import('pages/utility/MasterData.vue'),
+        redirect:{name : 'Master Data'},
+        children:[
+          { path:'',name:'Master Data',component:()=> import('components/MasterData/Utama.vue')},
+          { path:':folder',name:'Detail Master Data',component:()=> import('components/MasterData/Detail.vue')},
+        ],
         meta:{
             utility:true
           }

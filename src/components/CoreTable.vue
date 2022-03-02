@@ -80,7 +80,7 @@ export default {
         },
         optionsDetail:{
             type:Object
-        }
+        },
     },
     setup(props, { emit }){
         const { pagination,rows,loading,init,onRequest,gotoPage,pagesNumber,modalDetail,openDetail,dataDetail } = usePratesis()

@@ -35,7 +35,7 @@
             :boundary-numbers="false"
         />
     </div>
-    <user-detail v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :options="{ include : 'usergroup;area;distributor'}" v-model:dataForm="dataForm" >
+    <user-detail v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :options="{ include : 'usergroup;area;distributor'}" >
       <template v-slot:detail-content="props">
             <div v-if="!props.edit">
                 <div class="row items-center">
@@ -168,7 +168,7 @@ import { useCustom } from 'src/composeables/useCustom'
 export default {
     components:{
       'user-detail': defineAsyncComponent(() => import('./UserDetail')),
-      'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown'))
+      'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown')),
     },
     setup(){
       const { pagination,rows,loading,init,onRequest,pagesNumber,gotoPage,modalDetail,openDetail,dataDetail } = usePratesis()

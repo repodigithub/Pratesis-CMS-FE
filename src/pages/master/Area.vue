@@ -5,9 +5,6 @@
             <div class="col-12">
                 <filter-table :option="option" placeholder="Ex: ASM Medan" @onFiltering="onFilter" @onReseting="onResetFilter"/>
                 <core-table :url="$route.path.substr(1)" :option="{include:'region'}" v-model:filter="filter" :columns="columns" v-model:requesting="reload" :islogin="false" >
-                    <template v-for="(_, slot) in $slots" v-slot:[slot]="props">
-                        <slot :name="slot" v-bind="props" />
-                    </template>
                     <template v-slot:detail-content="props">
                         <div v-if="!props.edit">
                             <div class="row items-center">
@@ -28,7 +25,7 @@
                             <div class="row items-center q-mt-md">
                                 <div>Region</div>
                                 <q-space />
-                                <div >{{props.tampil.region.nama_region}}</div>
+                                <div >{{props.tampil.nama_region}}</div>
                             </div>
                             <div class="row items-center q-mt-md">
                                 <div>Titik Koordinat</div>
@@ -52,8 +49,7 @@
                             :rules="[
                                 val => val !== null && val !== '' || 'alamat tidak boleh kosong',
                             ]"/>
-                            <label for="region">Region</label>
-                            <select-dropdown url="region" v-model:selected="props.send.kode_region" class="q-mb-md"/>
+                            <select-dropdown url="region" v-model:selected="props.send.kode_region" class="q-mb-md" nameLabel="Region"/>
                             
                             <label for="Titik Koordinat" >Titik Koordinat</label>
                             <q-input v-model="props.send.titik_koordinat" type="text" id="Titik Koordinat" outlined dense/>

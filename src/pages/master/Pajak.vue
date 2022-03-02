@@ -70,22 +70,22 @@
     <add-data v-model:modalAdd="modalAdd" v-if="modalAdd" @reloadTable="reloadTable">
         <template v-slot:add-content="props">
             <div class="row justify-between">
-                <div class="col-2">
-                     <label for="Kode Pajak">Kode Pajak</label>
+                <div class="col-3">
+                     <label class="font-normal" for="Kode Pajak">Kode Pajak</label>
                     <q-input v-model="props.send.kode_pajak"  id="Kode Pajak" outlined dense lazy-rules
                     :rules="[
                         val => val !== null && val !== '' || 'Kode Pajak tidak boleh kosong',
                     ]" placeholder="Kode Pajak"/>
                 </div>
-                <div class="col-9">
-                    <label for="Nama Pajak">Nama Pajak</label>
+                <div class="col-8">
+                    <label class="font-normal" for="Nama Pajak">Nama Pajak</label>
                     <q-input v-model="props.send.nama_pajak" id="Nama Pajak" outlined dense lazy-rules
                     :rules="[
                         val => val !== null && val !== '' || 'Nama Pajak tidak boleh kosong',
                     ]" placeholder="Nama Pajak"/>
                 </div>
                 <div class="col-12">
-                    <label for="Tipe Pajak">Tipe Pajak</label>
+                    <label class="font-normal" for="Tipe Pajak">Tipe Pajak</label>
                     <q-select v-model="props.send.tipe_pajak" id="Tipe Pajak" outlined dense lazy-rules
                     :rules="[
                         val => val !== null && val !== '' || 'Tipe Pajak tidak boleh kosong',
@@ -93,15 +93,15 @@
                     :options="opttipe"
                     />
                 </div>
-                <div class="col-2">
-                     <label for="Presentase Pajak">Presentase Pajak</label>
+                <div class="col-3">
+                     <label class="font-normal" for="Presentase Pajak">Presentase Pajak</label>
                     <q-input v-model="props.send.presentase_pajak"  id="Presentase Pajak" outlined dense lazy-rules
                     :rules="[
                         val => val !== null && val !== '' || 'Presentase Pajak tidak boleh kosong',
                     ]" placeholder="Presentase Pajak" type="number"/>
                 </div>
-                <div class="col-9">
-                    <label for="Reference">Reference</label>
+                <div class="col-8">
+                    <label class="font-normal" for="Reference">Reference</label>
                     <q-input v-model="props.send.reference_tax" id="Reference" outlined dense lazy-rules
                     :rules="[
                         val => val !== null && val !== '' || 'Reference tidak boleh kosong',

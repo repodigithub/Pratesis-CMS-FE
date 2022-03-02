@@ -7,8 +7,8 @@
                         <!-- <q-breadcrumbs-el icon="home" to="/" />
                         <q-breadcrumbs-el label="Docs" icon="widgets"  />
                         <q-breadcrumbs-el label="Breadcrumbs" icon="navigation" /> -->
-                        <q-breadcrumbs-el :label="$route.name" style="color:#00000073;"  />
-                        <slot name="leftside"></slot>
+                        <q-breadcrumbs-el :label="$route.name" style="color:#00000073;" v-if="leftside" />
+                        <slot name="breadcrumb-content"></slot>
                     </q-breadcrumbs>
                     <div v-if="rightside">
                         <q-btn color="secondary" outline no-caps unelevated class="btn-one q-mr-lg" type="a" :href="'template/'+url" download >
@@ -38,6 +38,10 @@ export default {
             type: String,
             default: '#'
         },
+        leftside:{
+            type: Boolean,
+            default: true
+        }
     },
     setup(props,{ emit }){
 

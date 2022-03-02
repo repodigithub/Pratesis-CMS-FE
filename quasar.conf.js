@@ -50,7 +50,7 @@ module.exports = configure(function (ctx) {
       env: {
         BASE_URL: ctx.dev
           ? 'http://localhost:8000/api/v1/'
-          : 'http://103.28.219.71//api/v1/',
+          : 'http://103.28.219.71/api/v1/',
         HMAC_SECRET: 'WQ1hraPvqrdIAuGUHETz3PH8Auf3NrXJ8kwEEJfymUfvoZXTAlEBhFcZvDAAq6YU',
         RECAPTCHA: ctx.dev
           ? '6Le8yDIeAAAAAAFpJytitjjkUbolleNNvvXef4qc'

@@ -36,89 +36,125 @@
                         </div>
                     </q-card-section>
                 </q-card>
-                <core-table :url="$route.path.substr(1)" :columns="columns" v-model:requesting="reload" v-model:filter="filter" :islogin="false">
-                    <template v-slot:toptable>
+                <q-card class="own-card" flat>
+                    <q-card-section>
                         <div class="font-normal q-mb-sm">Search :</div>
                         <q-btn-group outline>
                             <q-btn :outline="status === 'All' ? false : true " color="primary" label="All" no-caps  unelevated style="padding:0 40px !important;" @click="filterStatus('All')" :class="status === 'All' ? '' : 'bg-primary4'"/>
                             <q-btn :outline="status === 'aktif' ? false : true " color="primary" label="Active" no-caps  unelevated style="padding:0 30px !important;" @click="filterStatus('aktif')" :class="status === 'aktif' ? '' : 'bg-primary4'"/>
                             <q-btn :outline="status === 'tidak-aktif' ? false : true " color="primary" label="Inactive" no-caps  unelevated style="padding:0 30px !important;" @click="filterStatus('tidak-aktif')" :class="status === 'tidak-aktif' ? '' : 'bg-primary4'"/>
                         </q-btn-group>
-                    </template>
-                    <template v-slot:body-cell-status="props">
-                        <q-td key="status" :props="props">
-                            <q-badge outline :color="props.row.status_distributor === 'aktif' ? 'positive' : 'warning'" :label="props.row.status_distributor === 'aktif' ? 'Active' : 'Inactive'" :class="props.row.status_distributor === 'aktif' ? 'active' : 'inactive'" class="status-badge"/>
-                        </q-td>
-                    </template>
-                    <template v-slot:detail-content="props">
-                        <div v-if="!props.edit">
-                            <div class="row items-center">
-                                <div>Kode Distributor</div>
-                                <q-space />
-                                <div >{{props.tampil.kode_distributor}}</div>
-                            </div>
-                            <div class="row items-center q-mt-md">
-                                <div>Nama Distributor</div>
-                                <q-space />
-                                <div >{{props.tampil.nama_distributor}}</div>
-                            </div>
-                            <div class="row items-center q-mt-md">
-                                <div>Distributor Group</div>
-                                <q-space />
-                                <div >{{props.tampil.nama_distributor_group}}</div>
-                            </div>
-                            <div class="row items-center q-mt-md">
-                                <div>Area</div>
-                                <q-space />
-                                <div >{{props.tampil.nama_area}}</div>
-                            </div>
-                            <div class="row items-center q-mt-md">
-                                <div>Alamat</div>
-                                <q-space />
-                                <div >{{props.tampil.alamat}}</div>
-                            </div>
-                            <div class="row items-center q-mt-md">
-                                <div>Status</div>
-                                <q-space />
-                                <div >{{props.tampil.status_distributor}}</div>
-                            </div>
+                    </q-card-section>
+                    <q-card-section>
+                        <q-table
+                                class="my-sticky-header-table q-mt-md btn-radius col-12"
+                                title=""
+                                :rows="rows"
+                                :columns="columns"
+                                row-key="id"
+                                flat
+                                bordered
+                                v-model:pagination="pagination"
+                                @request="onRequest"
+                                :loading="loading"
+                                :filter="filter"
+                                binary-state-sort
+                                hide-pagination
+                                @row-click="openDetail"
+                            >
+                            <template v-slot:loading>
+                            <q-inner-loading showing color="primary" />
+                            </template>
+                            <template v-slot:body-cell-status="props">
+                                <q-td key="status" :props="props">
+                                    <q-badge outline :color="props.row.status_distributor === 'aktif' ? 'positive' : 'warning'" :label="props.row.status_distributor === 'aktif' ? 'Active' : 'Inactive'" :class="props.row.status_distributor === 'aktif' ? 'active' : 'inactive'" class="status-badge"/>
+                                </q-td>
+                            </template>
+                        </q-table>
+                        <div class="col-12 row justify-end q-mt-md">
+                        <q-pagination
+                                v-model="pagination.page"
+                                color="black"
+                                active-color="secondary"
+                                active-text-color="secondary"
+                                :max="pagesNumber"
+                                size="md"
+                                direction-links
+                                outline
+                                class="table-pagination"
+                                @update:model-value="gotoPage"
+                                :max-pages="4"
+                                :boundary-numbers="false"
+                            />
                         </div>
-                        <div v-else>
-                            <label for="Kode distributor">Kode distributor</label>
-                            <q-input v-model="props.send.kode_distributor" type="text" id="Kode distributor" outlined dense lazy-rules
-                            :rules="[
-                                val => val !== null && val !== '' || 'Kode distributor tidak boleh kosong',
-                            ]"/>
-                            <label for="nama distributor">Nama distributor</label>
-                            <q-input v-model="props.send.nama_distributor" type="text" id="nama distributor" outlined dense lazy-rules
-                            :rules="[
-                                val => val !== null && val !== '' || 'nama distributor tidak boleh kosong',
-                            ]"/>
-                            <label for="region">Distributor Group</label>
-                            <select-dropdown url="distributor-group" v-model:selected="props.send.kode_distributor_group" class="q-mb-md"/>
-                            <label for="region">Area</label>
-                            <select-dropdown url="area" v-model:selected="props.send.kode_area" class="q-mb-md" :islogin="false"/>
-                            <label for="alamat">Alamat</label>
-                            <q-input v-model="props.send.alamat" type="text" id="alamat" outlined dense lazy-rules
-                            :rules="[
-                                val => val !== null && val !== '' || 'alamat tidak boleh kosong',
-                            ]"/>
-                            <label for="status">status</label>
-                            <q-input v-model="props.send.status_distributor" type="text" id="status" outlined dense lazy-rules
-                            :rules="[
-                                val => val !== null && val !== '' || 'status tidak boleh kosong',
-                            ]"/>
-                        </div>
-                    </template>
-                </core-table>
+                    </q-card-section>
+                </q-card>
             </div>
         </div>
     <upload-file v-model:upload="modalUpload" v-if="modalUpload" :menu="$route.path.substr(1)" @onUploadSuccess="reloadTable"/>
+    <detail v-model:modalDetail="modalDetail" v-if="modalDetail" v-model:dataDetail="dataDetail" @reloadTable="onRequest">
+        <template v-slot:detail-content="props">
+            <div v-if="!props.edit">
+                <div class="row items-center">
+                    <div>Kode Distributor</div>
+                    <q-space />
+                    <div >{{props.tampil.kode_distributor}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>Nama Distributor</div>
+                    <q-space />
+                    <div >{{props.tampil.nama_distributor}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>Distributor Group</div>
+                    <q-space />
+                    <div >{{props.tampil.nama_distributor_group}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>Area</div>
+                    <q-space />
+                    <div >{{props.tampil.nama_area}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>Alamat</div>
+                    <q-space />
+                    <div >{{props.tampil.alamat}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                    <div>Status</div>
+                    <q-space />
+                    <div >{{props.tampil.status_distributor}}</div>
+                </div>
+            </div>
+            <div v-else>
+                <label for="Kode distributor">Kode distributor</label>
+                <q-input v-model="props.send.kode_distributor" type="text" id="Kode distributor" outlined dense lazy-rules
+                :rules="[
+                    val => val !== null && val !== '' || 'Kode distributor tidak boleh kosong',
+                ]"/>
+                <label for="nama distributor">Nama distributor</label>
+                <q-input v-model="props.send.nama_distributor" type="text" id="nama distributor" outlined dense lazy-rules
+                :rules="[
+                    val => val !== null && val !== '' || 'nama distributor tidak boleh kosong',
+                ]"/>
+                <select-dropdown url="distributor-group" v-model:selected="props.send.kode_distributor_group" class="q-mb-md" nameLabel="Distributor Group" :master="false"/>
+                <select-dropdown url="area" v-model:selected="props.send.kode_area" class="q-mb-md" :islogin="false" nameLabel="Area" :master="false"/>
+                <label for="alamat">Alamat</label>
+                <q-input v-model="props.send.alamat" type="text" id="alamat" outlined dense lazy-rules
+                :rules="[
+                    val => val !== null && val !== '' || 'alamat tidak boleh kosong',
+                ]"/>
+                <label for="status">status</label>
+                <q-toggle v-model="statusEdit" id="status" />
+            </div>
+        </template>
+    </detail>
 </q-page>
 </template>
 
 <script>
-import { defineAsyncComponent,ref} from 'vue'
+import { defineAsyncComponent,ref,watch} from 'vue'
+import { useRoute } from 'vue-router'
 import { usePratesis } from 'src/composeables/usePratesis'
 
 const columns = [
@@ -132,8 +168,10 @@ const columns = [
 
 export default {
     setup(){
-        const { onFilter,filter,onResetFilter,modalUpload,openUpload,reload,reloadTable} = usePratesis()
-        
+        const { onFilter,filter,onResetFilter,modalUpload,openUpload,reload,reloadTable,pagination,rows,loading,init,onRequest,pagesNumber,gotoPage,modalDetail,openDetail,dataDetail} = usePratesis()
+        const route = useRoute()
+
+        init(route.path.substring(1))
 
         const status = ref('All')
         function filterStatus(key){
@@ -148,10 +186,26 @@ export default {
                 filter.value = {
                     "status_distributor": key
                 }
-
-                console.log("status_distributor",filter.value)
             }
         }
+        watch(()=>reload.value,val=>{
+            onRequest(val)
+        })
+        const statusEdit = ref(false)
+        watch(()=>dataDetail.value,val=>{
+            if(val.status_distributor === 'aktif'){
+                statusEdit.value = true
+            }else {
+                statusEdit.value = false
+            }
+        })
+        watch(()=>statusEdit.value,val=>{
+            if(val){
+                dataDetail.value.status_distributor = 'aktif'
+            }else{
+                dataDetail.value.status_distributor = 'tidak-aktif'
+            }
+        })
 
         const search = ref('')
         const region = ref('')
@@ -199,14 +253,17 @@ export default {
 
             filtering,
             reseting,
-            resetFilter
+            resetFilter,
+            statusEdit,
+
+            pagination,rows,loading,init,onRequest,pagesNumber,gotoPage,modalDetail,openDetail,dataDetail
         }
     },
     components:{
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
         'upload-file': defineAsyncComponent(() => import('components/Modal/UploadFile')),
-        'core-table': defineAsyncComponent(() => import('components/CoreTable')),
-        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown'))
+        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown')),
+        'detail': defineAsyncComponent(()=> import('components/Distributor/Detail'))
     },
 }
 </script>

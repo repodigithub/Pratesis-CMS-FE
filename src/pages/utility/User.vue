@@ -87,7 +87,7 @@ export default {
 
         function onSearching(){
             dataFilter.value[kode_pengguna.value] = searchKey.value
-            console.log('dataFilter',dataFilter.value)
+            // console.log('dataFilter',dataFilter.value)
             onFilter(dataFilter.value)
             reset.value = true
         }

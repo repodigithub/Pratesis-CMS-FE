@@ -12,7 +12,7 @@
                 </q-card-section>
                 <q-scroll-area class="fit" v-if="valid">
                     <q-card-section class="q-pb-none" >
-                        <slot name="detail-content" :tampil="dataModal" :send="dataModal" :edit="edit"/>
+                        <slot name="detail-content" :tampil="dataDetail" :send="dataDetail" :edit="edit"/>
                     </q-card-section>
                 </q-scroll-area>
                 <q-card-section class="row justify-center" v-else>
@@ -35,7 +35,7 @@ import {  useRoute } from 'vue-router'
 import { useService } from 'src/composeables/useService'
 import { useCustom } from 'src/composeables/useCustom'
 export default {
-    name:'detail-table',
+    name:'detail',
     props:{
         modalDetail: {
             type: Boolean,
@@ -83,8 +83,6 @@ export default {
         getData(url.value,props.islogin)
         .then(res=>{
             emit('update:dataDetail',res.data.data)
-            dataModal.value = res.data.data
-            // console.log("dataModal",dataModal.value)
             valid.value = true
         })
 
@@ -92,8 +90,9 @@ export default {
             form.value.validate()
             .then(valid=>{
                 if(valid){
+                    // console.log('datadetail',props.dataDetail)
                     showLoading()
-                    putData(url.value.split("?")[0],dataModal.value)
+                    putData(url.value.split("?")[0],props.dataDetail)
                     .then(()=>{
                         hideLoading()
                         successNotif(`Data ${route.name} berhasil diperbarui`)

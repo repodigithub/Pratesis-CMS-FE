@@ -74,9 +74,8 @@
             <q-card-actions align="center" style="margin-top:71px;margin-bottom:30px;padding-left:20px;padding-right:20px;" v-if="result && !uploading && error">
                 <q-btn label="Reupload File" no-caps color="secondary" class="btn-one" unelevated @click="reUpload"/>
             </q-card-actions>
-            <q-card-actions align="between" style="margin-top:71px;margin-bottom:30px;padding-left:20px;padding-right:20px;" v-if="result && !uploading && error === null">
-                <q-btn label="Cancel" no-caps color="secondary" class="btn-one" unelevated v-close-popup outline/>
-                <q-btn label="Submit" no-caps color="secondary" class="btn-one" unelevated v-close-popup/>
+            <q-card-actions align="center" style="margin-top:71px;margin-bottom:30px;padding-left:20px;padding-right:20px;" v-if="result && !uploading && error === null">
+                <q-btn label="Ok" no-caps color="secondary" class="btn-one" unelevated v-close-popup/>
             </q-card-actions>
         </q-card>
     </q-dialog>
