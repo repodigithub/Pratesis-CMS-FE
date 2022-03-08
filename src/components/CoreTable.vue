@@ -83,9 +83,20 @@ export default {
         },
     },
     setup(props, { emit }){
-        const { pagination,rows,loading,init,onRequest,gotoPage,pagesNumber,modalDetail,openDetail,dataDetail } = usePratesis()
+        const { pagination,rows,loading,init,onRequest,pagesNumber,modalDetail,openDetail,dataDetail } = usePratesis()
         init(props.url,props.option,props.islogin)
-        
+
+        function gotoPage(page){
+            let request = {}
+            request.pagination = {
+                page : page
+            }
+            if(props.filter){
+                request.filter = props.filter
+            }
+            onRequest(request)
+        }        
+
         watch(()=> props.requesting, val =>{
             onRequest(val)
         })

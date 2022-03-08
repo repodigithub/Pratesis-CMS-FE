@@ -36,11 +36,12 @@ export const useCustom = () => {
         return date.formatDate(tgl,'DD/MM/YY')
     }
 
+
     return {
         showLoading,
         hideLoading,
         successNotif,
         errorNotif,
-        formatTgl
+        formatTgl,
     }
 }

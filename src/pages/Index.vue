@@ -31,6 +31,7 @@ export default defineComponent({
     const loading = ref(false)
     const nextPage = ref(2)
     const options = computed(() => allOptions.slice(0, pageSize * (nextPage.value - 1)))
+    
 
     return {
       model: ref(null),
@@ -57,7 +58,8 @@ export default defineComponent({
         }
       }
     }
-  }
+  },
+ 
 })
 
 </script>

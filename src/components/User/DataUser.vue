@@ -163,33 +163,44 @@ const columns = [
   { name: 'email',  align: 'left',label: 'Email', field: 'email', },
 ]
 import { usePratesis } from 'src/composeables/usePratesis'
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent,inject } from 'vue'
 import { useCustom } from 'src/composeables/useCustom'
 export default {
     components:{
-      'user-detail': defineAsyncComponent(() => import('./UserDetail')),
-      'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown')),
+        'user-detail': defineAsyncComponent(() => import('./UserDetail')),
+        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown')),
     },
     setup(){
-      const { pagination,rows,loading,init,onRequest,pagesNumber,gotoPage,modalDetail,openDetail,dataDetail } = usePratesis()
-      const { formatTgl } = useCustom()
+        const { pagination,rows,loading,init,onRequest,pagesNumber,modalDetail,openDetail,dataDetail } = usePratesis()
+        const { formatTgl } = useCustom()
 
-      init('user',{
-        status: 'approve'
-      })
-      
-      return {
-          columns,
-          rows,
-          loading,
-          onRequest,
-          pagination,pagesNumber,gotoPage,
-          modalDetail,openDetail,dataDetail,
+        init('user',{
+            status: 'approve'
+        })
+        const filter = inject('filter')
+        function gotoPage(page){
+            let request = {}
+            request.pagination = {
+                page : page
+            }
+            if(filter){
+                request.filter = filter
+            }
+            onRequest(request)
+        }  
+        return {
+            columns,
+            rows,
+            loading,
+            onRequest,
+            pagination,pagesNumber,gotoPage,
+            modalDetail,openDetail,dataDetail,
 
-          formatTgl
-      }
+            formatTgl,
+            filter
+        }
     },
-    inject:['filter'],
+    // inject:['filter'],
 }
 </script>
 

@@ -46,11 +46,23 @@ export const useService = () => {
             })
         })
     }
+    const deleteData = async (url,islogin = true) =>{
+        return await new Promise((resolve,reject)=>{
+            api.delete(url,localheader(url.split("?")[0],islogin))
+            .then(res=>{
+                resolve(res)
+            })
+            .catch(err=>{
+                reject(err)
+            })
+        })
+    }
 
     return {
         getData,
         postData,
         putData,
+        deleteData,
 
         form,
         dataSend

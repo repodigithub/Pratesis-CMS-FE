@@ -121,14 +121,14 @@ const menu = [
         title:'Utility',
         icon:'utility',
         submenu:[
-            // {
-            //     title:'Master Data',
-            //     access:{
-            //         AD:true,
-            //         GA:true,
-            //         HO:true
-            //     }
-            // },
+            {
+                title:'Master Data',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true
+                }
+            },
             // {
             //     title:'Daftar Upload Budget',
             //     access:{

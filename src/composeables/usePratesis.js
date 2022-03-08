@@ -117,8 +117,9 @@ export const usePratesis = () => {
             if(filter.kode_spend_type){
                 filterKey += `&kode_spend_type=${filter.kode_spend_type}`
             }
-
+       
         }
+ 
         let paginate = ''
         if(state.option){
             const { status,include } = state.option
@@ -145,6 +146,11 @@ export const usePratesis = () => {
         })
     }
 
+    const filter = ref({})
+    const onFilter = dataFilter => {
+        filter.value = dataFilter
+    }
+
     const gotoPage = page => {
         if(!state.loading){
             onRequest({
@@ -155,10 +161,6 @@ export const usePratesis = () => {
         } 
     }
 
-    const filter = ref({})
-    const onFilter = dataFilter => {
-        filter.value = dataFilter
-    }
     const onResetFilter = () => {
         filter.value = null
     }
