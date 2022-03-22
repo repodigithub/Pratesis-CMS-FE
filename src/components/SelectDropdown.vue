@@ -51,6 +51,10 @@ export default {
         nameLabel:{
             type:String,
             default:''
+        },
+        isNormal:{
+            type:Boolean,
+            default:true
         }
     },
     setup(props){
@@ -68,10 +72,17 @@ export default {
         .then(res=>{
             res.data.data.data.forEach((item)=>{
                 response = Object.values(item)
-                optalt.push({
-                    label:response[2],
-                    value:response[1],
-                })
+                if(props.isNormal){
+                    optalt.push({
+                        label:response[2],
+                        value:response[1],
+                    })
+                }else{
+                    optalt.push({
+                        label:response[1],
+                        value:response[1],
+                    })
+                }
             })
             isValid.value = true
             nextPage.value = res.data.data.current_page + 1
@@ -98,10 +109,17 @@ export default {
                     update(()=>{
                         res.data.data.data.forEach((item)=>{
                             response = Object.values(item)
-                            options.value.push({
-                                label:response[2],
-                                value:response[1],
-                            })
+                            if(props.isNormal){
+                                options.value.push({
+                                    label:response[2],
+                                    value:response[1],
+                                })
+                            }else{
+                                options.value.push({
+                                    label:response[1],
+                                    value:response[1],
+                                })
+                            }
                         })
                         nextPage.value = res.data.data.current_page + 1
                         lastPage.value = res.data.data.last_page
@@ -126,10 +144,17 @@ export default {
                     nextTick( () => {
                         res.data.data.data.forEach((item)=>{
                             response = Object.values(item)
-                            options.value.push({
-                                label:response[2],
-                                value:response[1],
-                            })
+                            if(props.isNormal){
+                                options.value.push({
+                                    label:response[2],
+                                    value:response[1],
+                                })
+                            }else{
+                                options.value.push({
+                                    label:response[1],
+                                    value:response[1],
+                                })
+                            }
                         })
                         lastPage.value= res.data.data.last_page
                         nextPage.value= res.data.data.current_page + 1

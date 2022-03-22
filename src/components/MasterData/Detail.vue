@@ -77,18 +77,21 @@
             <q-card-section>
                 <div class="row justify-between">
                     <div class="font-medium text-bold">Daftar {{detailName}}</div>
-                    <q-btn color="secondary"  no-caps class="btn-one" unelevated @click="onDelete" v-if="selected.length > 0">
-                        <q-img
-                            src="~assets/icon/trash-alt.svg"
-                            spinner-color="primary"
-                            spinner-size="5px"
-                            width="20px"
-                            height="20px"
-                            style="filter: brightness(0) invert(1);"
-                            class="q-mr-sm"
-                        />
-                        Hapus
-                    </q-btn>
+                    <div class="row">
+                        <q-btn color="secondary"  no-caps class="btn-one q-mr-sm" unelevated @click="onDelete" v-if="selected.length > 0">
+                            <q-img
+                                src="~assets/icon/trash-alt.svg"
+                                spinner-color="primary"
+                                spinner-size="5px"
+                                width="20px"
+                                height="20px"
+                                style="filter: brightness(0) invert(1);"
+                                class="q-mr-sm"
+                            />
+                            Hapus
+                        </q-btn>
+                        <q-btn color="secondary" icon="download_for_offline" label="Download" no-caps class="btn-one" unelevated @click="batchDownload" v-if="selected.length > 0"/>
+                    </div>
                 </div>
                 <div class="row">
                     <master-table :url="`master-data/${$route.params.folder}`" canSelect v-model:resultSelect="selected" v-model:filter="filter" ref="mastertable"/>
@@ -107,6 +110,8 @@ import { useCustom } from 'src/composeables/useCustom'
 import {useRoute} from 'vue-router'
 import {useQuasar} from 'quasar'
 import {useService} from 'src/composeables/useService'
+import { api,header } from 'boot/axios'
+import { useStore } from 'vuex'
 export default {
     setup(){
         const { changeData,filter } = usePratesis()
@@ -149,6 +154,33 @@ export default {
                 })
             })
         }
+    }
+    const store = useStore()
+    let token = store.state.auth.token
+    function batchDownload(){
+        let ids = []
+        let headers = header(token,true)
+        headers.responseType = 'blob'
+        if(Array.isArray(selected.value)){
+            selected.value.forEach((item) => {
+                ids.push(item.id)
+            })
+            api.post('master-data/download',{
+                ids: ids
+            },headers)
+            .then(res=>{
+                const url = window.URL.createObjectURL(new Blob([res.data]))
+                const taga = document.createElement('a')
+                taga.href = url
+                taga.setAttribute('download','masterdata.zip')
+                document.body.appendChild(taga)
+                taga.click()
+            })
+            .catch(err=>{
+                console.log("error",err)
+            })
+        }
+        
     }
 
     const search = ref(null)
@@ -194,7 +226,8 @@ export default {
             onSearch,
             onReset,
             reset,
-            mastertable
+            mastertable,
+            batchDownload
         }
     },
     components:{

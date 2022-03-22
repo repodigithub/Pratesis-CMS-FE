@@ -5,7 +5,8 @@
             @submit.prevent.stop="onSave" ref="form"
                 style="width:460px;">
             <q-card-section class="row items-center q-pb-none">
-                    <div class="text-h6">Add New {{$route.name}}</div>
+                    <div class="text-h6" v-if="titleNormal">Add New {{$route.name}}</div>
+                    <slot name="title-content" v-else/>
                     <q-space />
                     <q-btn icon="close" flat round dense v-close-popup />
             </q-card-section>
@@ -38,6 +39,14 @@ export default {
         modalAdd:{
             type:Boolean
         },
+        normal:{
+            type:Boolean,
+            default:true
+        },
+        titleNormal:{
+            type:Boolean,
+            default:true
+        }
     },
     setup(props,{ emit }){
         // const generalRule = ref([])
@@ -56,18 +65,22 @@ export default {
             form.value.validate()
             .then(valid=>{
                 if(valid){
-                    showLoading()
-                    postData(route.path.substr(1),dataSend.value)
-                    .then(()=>{
-                        hideLoading()
-                        successNotif(`Data ${route.name} berhasil ditambahkan`)
-                        emit('update:modalAdd',false)
-                        emit('reloadTable',{
-                            pagination : {
-                                page : 1
-                            }
+                    if (props.normal) {
+                        showLoading()
+                        postData(route.path.substr(1),dataSend.value)
+                        .then(()=>{
+                            hideLoading()
+                            successNotif(`Data ${route.name} berhasil ditambahkan`)
+                            emit('update:modalAdd',false)
+                            emit('reloadTable',{
+                                pagination : {
+                                    page : 1
+                                }
+                            })
                         })
-                    })
+                    }else{
+                        emit('onSubmitAdd')
+                    }
                 }
             })
         }
@@ -77,7 +90,7 @@ export default {
             dataSend,
             onSave,
             
-            successNotif
+            successNotif,showLoading,hideLoading
             // generalRule,
             // isEmpty,
 

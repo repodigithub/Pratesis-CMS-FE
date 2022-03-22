@@ -131,19 +131,19 @@ components: {
     if(this.$route.meta.salesh){
       if(Object.keys(this.submenuexpand).length < 0){
         this.submenuexpand = {
-          0 : true
+          1 : true
         }
       }else{
-        this.submenuexpand[0] = true
+        this.submenuexpand[1] = true
       }
     }
     if(this.$route.meta.producth){
       if(Object.keys(this.submenuexpand).length < 0){
         this.submenuexpand = {
-          1 : true
+          2 : true
         }
       }else{
-        this.submenuexpand[1] = true
+        this.submenuexpand[2] = true
       }
     }
   },

@@ -18,20 +18,16 @@
                                 </q-input>
                             </div>
                             <div class="col-2">
-                                <div class="font-normal">Divisi :</div>
-                                <select-dropdown url="divisi" v-model:selected="divisi" master="true"/>
+                                <select-dropdown url="divisi" v-model:selected="divisi" master="true" nameLabel="Divisi : "/>
                             </div>
                             <div class="col-2">
-                                <div class="font-normal">Category :</div>
-                                <select-dropdown url="category" v-model:selected="category" master="true"/>
+                                <select-dropdown url="category" v-model:selected="category" master="true" nameLabel="Category :"/>
                             </div>
                             <div class="col-2">
-                                <div class="font-normal">Sub Brand :</div>
-                                <select-dropdown url="sub-brand" v-model:selected="subbrand" master="true"/>
+                                <select-dropdown url="sub-brand" v-model:selected="subbrand" master="true" nameLabel="Sub Brand :"/>
                             </div>
                             <div class="col-2">
-                                <div class="font-normal">Product :</div>
-                                <select-dropdown url="product" v-model:selected="product" master="true"/>
+                                <select-dropdown url="product" v-model:selected="product" master="true" nameLabel="Product :"/>
                             </div>
                             <div class="col-1">
                                 <q-btn color="primary" label="Search" no-caps unelevated class="btn-one" :class="resetFilter ? 'q-mb-md' :''" @click="filtering"/>

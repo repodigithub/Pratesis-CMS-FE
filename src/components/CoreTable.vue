@@ -16,6 +16,9 @@
                 hide-pagination
                 binary-state-sort
                 @row-click="openDetail"
+                :selection="canSelect ? 'multiple' : 'none'"
+                :selected-rows-label="getSelectedString"
+                v-model:selected="selected"
             >
                 <template v-slot:loading>
                     <q-inner-loading showing color="primary" />
@@ -24,7 +27,7 @@
                     <slot :name="slot" v-bind="props" />
                 </template>
             </q-table>
-            <div class="row justify-end q-mt-md">
+            <div class="row justify-end q-mt-md" v-if="rows.length > 0">
                 <q-pagination
                     v-model="pagination.page"
                     color="black"
@@ -42,7 +45,7 @@
             </div>
         </q-card-section>
     </q-card>
-    <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :canEdit="canEdit" :options="optionsDetail">
+    <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail && canOpenDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :canEdit="canEdit" :options="optionsDetail">
         <template v-for="(_, slot) in $slots" v-slot:[slot]="props">
             <slot :name="slot" v-bind="props" />
         </template>
@@ -51,7 +54,7 @@
 
 <script>
 import { usePratesis } from 'src/composeables/usePratesis'
-import { watch,defineAsyncComponent } from 'vue'
+import { watch,defineAsyncComponent,ref } from 'vue'
 export default {
     name:'core-table',
     props: {
@@ -68,7 +71,7 @@ export default {
             type: String,
         },
         requesting: {
-            type: String,
+            type: Object,
         },
         islogin: {
             type: Boolean,
@@ -80,6 +83,17 @@ export default {
         },
         optionsDetail:{
             type:Object
+        },
+        canOpenDetail:{
+            type:Boolean,
+            default:true
+        },
+        canSelect:{
+            type:Boolean,
+            default:false
+        },
+        resultSelect:{
+            type:Array
         },
     },
     setup(props, { emit }){
@@ -100,6 +114,20 @@ export default {
         watch(()=> props.requesting, val =>{
             onRequest(val)
         })
+        const selected = ref([])
+        function getSelectedString () {
+            if(selected.value.length === 0){
+                return ''
+            }else {
+                return `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${pagination.value.rowsNumber}`
+            }
+        }
+        watch(()=>selected.value,val=>{
+            emit('update:resultSelect',val)
+        })
+        watch(()=>props.resultSelect,val=>{
+            selected.value = val
+        })
         
         return {
             rows,
@@ -112,6 +140,7 @@ export default {
             modalDetail,//data detail table
             openDetail,
             dataDetail,
+            selected,getSelectedString
         }
     },
     components:{

@@ -1,6 +1,6 @@
 <template>
-  <q-page class="flex flex-center">
-    <div class="text-h5">Promo page</div>
+  <q-page >
+    <router-view> </router-view>
   </q-page>
 </template>
 

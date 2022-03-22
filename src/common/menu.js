@@ -14,15 +14,16 @@ const menu = [
         title:'Master',
         icon: 'master',
         submenu:[
-            // {
-            //     title:'Promo',
-            //     access:{
-            //         superadmin:true,
-            //         distributor:true,
-            //         headoffice:true
-            //     },
+            {
+                title:'Promo',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                },
         
-            // },
+            },
             
             {
                 title:'Sales Hierarchy',

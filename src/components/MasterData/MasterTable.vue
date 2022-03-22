@@ -48,6 +48,7 @@
                         height="20px"
                     />
                 </q-btn>
+                <q-btn round color="secondary" icon="download_for_offline" flat unelevated @click.stop="oneDownload(props.row.id)" />
             </q-td>
         </template>
     </q-table>
@@ -75,6 +76,8 @@ import { useService } from 'src/composeables/useService'
 import { useCustom } from 'src/composeables/useCustom'
 import { watch,ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { api,header } from 'boot/axios'
+import { useStore } from 'vuex'
 export default {
     name:'master-table',
     props:{
@@ -97,7 +100,7 @@ export default {
     },
     setup(props,{emit}){
         const { pagination,rows,loading,pagesNumber } = usePratesis()
-        const { getData,deleteData } = useService()
+        const { getData,deleteData,postData } = useService()
         const { formatTgl,successNotif } = useCustom()
         const quasar = useQuasar()
 
@@ -222,6 +225,29 @@ export default {
                 })
             })
         }
+        const store = useStore()
+        let token = store.state.auth.token
+
+        function oneDownload(value){
+            let id = []
+            id.push(value)
+            let headers = header(token,true)
+            headers.responseType = 'blob'
+            api.post('master-data/download',{
+                ids: id
+            },headers)
+            .then(res=>{
+                const url = window.URL.createObjectURL(new Blob([res.data]))
+                const taga = document.createElement('a')
+                taga.href = url
+                taga.setAttribute('download','masterdata.zip')
+                document.body.appendChild(taga)
+                taga.click()
+            })
+            .catch(err=>{
+                console.log("error",err)
+            })
+        }
 
         return {
             pagination,rows,loading,onRequest,pagesNumber,gotoPage,
@@ -229,7 +255,7 @@ export default {
             columns,
 
             selected,getSelectedString,
-            oneDelete
+            oneDelete,oneDownload
         }
     },
     

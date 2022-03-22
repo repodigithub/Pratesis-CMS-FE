@@ -48,12 +48,12 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
       env: {
-        BASE_URL: ctx.dev
-          ? 'http://localhost:8000/api/v1/'
+        BASE_URL: ctx.dev //http://localhost:8000/api/v1/
+          ? 'http://localhost:8000/api/v1/' 
           : 'http://103.28.219.71/api/v1/',
         HMAC_SECRET: 'WQ1hraPvqrdIAuGUHETz3PH8Auf3NrXJ8kwEEJfymUfvoZXTAlEBhFcZvDAAq6YU',
         RECAPTCHA: ctx.dev
-          ? '6Le8yDIeAAAAAAFpJytitjjkUbolleNNvvXef4qc'
+          ? '6Le8yDIeAAAAAAFpJytitjjkUbolleNNvvXef4qc'  //6Le8yDIeAAAAAAFpJytitjjkUbolleNNvvXef4qc
           : '6LcPB5QeAAAAAIZwz-rzXFU9OomQms0v8oe_Mj8s',
       },
 

@@ -25,12 +25,12 @@
                 <label for="Kode brand">Kode Alasan</label>
                 <q-input v-model="props.send.kode_alasan" type="text" id="Kode brand" outlined dense lazy-rules
                 :rules="[
-                    val => val !== null && val !== '' || 'Kode Alasan tidak boleh kosong',
+                    val => val && val.length > 0 || 'Kode Alasan tidak boleh kosong',
                 ]"/>
                 <label for="nama brand">Deskripsi Alasan</label>
                 <q-input v-model="props.send.deskripsi_alasan" type="text" id="nama brand" outlined dense lazy-rules
                 :rules="[
-                    val => val !== null && val !== '' || 'deskripsi Alasan tidak boleh kosong',
+                    val => val && val.length > 0 || 'deskripsi Alasan tidak boleh kosong',
                 ]"/>
             </div>
         </template>
@@ -40,12 +40,12 @@
                 <label for="Kode Alasan">Kode Alasan</label>
                 <q-input v-model="props.send.kode_alasan" type="text" id="Kode Alasan" outlined dense lazy-rules
                 :rules="[
-                    val => val !== null && val !== '' || 'Kode Alasan tidak boleh kosong',
+                    val => val && val.length > 0 || 'Kode Alasan tidak boleh kosong',
                 ]" placeholder="Kode Alasan"/>
                 <label for="deskripsi Alasan">deskripsi Alasan</label>
                 <q-input v-model="props.send.deskripsi_alasan" type="textarea" id="deskripsi Alasan" outlined dense lazy-rules
                 :rules="[
-                    val => val !== null && val !== '' || 'Deskripsi Alasan tidak boleh kosong',
+                    val => val && val.length > 0 || 'Deskripsi Alasan tidak boleh kosong',
                 ]" placeholder="Deskripsi Alasan"/>
         </template>
     </add-data>
