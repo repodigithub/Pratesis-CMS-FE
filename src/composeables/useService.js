@@ -12,7 +12,7 @@ export const useService = () => {
     }
 
     const getData = async (url,islogin = true) => {
-        return await new Promise((resolve,reject)=>{
+        return new Promise((resolve,reject)=>{
             api.get(url,localheader(url.split("?")[0],islogin))
             .then(res=>{
                 resolve(res)
@@ -24,7 +24,7 @@ export const useService = () => {
     }
 
     const postData = async (url,data,islogin = true) =>{
-        return await new Promise((resolve,reject)=>{
+        return new Promise((resolve,reject)=>{
             api.post(url,data,localheader(url.split("?")[0],islogin))
             .then(res=>{
                 resolve(res)
@@ -36,7 +36,7 @@ export const useService = () => {
     }
 
     const putData = async (url,data,islogin = true) =>{
-        return await new Promise((resolve,reject)=>{
+        return new Promise((resolve,reject)=>{
             api.put(url,data,localheader(url.split("?")[0],islogin))
             .then(res=>{
                 resolve(res)
@@ -47,7 +47,7 @@ export const useService = () => {
         })
     }
     const deleteData = async (url,islogin = true) =>{
-        return await new Promise((resolve,reject)=>{
+        return new Promise((resolve,reject)=>{
             api.delete(url,localheader(url.split("?")[0],islogin))
             .then(res=>{
                 resolve(res)

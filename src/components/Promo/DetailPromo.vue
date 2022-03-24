@@ -4,8 +4,8 @@
         <q-breadcrumbs-el label="Promo" class="text-primary" :to="{name: 'Promo'}"/>
         <q-breadcrumbs-el label="Detail Promo" style="color:#00000073;"/>
     </template>
-    <template v-slot:rightside-content v-if="userRole && (judul.status == 'draft')">
-        <q-btn color="secondary" outline no-caps class="btn-one" style="padding-left:10px!important;" unelevated>
+    <template v-slot:rightside-content v-if="userRole && isDraft">
+        <q-btn color="secondary" outline no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="onPromoSubmit">
             <q-img
                 src="~assets/icon/file-check.svg"
                 spinner-color="primary"
@@ -27,8 +27,13 @@
                     <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
                 </div>
                 <div class="row justify-between" v-else>
-                    <div class="col-12">
+                    <div class="col-12 row ">
                         <div class="font-big">{{judul.nama_promo}}</div>
+                        <q-space />
+                        <q-btn color="secondary" no-caps unelevated class="btn-one">
+                            <q-icon name="edit" style="font-size:18px;" class="q-mr-sm"/>
+                            <div>Edit</div>
+                        </q-btn>
                     </div>
                     <div class="col-12 row" style="margin-bottom:13px;">
                         <div class="col-8" style="padding-right:60px;">
@@ -40,10 +45,10 @@
                     </div>
                     <div class="col-8" style="padding-right:60px;">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-4">
                                 Donut Chart
                             </div>
-                            <div class="col-6">
+                            <div class="col-8">
                                 <div class="row justify-between items-center" style="margin-bottom:10px;">
                                     <div class="row items-center">
                                         <div
@@ -165,7 +170,8 @@
                                     <div class="text-primary font-16">
                                         <span v-if="loadbudgetarea">Loading...</span>
                                         <span v-else>
-                                            {{persentaseBudgetarea}} %
+                                            <span style="opacity:0.4;">Rp</span> {{formatRibuan(budget_area)}}
+                                            ({{persentaseBudgetarea}} %)
                                         </span>
 
                                     </div>
@@ -177,7 +183,7 @@
                         <div class="row items-center" style="height:32px;">
                             <div>Spend Type</div>
                             <q-space />
-                            <div class="d">{{judul.kode_spend_type}}</div>
+                            <q-badge outline :label="judul.kode_spend_type" :class="active ? colorStatusSpend(judul.kode_spend_type) : ''"/>
                         </div>
                         <div class="row items-center" style="height:32px;">
                             <div>Tanggal Awal</div>
@@ -197,7 +203,9 @@
                         <div class="row items-center" style="height:32px;">
                             <div>Status</div>
                             <q-space />
-                            <div class="d">{{judul.status}}</div>
+                            <q-badge outline :label="statusPromo(judul.status)" :class="active ? colorStatusPromo(judul.status) : ''"
+            style="padding-top:5px;padding-bottom:5px;"/>
+                            
                         </div>
                         <div class="row items-center" style="height:32px;">
                             <div>Batas Waktu Claim</div>
@@ -226,10 +234,10 @@
     </div>
     <promo-image />
     <div class="col-12 q-mb-md">
-        <budget-produk v-model:budget_update="budget_left" @updateProduk="getUpdateBudget"/>
+        <budget-produk v-model:budget_update="budget_left" @updateProduk="getUpdateBudget" v-model:isDraft="isDraft"/>
     </div>
     <div class="col-12">
-        <budget-area v-model:budgetlimit="budgetlimitarea" @updateArea="getBudgetArea"/>
+        <budget-area v-model:budgetlimit="budgetlimitarea" @updateArea="getBudgetArea" v-model:isDraft="isDraft"/>
     </div>
 </div>
 
@@ -248,7 +256,8 @@ export default {
         const { getData,postData,putData,deleteData } = useService()
         const loadjudul = ref(true)
         const judul = ref({})
-        const { showLoading,hideLoading,successNotif,formatTglPromo } = useCustom()
+        const { showLoading,hideLoading,successNotif,formatTglPromo,colorStatusPromo,statusPromo,colorStatusSpend  } = useCustom()
+        
         const { formatRibuan } = usePratesis()
         
         const route = useRoute()
@@ -257,6 +266,7 @@ export default {
         const budget_update = ref(0)
         const budget_left = ref(0)
         const documentClaim = ref(null)
+        const status = ref(null)
         onMounted(()=>{
             getData(`promo/${route.params.id}`)
             .then(res=>{
@@ -276,6 +286,7 @@ export default {
                 budget_left.value = result.statistics.budget_left
                 budget_area.value = result.statistics.budget_area
                 documentClaim.value = result.document
+                status.value = result.status
                 loadjudul.value = false
             })
             .catch(err=>{
@@ -283,10 +294,7 @@ export default {
             })
         })
         const persentaseBudgetarea = computed(()=>{
-            return ((budget.value - budget_area.value)/budget.value)*100
-        })
-        const budgetlimitarea = computed(()=>{
-            return budget.value - budget_area.value
+            return (budget_area.value/budget.value)*100
         })
 
         const loadbudgetarea = ref(false)
@@ -310,13 +318,28 @@ export default {
                 budget_update.value = result.statistics.budget_update
             })
         }
+
+        const isDraft = computed(()=>{
+            return ['draft','reject'].indexOf(status.value) >= 0 ? true : false
+        })
+
+        function onPromoSubmit(){
+            showLoading()
+            setTimeout(() => {
+                hideLoading()
+            }, 5000);
+        }
+        const active = ref(true)
         return {
             loadjudul,judul,budget,
-            persentaseBudgetarea,budget_area,getBudgetArea,loadbudgetarea,budgetlimitarea,
+            persentaseBudgetarea,budget_area,getBudgetArea,loadbudgetarea,
             showLoading,hideLoading,successNotif,formatTglPromo,
             formatRibuan,
             getUpdateBudget,loadbudgetproduk,budget_update,budget_left,
-            documentClaim
+            documentClaim,
+            status,isDraft,
+            onPromoSubmit,
+            colorStatusPromo,statusPromo,colorStatusSpend,active 
         }
     },
     components:{

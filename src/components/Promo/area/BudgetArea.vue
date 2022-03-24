@@ -1,9 +1,9 @@
 <template>
-    <core-table :url="`promo/${$route.params.id}/area`" :columns="area" :canOpenDetail="false" v-model:requesting="request" :canSelect="true" v-model:resultSelect="selected">
+    <core-table :url="`promo/${$route.params.id}/area`" :columns="area" :canOpenDetail="false" v-model:requesting="request" :canSelect="isDraft" v-model:resultSelect="selected">
         <template v-slot:toptable>
             <div class="row justify-between">
                 <div class="font-medium">Budget Area</div>
-                <div class="row">
+                <div class="row" v-if="isDraft">
                     <q-btn color="secondary"  no-caps class="btn-one q-mr-sm" unelevated @click="batchDelete" v-if="selected.length > 0">
                         <q-icon name="close"  />
                         Delete
@@ -15,7 +15,7 @@
                 </div>
             </div>
         </template>
-        <template v-slot:body-cell-actions="props">
+        <template v-slot:body-cell-actions="props" v-if="isDraft">
             <q-td key="action" :props="props">
                 <q-btn color="primary" round flat icon="edit" no-caps @click.stop="openEdit(props.row)" unelevated class=" btn-two"/>
                 <q-btn round color="secondary" flat unelevated @click.stop="oneDelete(props.row.id)">
@@ -71,7 +71,7 @@ import { usePratesis } from 'src/composeables/usePratesis'
 
 export default {
     name:'budget-area',
-    props:['budgetlimit'],
+    props:['budgetlimit','isDraft'],
     setup(props,{ emit }){
         const { showLoading,hideLoading,successNotif } = useCustom()
         const { postData,getData,putData,deleteData } = useService()
@@ -84,8 +84,13 @@ export default {
             { name: 'alamat',  align: 'left',label: 'Alamat', field: 'alamat'},
             { name: 'persentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
             { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget)}`},
-            { name:'actions',align:'left',label:'',field:'kode_area'}
+            
         ]
+        watch(()=>props.isDraft,val=>{
+            if(val){
+                area.push({ name:'actions',align:'left',label:'',field:'kode_area'})
+            }
+        })
 
         const modalAdd = ref(false)
         const edit = ref(false)

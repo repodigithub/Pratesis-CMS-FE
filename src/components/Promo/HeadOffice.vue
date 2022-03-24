@@ -214,8 +214,8 @@ export default {
         }
     },
     components:{
-        'item-promo' : defineAsyncComponent(()=> import('./admin/ItemPromo')),
-        'filter-promo': defineAsyncComponent(()=> import('./admin/FilterPromo'))
+        'item-promo' : defineAsyncComponent(()=> import('./utama/ItemPromo')),
+        'filter-promo': defineAsyncComponent(()=> import('./utama/FilterPromo'))
     }
 }
 </script>

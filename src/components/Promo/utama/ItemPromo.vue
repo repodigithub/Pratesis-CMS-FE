@@ -12,7 +12,7 @@
             <div class="font-medium text-bold">{{item.nama_promo}}</div>
             <div style="font-weight:500;" class="q-mb-sm">{{item.opso_id}}</div>
             <div class="row">
-                <q-badge outline :label="item.kode_spend_type" class="q-mr-md" :class="active ? randomColor(item.kode_spend_type) : ''"/>
+                <q-badge outline :label="item.kode_spend_type" class="q-mr-md" :class="active ? colorStatusSpend(item.kode_spend_type) : ''"/>
                 <div class="row items-center q-mr-md">
                     <q-img
                         src="~assets/icon/calendar-star.svg"
@@ -37,7 +37,7 @@
         </div>
         <q-space />
         <div class="status-promo">
-            <q-badge outline :label="status(item.status)" class="q-mr-md" :class="active ? colorStatus(item.status) : ''"
+            <q-badge outline :label="statusPromo(item.status)" class="q-mr-md" :class="active ? colorStatusPromo(item.status) : ''"
             style="padding-top:5px;padding-bottom:5px;"/>
         </div>
     </div>
@@ -46,7 +46,6 @@
 <script>
 import { ref } from 'vue'
 import { useCustom } from 'src/composeables/useCustom'
-// import { usePratesis } from 'src/composeables/usePratesis'
 export default {
     name:'item-promo',
     props:{
@@ -56,44 +55,14 @@ export default {
     },
     setup(){
         const cekpromo = ref(false)
-        const { promoTgl } = useCustom()
+        const { promoTgl,colorStatusPromo,statusPromo,colorStatusSpend } = useCustom()
         const active = ref(true)
-        const randomColor = value =>{
-            if(value == 'RA'){
-                return 'text-blue-7 bg-blue-2'
-            }else if(value == 'FO'){
-                return 'text-teal-7 bg-teal-2'
-            }else if(value == 'OA'){
-                return 'text-amber-7 bg-amber-2'
-            }else if(value == 'PA'){
-                return 'text-purple-7 bg-purple-2'
-            }else{
-                const arrayColor = ['text-red-7 bg-red-2','text-pink-7 bg-pink-2','text-purple-7 bg-purple-2','text-deep-purple-7 bg-deep-purple-2','text-indigo-7 bg-indigo-2','text-blue-7 bg-blue-2','text-light-blue-7 bg-light-blue-2','text-cyan-7 bg-cyan-2','text-teal-7 bg-teal-2','text-green-7 bg-green-2','text-light-green-7 bg-light-green-2','text-lime-7 bg-lime-2','text-yellow-7 bg-yellow-2','text-amber-7 bg-amber-2','text-orange-7 bg-orange-2','text-deep-orange-7 bg-deep-orange-2','text-brown-7 bg-brown']
-                let random = Math.floor(Math.random() * 16)
-                return arrayColor[random]
-            }
 
-        }
-        const colorStatus = value => {
-            if(value == 'draft'){
-                return 'draft'
-            }else if(value == 'reject'){
-                return 'reject'
-            }else if(value == 'need_approval'){
-                return 'need'
-            }else if(value == 'approve'){
-                return 'approve'
-            }else{
-                return ''
-            }
-        }
-        const status = value =>{
-            return value.replace(/_/g," ").replace(/(?:^|\s)\S/g,function(a){ return a.toUpperCase()})
-        }
         return {
             cekpromo,
             promoTgl,
-            active,randomColor,colorStatus,status
+            active,
+            colorStatusPromo,statusPromo,colorStatusSpend
         }
     },
     
@@ -114,20 +83,5 @@ export default {
 
     }
 }
-.approve {
-    color:$success1;
-    background:$success3;
-}
-.need{
-    color:$grey;
-    background:$grey4;
-}
-.reject{
-    color:$warning1;
-    background:$warning3;
-}
-.draft{
-    color:$info1;
-    background:$info3;
-}
+
 </style>

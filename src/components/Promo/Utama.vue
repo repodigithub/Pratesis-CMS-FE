@@ -123,13 +123,15 @@ export default {
             sendForm.append('claim',dataPromo.value.claim)
             sendForm.append('kode_spend_type',dataPromo.value.kode_spend_type)
             sendForm.append('kode_budget_holder',dataPromo.value.kode_budget_holder)
-            sendForm.append('file',filesupload.value)
+            if (filesupload.value) {
+                sendForm.append('file',filesupload.value)
+            }
             showLoading()
             postData('promo',sendForm)
             .then(res=>{
                 console.log('res,',res.data.data.id)
                 successNotif('Promo berhasil ditambahkan')
-                // router.push({name : 'Detail Promo',query:{id:res.data.data.id}})
+                router.push({name : 'Detail Promo',params:{id:res.data.data.id}})
                 hideLoading()
                 modalAdd.value = false
             })

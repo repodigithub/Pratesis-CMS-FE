@@ -204,10 +204,13 @@ export const usePratesis = () => {
             return val.replace(/ /g,"-").toLowerCase()
         }
     }
+
     const formatRibuan = (val) =>{
         let string = String(val)
         return string.replace(/(\d)(?=(\d{3})+(?!\d))/g,"\$1.")
     }
+
+    
 
     return {
         rows,
@@ -239,6 +242,8 @@ export const usePratesis = () => {
         name,
         randomColor,
         changeData,
-        formatRibuan //change ribuan
+        formatRibuan, //change ribuan
+
+        
     }
 }

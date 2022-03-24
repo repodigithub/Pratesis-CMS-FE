@@ -10,7 +10,7 @@
                     <div class="font-medium">Budget Produk</div>
                     <div class="text-primary" style="font-weight:500;font-size:16px;">Brand</div>
                 </div>
-                <div class="d">
+                <div class="d" v-if="isDraft">
                     <q-btn color="secondary"  no-caps class="btn-one" unelevated @click="$router.push({ name:'Add budget Produk',params:{id:$route.params.id},query:{budget:budget_update} })">
                         <q-icon name="add" />
                         Add Produk
@@ -18,8 +18,8 @@
                 </div>
             </div>
         </template>
-        <template v-slot:body-cell-actions="props">
-            <q-td key="action" :props="props">
+        <template v-slot:body-cell-actions="props" v-if="isDraft">
+            <q-td key="action" :props="props" >
                 <q-btn color="primary" round flat icon="edit" no-caps @click.stop="openEditProduk(props.row)" unelevated class=" btn-two"/>
                 <q-btn round color="secondary" flat unelevated @click.stop="oneDeleteProduk(props.row.id)">
                 <q-img
@@ -44,7 +44,7 @@ import { useCustom  } from 'src/composeables/useCustom'
 import { usePratesis } from 'src/composeables/usePratesis'
 export default {
     name:'budget-produk',
-    props:['budget_update'],
+    props:['budget_update','isDraft'],
     setup(props,{emit}){
         const { formatRibuan } = usePratesis()
         const produk = [
@@ -53,8 +53,14 @@ export default {
             { name: 'produk_aktif',  align: 'left',label: 'Jumlah Produk Aktif', field: 'produk_aktif'},
             { name: 'persentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
             { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget_brand)}`},
-            { name:'actions',align:'left',label:'',field:'kode_brand'}
+            
         ]
+        watch(()=>props.isDraft,val=>{
+            if(val){
+                produk.push({ name:'actions',align:'left',label:'',field:'kode_brand'})
+            }
+        })
+        
         const request = ref(null)
         const { showLoading,hideLoading,successNotif } = useCustom()
         const { deleteData } = useService()
