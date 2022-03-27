@@ -1,9 +1,11 @@
 import {toRefs, ref, reactive,computed} from 'vue'
+import { useRouter } from 'vue-router'
 // import { api,header } from 'boot/axios'
 // import { useQuasar,date } from 'quasar'
 import { useStore } from 'vuex'
 import { useService } from './useService'
 export const usePratesis = () => {
+    const router  = useRouter()
     const store = useStore()
     // let token = store.state.auth.token
     const rows = ref([])
@@ -12,6 +14,7 @@ export const usePratesis = () => {
         loading:false,
         url:null,
         option:null,
+        detailLinked: null
     })
 
     const pagination = ref({})
@@ -35,7 +38,8 @@ export const usePratesis = () => {
 
     const { getData } = useService()
 
-    const init =  (url,option,islogin = true) => {
+    const init =  (url,option,islogin = true, detailLinked) => {
+        state.detailLinked = detailLinked
         state.loading = true
         state.url = url
         userLogin.value = islogin
@@ -177,7 +181,14 @@ export const usePratesis = () => {
     const modalDetail = ref(false)
     const dataDetail = ref({})
     const openDetail = (evt,row) => {
-        modalDetail.value = true
+        if(state.detailLinked) {
+            router.push({name: 'Detail Produk',params: {
+                id: 3,
+                produk: row.id
+            }})
+        } else {
+            modalDetail.value = true
+        }
         dataDetail.value = row
     }
 

@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="text-primary font-16"> <span style="opacity:0.4;">Rp</span> {{formatRibuan(budget)}}</div>
                                 </div>
-                                <div class="row justify-between items-center" style="margin-bottom:10px;">
+                                <div v-if="userRole != 'GA'" class="row justify-between items-center" style="margin-bottom:10px;">
                                     <div class="row items-center">
                                         <div
                                             style="border-radius:10px;width:36px;height:36px;background: #0065FF;margin-right:15px;"
@@ -86,7 +86,7 @@
                                     </span>
                                     </div>
                                 </div>
-                                <div class="row justify-between items-center" style="margin-bottom:10px;">
+                                <div v-if="userRole != 'GA'" class="row justify-between items-center" style="margin-bottom:10px;">
                                     <div class="row items-center">
                                         <div
                                             style="border-radius:10px;width:36px;height:36px;background: #FF7B7B;margin-right:15px;"

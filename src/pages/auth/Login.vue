@@ -30,7 +30,7 @@
             lazy-rules
             hide-bottom-space
             :rules="[
-                (val) => (val && val.length > 0) || 'password tidak boleh kosong'
+                (val) => (val && val.length > 0) || 'Password tidak boleh kosong'
             ]"
             >
                 <template v-slot:append>

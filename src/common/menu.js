@@ -24,7 +24,24 @@ const menu = [
                 },
         
             },
-            
+            {
+                title:'Approval',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                },
+            },
+            {
+                title:'Verifikasi',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                },
+            },
             {
                 title:'Sales Hierarchy',
                 submenu:[
@@ -119,6 +136,46 @@ const menu = [
         },
     },
     {
+        title:'Transaksi',
+        icon:'transaksi',
+        submenu:[
+            // {
+            //     title: 'Klaim Promo',
+            //     access:{
+            //         GA: true,
+            //         superadmin:true,
+            //     }
+            // },
+            {
+                title: 'Edit Budget',
+                access:{
+                    GA: true,
+                    superadmin:true,
+                }
+            },
+            {
+                title: 'Verifikasi',
+                access:{
+                    GA: true,
+                    superadmin:true,
+                }
+            },
+            {
+                title: 'Cetak Ulang BPP',
+                access:{
+                    GA: true,
+                    superadmin:true,
+                }
+            },
+        ],
+        access:{
+            superadmin:true,
+            distributor:true,
+            depot:true,
+            GA: true
+        },
+    },
+    {
         title:'Utility',
         icon:'utility',
         submenu:[
@@ -184,13 +241,13 @@ const menu = [
         title:'Laporan',
         icon:'laporan',
         submenu:[
-            // {
-            //     title:'Master',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
+            {
+                title:'Master',
+                access:{
+                    GA:true,
+                    // headoffice:true
+                }
+            },
             {
                 title:'Ubah Profil',
                 access:{
@@ -208,34 +265,38 @@ const menu = [
             //         headoffice:true
             //     }
             // },
-            // {
-            //     title:'Data Promosi',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
-            // {
-            //     title:'Alokasi',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
-            // {
-            //     title:'Klaim',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
-            // {
-            //     title:'Tpr Distributor',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
+            {
+                title:'Data Promosi',
+                access:{
+                    GA:true,
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Alokasi',
+                access:{
+                    GA:true,
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Klaim',
+                access:{
+                    GA:true,
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
+            {
+                title:'Tpr Distributor',
+                access:{
+                    GA:true,
+                    superadmin:true,
+                    headoffice:true
+                }
+            },
         ],
         access:{
             AD:true,
@@ -243,42 +304,7 @@ const menu = [
             HO:true,
             DI:true
         },
-    },
-    // {
-    //     title:'Transaksi',
-    //     icon:'transaksi',
-    //     submenu:[
-    //         {
-    //             title: 'Klaim Promo',
-    //             access:{
-    //                 superadmin:true,
-    //             }
-    //         },
-    //         {
-    //             title: 'Edit Budget',
-    //             access:{
-    //                 superadmin:true,
-    //             }
-    //         },
-    //         {
-    //             title: 'Verifikasi',
-    //             access:{
-    //                 superadmin:true,
-    //             }
-    //         },
-    //         {
-    //             title: 'Cetak Ulang BPP',
-    //             access:{
-    //                 superadmin:true,
-    //             }
-    //         },
-    //     ],
-    //     access:{
-    //         superadmin:true,
-    //         distributor:true,
-    //         depot:true
-    //     },
-    // }
+    }
 ]
 
 export { menu }

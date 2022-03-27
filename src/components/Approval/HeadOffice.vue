@@ -31,7 +31,7 @@
             </div>
             <div v-else>
                 <div v-if="itemPromo.length > 0">
-                    <item-promo v-for="item in itemPromo" :key="item" :item="item"/>
+                    <item-promo v-for="item in itemPromo" :key="item" :item="item" :sidebarModal="true"/>
                 </div>
                 <div class="row item-promo items-center" v-else>
                     <div class="col-12 text-center text-h6">
@@ -215,8 +215,8 @@ export default {
         }
     },
     components:{
-        'item-promo' : defineAsyncComponent(()=> import('./admin/ItemPromo')),
-        'filter-promo': defineAsyncComponent(()=> import('./admin/FilterPromo'))
+        'item-promo' : defineAsyncComponent(()=> import('../Promo/admin/ItemPromo')),
+        'filter-promo': defineAsyncComponent(()=> import('../Promo/admin/FilterPromo'))
     },
     mounted() {
         if(this.userRole == 'GA')  this.spend_type = "RA"

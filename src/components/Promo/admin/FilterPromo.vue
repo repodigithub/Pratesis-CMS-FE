@@ -25,7 +25,8 @@
                         </q-input>
                     </div>
                     <div class="col-3 q-mr-md">
-                        <select-dropdown url="area" v-model:selected="filter.area_id" :islogin="false" nameLabel="Area :"/>
+                        <select-dropdown url="area" v-if="userRole == 'GA'" v-model:selected="filter.area_id" :islogin="false" nameLabel="Distributor :"/>
+                        <select-dropdown url="area" v-else v-model:selected="filter.area_id" :islogin="false" nameLabel="Area :"/>
                     </div>
                     <div class="col row items-end">
                         <div class="col-4 q-mr-sm">
@@ -50,7 +51,7 @@
                         </div>
                         <q-space />
                         <div class="col">
-                            <q-btn color="primary" label="Search" no-caps unelevated class="btn-one " @click="filtering" :class="reset ? 'q-mb-sm' : ''"/>
+                            <q-btn color="primary" label="Apply" no-caps unelevated class="btn-one " @click="filtering" :class="reset ? 'q-mb-sm' : ''"/>
                             <q-btn color="negative" label="Reset" no-caps unelevated class="btn-one" @click="reseting" v-if="reset"/>
                         </div>
                     </div>
@@ -80,7 +81,14 @@ export default {
         return {
             filter,filtering,reseting,reset
         }
+    },
+    computed: {
+        userRole(){
+            let role = this.$store.state.auth.user.kode_group.substr(0,2)
+            return ['SA','DI'].indexOf(role) >= 0 ? '' : role
+        },
     }
+    
 }
 </script>
 

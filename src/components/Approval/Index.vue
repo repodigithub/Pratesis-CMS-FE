@@ -3,7 +3,7 @@
     <template v-slot:breadcrumb-content>
         <q-breadcrumbs-el label="Promo" style="color:#00000073;"/>
     </template>
-    <template v-slot:rightside-content v-if="userRole != 'GA'">
+    <template v-slot:rightside-content >
         <q-btn color="secondary"  no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="openAdd">
             <q-icon name="add" />
             Add New
@@ -95,7 +95,7 @@
 <script>
 import { defineAsyncComponent,ref,watch } from 'vue'
 import HeadOffice from './HeadOffice.vue'
-import Distributor from './Distributor.vue'
+import Distributor from '../Promo/Distributor.vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 import { useCustom } from 'src/composeables/useCustom'
 import {  useRouter } from 'vue-router'
@@ -178,7 +178,3 @@ export default {
     },
 }
 </script>
-
-<style>
-
-</style>
