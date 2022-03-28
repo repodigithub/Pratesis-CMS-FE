@@ -15,7 +15,7 @@
                 @request="onRequest"
                 hide-pagination
                 binary-state-sort
-                @row-click="openDetail"
+                @row-click="onRowClick"
                 :selection="canSelect ? 'multiple' : 'none'"
                 :selected-rows-label="getSelectedString"
                 v-model:selected="selected"
@@ -95,6 +95,10 @@ export default {
         resultSelect:{
             type:Array
         },
+        normalDetail:{
+            type:Boolean,
+            default:true
+        }
     },
     setup(props, { emit }){
         const { pagination,rows,loading,init,onRequest,pagesNumber,modalDetail,openDetail,dataDetail } = usePratesis()
@@ -128,6 +132,14 @@ export default {
         watch(()=>props.resultSelect,val=>{
             selected.value = val
         })
+
+        function onRowClick(evt,row,index){
+            if (props.normalDetail) {
+                openDetail(evt,row)
+            }else{ //detail yang tidak normal seperti detail budget produk di promo
+                emit('rowClick',row)
+            }
+        }
         
         return {
             rows,
@@ -140,7 +152,8 @@ export default {
             modalDetail,//data detail table
             openDetail,
             dataDetail,
-            selected,getSelectedString
+            selected,getSelectedString,
+            onRowClick
         }
     },
     components:{

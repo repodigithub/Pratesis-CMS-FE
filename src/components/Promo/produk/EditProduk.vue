@@ -94,9 +94,9 @@
                                   id="Budget"
                                   filled
                                   dense
-                                  :bg-color="product.status && isOtomatis ? '':'grey4'" 
-                                  :class="product.status && isOtomatis ? '' : 'input-disable'"
-                                  :disable="product.status && isOtomatis ? false : true"
+                                  :bg-color="product.status && isManual ? '':'grey4'" 
+                                  :class="product.status && isManual ? '' : 'input-disable'"
+                                  :disable="product.status && isManual ? false : true"
                                   >
                                     <template v-slot:prepend>
                                         <div class="font-normal">Rp</div>
@@ -176,7 +176,7 @@ export default {
         })
 
         const otomatis = ref('0')
-        const isOtomatis = computed(()=>{
+        const isManual = computed(()=>{
             return otomatis.value == '0' ? true  : false
         })
 
@@ -222,8 +222,22 @@ export default {
         const sisaBudget = computed(()=>{
             return parseInt(budgetbrand.value) - totalBudgetProduk.value
         })
+
+        watch(()=>budgetbrand.value,val=>{
+            let statustrue = products.value.filter(item=>item.status).length
+            let budgetRata = ''
+            if (statustrue > 0) {
+                budgetRata = parseInt(val) / statustrue
+            }
+            if (!isManual.value) {
+                products.value.map(item=>{
+                    if(item.status){
+                        item.budget = budgetRata
+                    }
+                })
+            }
+        })
         
-    
         const senditemProduct = computed(()=>{
             let result = []
             products.value.forEach(item=>{
@@ -283,7 +297,7 @@ export default {
             formatRibuan,
             budgetbrand,
             kode_brand,brand,products,altproducts,
-            otomatis,isOtomatis,
+            otomatis,isManual, 
             updateStatus,
             totalBudgetProduk,sisaBudget,
             onSubmit,showLoading,hideLoading,successNotif,errorNotif,

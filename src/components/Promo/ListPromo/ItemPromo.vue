@@ -1,6 +1,5 @@
 <template>
     <div class="row item-promo cursor-pointer" @click="$router.push({ name:'Detail Promo',params:{ id : item.id } })">
-        <!-- <q-checkbox v-model="cekpromo" label=" " /> -->
         <q-img
             src="~assets/dummy/dummypromo.png"
             spinner-color="primary"
@@ -54,12 +53,10 @@ export default {
         }
     },
     setup(){
-        const cekpromo = ref(false)
         const { promoTgl,colorStatusPromo,statusPromo,colorStatusSpend } = useCustom()
         const active = ref(true)
 
         return {
-            cekpromo,
             promoTgl,
             active,
             colorStatusPromo,statusPromo,colorStatusSpend

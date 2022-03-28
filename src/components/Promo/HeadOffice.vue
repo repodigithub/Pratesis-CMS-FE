@@ -32,6 +32,22 @@
             <div v-else>
                 <div v-if="itemPromo.length > 0">
                     <item-promo v-for="item in itemPromo" :key="item" :item="item"/>
+                    <div class="row justify-end q-mt-md col-12" v-if="itemPromo.length > 0">
+                        <q-pagination
+                            v-model="pagination.page"
+                            color="black"
+                            active-color="secondary"
+                            active-text-color="secondary"
+                            :max="pagesNumber"
+                            size="md"
+                            direction-links
+                            outline
+                            class="table-pagination"
+                            @update:model-value="gotoPage"
+                            :max-pages="4"
+                            :boundary-numbers="false"
+                        />
+                    </div>
                 </div>
                 <div class="row item-promo items-center" v-else>
                     <div class="col-12 text-center text-h6">
@@ -40,78 +56,7 @@
                 </div>
             </div>
         </q-card-section>
-        <!-- <q-card-section class="q-pt-none">
-                <q-table
-                title=""
-                :rows="rows"
-                :columns="columns"
-                row-key="name"
-                :selection="request ? 'multiple' : 'none'"
-                v-model:selected="selected"
-                :filter="filter"
-                grid
-                hide-header
-                >
-
-                <template v-slot:item="props">
-                    
-                    <div
-                    class="q-pa-xs col-12 grid-style-transition"
-                    :style="props.selected ? 'transform: scale(0.98);' : ''"
-                    
-                    >
-                    <q-card :class="props.selected ? 'bg-grey-2' : ''" flat>
-                        <q-card-section>
-                            <div class="row">
-                                <q-checkbox dense v-model="props.selected" label=" " v-if="request"/>
-                                <q-img
-                                    src="~assets/dummy/dummypromo.png"
-                                    spinner-color="primary"
-                                    spinner-size="82px"
-                                    width="80px"
-                                    height="80px"
-                                />
-                                <div class="q-ml-md">
-                                    <div class="font-medium text-bold">Jasa Pemasaran Ice Cream 2021 SAR RSM IC 14 - 31 Mar 2011</div>
-                                    <div style="font-weight:500;" class="q-mb-sm">10124343</div>
-                                    <div class="row">
-                                        <q-badge outline label="RA" class="text-primary q-mr-md"/>
-                                        <div class="row items-center q-mr-md">
-                                            <q-img
-                                                src="~assets/icon/calendar-star.svg"
-                                                spinner-color="primary"
-                                                spinner-size="5px"
-                                                width="16px"
-                                                height="18px"
-                                            />
-                                            <div class="font-normal q-ml-sm ">14 Mar 2021</div>
-                                        </div>
-                                        <div class="row items-center">
-                                            <q-img
-                                                src="~assets/icon/calendar-check.svg"
-                                                spinner-color="primary"
-                                                spinner-size="5px"
-                                                width="16px"
-                                                height="18px"
-                                            />
-                                            <div class="font-normal q-ml-sm">16 Mar 2021</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <q-space />
-                                <div class="status-promo">
-                                    <q-badge outline label="Approved" class="text-primary q-mr-md"/>
-                                </div>
-
-                            </div>
-                        </q-card-section>
-                        
-                    </q-card>
-                    </div>
-                </template>
-
-                </q-table>
-        </q-card-section> -->
+        
     </q-card>
     
 </div>
@@ -119,98 +64,94 @@
 </template>
 
 <script>
-import { ref, defineAsyncComponent } from 'vue'
-import { columns,rows } from 'src/common/dummy'
+import { ref, defineAsyncComponent,watch,onMounted } from 'vue'
 import { useService } from 'src/composeables/useService'
+import { usePratesis } from 'src/composeables/usePratesis'
 export default {
     setup(){
         const spend_type = ref('All')
         const status = ref('All')
-        const loading = ref(true)
-        const filterStatus = statusPromo => {
-            itemPromo.value = []
-            status.value = statusPromo
+        const filterSearch = ref({})
+
+
+        const loading = ref(false)
+        const { getData,postData } = useService()
+
+        const { pagination,pagesNumber } = usePratesis()
+        const itemPromo = ref([])
+        const url = ref('promo?limit=5')
+        function getPromo(page = ''){
             loading.value = true
-            if(statusPromo == 'All'){
-                let url = `promo`
-                if(spend_type.value !== 'All'){
-                    url += `?spend_type=${spend_type.value.toLowerCase()}`
-                }
-                getData(url)
-                .then(res=>{
-                    itemPromo.value = res.data.data.data
-                    loading.value = false
-                })
-            }else{
-                let url = `promo?status=${statusPromo.replace(/ /g,"_").toLowerCase()}`
-                if(spend_type.value !== 'All'){
-                    url += `&spend_type=${spend_type.value.toLowerCase()}`
-                }
-                getData(url)
-                .then(res=>{
-                    itemPromo.value = res.data.data.data
-                    loading.value = false
-                })
+            let key = ''
+            if (filterSearch.value.nama) {
+                key += `&nama=${filterSearch.value.nama}`
             }
+            if (filterSearch.value.opso_id) {
+                key += `&opso_id=${filterSearch.value.opso_id}`
+            }
+            if (filterSearch.value.area_id) {
+                key += `&area_id=${filterSearch.value.area_id}`
+            }
+            if (filterSearch.value.start_date) {
+                key += `&start_date=${filterSearch.value.start_date}`
+            }
+            if (filterSearch.value.end_date) {
+                key += `&end_date=${filterSearch.value.end_date}`
+            }
+            if(spend_type.value !== 'All'){
+                key += `&spend_type=${spend_type.value.toLowerCase()}`
+            }
+            if(status.value !== 'All'){
+                key += `&status=${status.value.replace(/ /g,"_").toLowerCase()}`
+            }
+
+            let pages = page ? `&page=${page}` : ''
+            getData(url.value + key + pages)
+            .then(res=>{
+                loading.value = false
+                let result = res.data.data
+                itemPromo.value = result.data
+                pagination.value.page = result.current_page
+                pagination.value.rowsPerPage = result.per_page
+                pagination.value.rowsNumber = result.total
+            })
+            .catch(err=>{
+                console.log('error,',err)
+            })
+            getData('promo-depot')
+            .then(res=>{
+                console.log('promo depot',res)
+            })
         }
 
-        const request = ref(false)
+        getPromo()
 
-        const promo = ref({})
-        const cekpromo = ref(false)
+        function filterPromo(filter){
+            filterSearch.value = { ...filter }
+            getPromo()
+        }
+
+        const filterStatus = statusPromo => {
+            status.value = statusPromo
+            getPromo()
+        }
 
         const filterSpend = spendtype => {
-            itemPromo.value = []
             spend_type.value = spendtype
-            loading.value = true
-            if(spendtype == 'All'){
-                let url = `promo`
-                if(status.value !== 'All'){
-                    url += `?status=${status.value.replace(/ /g,"_").toLowerCase()}`
-                }
-                getData(url)
-                .then(res=>{
-                    itemPromo.value = res.data.data.data
-                    loading.value = false
-                })
-            }else{
-                let url =`promo?spend_type=${spendtype.toLowerCase()}`
-                if(status.value !== 'All'){
-                    url += `&status=${status.value.replace(/ /g,"_").toLowerCase()}`
-                }
-                getData(url)
-                .then(res=>{
-                    itemPromo.value = res.data.data.data
-                    loading.value = false
-                })
-            }
+            getPromo()
         }
 
-        const { getData,postData } = useService()
-        const itemPromo = ref([])
-        getData('promo')
-        .then(res=>{
-            itemPromo.value = res.data.data.data
-            loading.value = false
-            console.log('response promo,',res)
-        })
-        .catch(err=>{
-            console.log('error,',err)
-        })
-
-        function filterPromo(value){
-            console.log('filterpromo',value)
+        const gotoPage = page => {
+            getPromo(page)
         }
-
 
         return {
             spend_type,filterSpend,
             status,filterStatus,
-            columns,rows,filter: ref(''),selected: ref([]),
-            request,
-            promo,cekpromo,itemPromo,loading,
-            filterPromo
-            
+            itemPromo,loading,
+            filterPromo,
+            url,filterSearch,
+            pagination,pagesNumber,gotoPage
         }
     },
     components:{

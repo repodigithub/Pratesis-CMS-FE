@@ -150,36 +150,36 @@ export default {
             }
         }
 
-        async function sendApi(index){
-            return new Promise((resolve,reject)=>{
-                setTimeout(() => {
-                    dataUpload.value[index].start = false
-                    dataUpload.value[index].finish = true
-                    if (index !== dataUpload.value.length-1) {
-                        dataUpload.value[index + 1].start = true
-                    }
-                    resolve('OK')
-                }, 2000);
-            })
-        }
-
         // async function sendApi(index){
-        //     let kirim = new FormData()
-        //     kirim.append('file',dataUpload.value[index].file)
-        //     return postData(`promo/${route.params.id}/image`,kirim)
-        //             .then(()=>{
-        //                 dataUpload.value[index].start = false
-        //                 dataUpload.value[index].finish = true
-        //                 if (index !== dataUpload.value.length-1) {
-        //                     dataUpload.value[index + 1].start = true
-        //                 }
-        //             })
-        //             .catch(err=>{
-        //                 dataUpload.value[index].error = true
-        //                 dataUpload.value[index].start = false
-        //                 error.value = err.response.data.data.file
-        //             })
+        //     return new Promise((resolve,reject)=>{
+        //         setTimeout(() => {
+        //             dataUpload.value[index].start = false
+        //             dataUpload.value[index].finish = true
+        //             if (index !== dataUpload.value.length-1) {
+        //                 dataUpload.value[index + 1].start = true
+        //             }
+        //             resolve('OK')
+        //         }, 2000);
+        //     })
         // }
+
+        async function sendApi(index){
+            let kirim = new FormData()
+            kirim.append('file',dataUpload.value[index].file)
+            return postData(`promo/${route.params.id}/image`,kirim)
+                    .then(()=>{
+                        dataUpload.value[index].start = false
+                        dataUpload.value[index].finish = true
+                        if (index !== dataUpload.value.length-1) {
+                            dataUpload.value[index + 1].start = true
+                        }
+                    })
+                    .catch(err=>{
+                        dataUpload.value[index].error = true
+                        dataUpload.value[index].start = false
+                        error.value = err.response.data.data.file
+                    })
+        }
 
         function uploadSuccess(){
             emit('update:upload',false)

@@ -376,10 +376,10 @@ export default {
     },
     components:{
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
-        'budget-area' : defineAsyncComponent(()=> import('./area/BudgetArea')),
-        'budget-produk' : defineAsyncComponent(()=> import('./produk/BudgetProduk')),
-        'promo-image' : defineAsyncComponent(()=> import('./Image/PromoImage')),
-        'add-edit-promo' : defineAsyncComponent(()=> import('./utama/AddEditPromo'))
+        'budget-area' : defineAsyncComponent(()=> import('../area/BudgetArea')),
+        'budget-produk' : defineAsyncComponent(()=> import('../produk/BudgetProduk')),
+        'promo-image' : defineAsyncComponent(()=> import('../Image/PromoImage')),
+        'add-edit-promo' : defineAsyncComponent(()=> import('../AddEditPromo'))
     },
     computed:{
         userRole(){

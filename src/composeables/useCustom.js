@@ -35,6 +35,9 @@ export const useCustom = () => {
     const formatTgl = tgl => {
         return date.formatDate(tgl,'DD/MM/YY')
     }
+    const editTglPromo = tgl => {
+        return date.formatDate(tgl,'YYYY-MM-DD')
+    }
 
     const promoTgl = tgl => {
         return date.formatDate(tgl,'DD MMM YYYY')
@@ -92,6 +95,7 @@ export const useCustom = () => {
         formatTglPromo,
         colorStatusPromo, //styling status promo
         statusPromo, //tulisan status promo
-        colorStatusSpend //styling status spend type
+        colorStatusSpend, //styling status spend type
+        editTglPromo
     }
 }

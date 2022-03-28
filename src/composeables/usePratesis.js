@@ -176,6 +176,7 @@ export const usePratesis = () => {
 
     const modalDetail = ref(false)
     const dataDetail = ref({})
+    
     const openDetail = (evt,row) => {
         modalDetail.value = true
         dataDetail.value = row

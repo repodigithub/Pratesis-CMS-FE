@@ -3,7 +3,10 @@
         :url="`promo/${$route.params.id}/product`"
         :columns="produk"
         :canOpenDetail="false"
-        v-model:requesting="request">
+        v-model:requesting="request"
+        :normalDetail="false"
+        @rowClick="openDetail"
+        >
         <template v-slot:toptable>
             <div class="row justify-between">
                 <div class="content-title">
@@ -36,7 +39,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent,ref,watch,computed } from 'vue'
+import { defineAsyncComponent,ref,watch,onMounted } from 'vue'
 import { useRouter,useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useService } from 'src/composeables/useService'
@@ -55,6 +58,11 @@ export default {
             { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget_brand)}`},
             
         ]
+        onMounted(()=>{
+            if (props.isDraft) {
+                produk.push({ name:'actions',align:'left',label:'',field:'kode_brand'})
+            }
+        })
         watch(()=>props.isDraft,val=>{
             if(val){
                 produk.push({ name:'actions',align:'left',label:'',field:'kode_brand'})
@@ -95,11 +103,15 @@ export default {
             let budget = props.budget_update + produk.budget_brand
             router.push({name:'Edit budget Produk',params:{id:route.params.id,produk:id},query:{budget:budget}})
         }
+        function openDetail(row){
+            console.log('row yang diklik',row)
+            router.push({name:'Detail Produk',params:{id:route.params.id,produk:row.id}})
+        }
         return {
             produk,request,
             showLoading,hideLoading,successNotif,
             oneDeleteProduk,openEditProduk,
-            formatRibuan
+            formatRibuan,openDetail
         }
     },
     components:{

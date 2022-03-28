@@ -35,7 +35,6 @@ const menu = [
                 ],
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -50,7 +49,6 @@ const menu = [
                 ],
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -58,7 +56,6 @@ const menu = [
                 title:'Document Claim',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -66,7 +63,6 @@ const menu = [
                 title:'Alasan',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -74,7 +70,6 @@ const menu = [
                 title:'Pajak',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -82,7 +77,6 @@ const menu = [
                 title:'Spend Type',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -90,7 +84,6 @@ const menu = [
                 title:'Type Promo',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -98,7 +91,6 @@ const menu = [
                 title:'Investment',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -106,7 +98,6 @@ const menu = [
                 title:'Budget Holder',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -126,7 +117,6 @@ const menu = [
                 title:'Master Data',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -162,7 +152,6 @@ const menu = [
                 title:'User',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -176,7 +165,6 @@ const menu = [
         ],
         access:{
             AD:true,
-            GA:true,
             HO:true
         },
     },

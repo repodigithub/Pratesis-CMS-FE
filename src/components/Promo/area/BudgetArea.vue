@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent,ref,watch,computed } from 'vue'
+import { defineAsyncComponent,ref,watch,computed,onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useService } from 'src/composeables/useService'
 import { useCustom  } from 'src/composeables/useCustom'
@@ -86,6 +86,11 @@ export default {
             { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget)}`},
             
         ]
+        onMounted(()=>{
+            if (props.isDraft) {
+                area.push({ name:'actions',align:'left',label:'',field:'kode_area'})
+            }
+        })
         watch(()=>props.isDraft,val=>{
             if(val){
                 area.push({ name:'actions',align:'left',label:'',field:'kode_area'})
@@ -100,6 +105,7 @@ export default {
         const alamat = ref('undefined')
         const budget = ref('')
         const areaid = ref('')
+        const budgetalt = ref('')
         function openAdd(){
             edit.value = false
             modalAdd.value = true
@@ -114,7 +120,9 @@ export default {
             edit.value = true
             kode_area.value = area.kode_area
             budget.value = area.budget
+            budgetalt.value = area.budget
             areaid.value = area.id
+            
         }
         watch(()=> kode_area.value,val=>{
             if([null,''].indexOf(val) < 0 ){
@@ -133,7 +141,7 @@ export default {
         
         const budgetlimits = computed(()=>{
             let result = props.budgetlimit
-            return edit.value ? result + parseInt(budget.value) : result
+            return edit.value ? result + parseInt(budgetalt.value) : result
         })
 
         function onSubmitAdd(){
@@ -242,7 +250,7 @@ export default {
             showLoading,hideLoading,successNotif,
             request,selected,batchDelete,oneDelete,
             onSubmitAdd,
-            formatRibuan,budgetlimits
+            formatRibuan,budgetlimits,budgetalt
         }
     },
     components:{

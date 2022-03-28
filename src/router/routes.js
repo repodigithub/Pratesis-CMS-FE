@@ -35,11 +35,11 @@ const routes = [
       { path: 'promo',name:'promo', component: () => import('pages/master/Promo.vue'),
         redirect:{name : 'Promo'},
         children:[
-          { path:'',name:'Promo',component:()=> import('components/Promo/Utama.vue')},
-          { path:'detail-promo/:id',name:'Detail Promo',component:()=> import('components/Promo/DetailPromo.vue')},
+          { path:'',name:'Promo',component:()=> import('components/Promo/ListPromo/ListPromo.vue')},
+          { path:'detail-promo/:id',name:'Detail Promo',component:()=> import('components/Promo/DetailPromo/DetailPromo.vue')},
           { path:'detail-promo/:id/produk',name:'Add budget Produk',component:()=> import('components/Promo/produk/AddProduk.vue')},
           { path:'detail-promo/:id/produk/:produk',name:'Edit budget Produk',component:()=> import('components/Promo/produk/EditProduk.vue')},
-          { path:'detail-promo/detail-produk',name:'Detail Produk',component:()=> import('components/Promo/DetailProduk.vue')},
+          { path:'detail-promo/:id/produk/:produk/detail-produk',name:'Detail Produk',component:()=> import('components/Promo/produk/DetailProduk.vue')},
         ],
         meta:{
           master:true
