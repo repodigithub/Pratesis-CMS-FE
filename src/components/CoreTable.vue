@@ -45,7 +45,7 @@
             </div>
         </q-card-section>
     </q-card>
-    <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail && canOpenDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :canEdit="canEdit" :options="optionsDetail">
+    <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail && canOpenDetail && !detailLinked" :dataDetail="dataDetail" @reloadTable="onRequest" :canEdit="canEdit" :options="optionsDetail">
         <template v-for="(_, slot) in $slots" v-slot:[slot]="props">
             <slot :name="slot" v-bind="props" />
         </template>
@@ -95,14 +95,14 @@ export default {
         resultSelect:{
             type:Array
         },
-        normalDetail:{
-            type:Boolean,
-            default:true
+        detailLinked: {
+            type: Boolean,
+            default: false
         }
     },
     setup(props, { emit }){
         const { pagination,rows,loading,init,onRequest,pagesNumber,modalDetail,openDetail,dataDetail } = usePratesis()
-        init(props.url,props.option,props.islogin)
+        init(props.url,props.option,props.islogin, props.detailLinked)
 
         function gotoPage(page){
             let request = {}

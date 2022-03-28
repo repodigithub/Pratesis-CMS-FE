@@ -7,6 +7,9 @@
         :normalDetail="false"
         @rowClick="openDetail"
         >
+        :canOpenDetail="true"
+        :detailLinked="true"
+        v-model:requesting="request">
         <template v-slot:toptable>
             <div class="row justify-between">
                 <div class="content-title">
@@ -14,6 +17,8 @@
                     <div class="text-primary" style="font-weight:500;font-size:16px;">Brand</div>
                 </div>
                 <div class="d" v-if="isDraft">
+                <!-- v-if="userRole != 'GA'" -->
+                <div class="d" >
                     <q-btn color="secondary"  no-caps class="btn-one" unelevated @click="$router.push({ name:'Add budget Produk',params:{id:$route.params.id},query:{budget:budget_update} })">
                         <q-icon name="add" />
                         Add Produk
@@ -116,7 +121,13 @@ export default {
     },
     components:{
         'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
-    }
+    },
+    computed:{
+        userRole(){
+            let role = this.$store.state.auth.user.kode_group.substr(0,2)
+            return ['SA','DI'].indexOf(role) >= 0 ? '' : role
+        },
+    },
 }
 </script>
 

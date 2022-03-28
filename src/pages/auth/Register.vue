@@ -81,7 +81,7 @@
                     placeholder="password"
                     hide-bottom-space
                     :rules="[
-                        (val) => (val && val.length > 0) || 'password tidak boleh kosong'
+                        (val) => (val && val.length > 0) || 'Password tidak boleh kosong'
                     ]"
                     >
                         <template v-slot:append>
@@ -168,11 +168,22 @@ export default {
         'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown'))
     },
     setup(){
-        const dataSend = ref({})
+        const dataSend = ref({
+            user_id:'',
+            full_name:'',
+            username:'',
+            email:'',
+            password:'',
+            kode_distributor:null,
+            kode_area:null,
+            kode_group:''
+        })
         const form = ref('')
         const registerSuccess = ref(false)
         const store = useStore()
-        const error = ref('')
+        const error = ref({
+            recaptcha: ''
+        })
         const { showLoading,hideLoading } = useCustom()
 
         dataSend.value = {

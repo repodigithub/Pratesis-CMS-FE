@@ -39,12 +39,22 @@ const routes = [
           { path:'detail-promo/:id',name:'Detail Promo',component:()=> import('components/Promo/DetailPromo/DetailPromo.vue')},
           { path:'detail-promo/:id/produk',name:'Add budget Produk',component:()=> import('components/Promo/produk/AddProduk.vue')},
           { path:'detail-promo/:id/produk/:produk',name:'Edit budget Produk',component:()=> import('components/Promo/produk/EditProduk.vue')},
-          { path:'detail-promo/:id/produk/:produk/detail-produk',name:'Detail Produk',component:()=> import('components/Promo/produk/DetailProduk.vue')},
+          { path:'detail-promo/:id/detail-produk/:produk',name:'Detail Produk',component:()=> import('components/Promo/DetailProduk.vue')},
         ],
         meta:{
           master:true
         }
       },
+      { path: 'approval',name:'approval', component: () => import('pages/master/Approval.vue'),
+        redirect: {name : 'Approval'},
+        children:[
+          { path:'',name:'Approval',component:()=> import('components/Approval/Index.vue')},
+        ],
+        meta:{
+          master:true
+        }
+      },
+      { path: 'verifikasi', name:'Verifikasi', component: () => import('pages/master/Verifikasi.vue')},
       { path: 'document-claim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue'),
         meta:{
             master:true

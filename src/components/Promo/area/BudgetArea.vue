@@ -4,13 +4,19 @@
             <div class="row justify-between">
                 <div class="font-medium">Budget Area</div>
                 <div class="row" v-if="isDraft">
+    <core-table :url="`promo/${$route.params.id}/area`" :columns="userRole != 'GA' ? area : areaDepo" :canOpenDetail="false" v-model:requesting="request" :canSelect="true" v-model:resultSelect="selected">
+        <template v-slot:toptable>
+            <div class="row justify-between">
+                <div class="font-medium" v-if="userRole != 'GA'">Budget Area</div>
+                <div class="font-medium" v-else>Budget Distributor</div>
+                <div class="row">
                     <q-btn color="secondary"  no-caps class="btn-one q-mr-sm" unelevated @click="batchDelete" v-if="selected.length > 0">
                         <q-icon name="close"  />
                         Delete
                     </q-btn>
                     <q-btn color="secondary"  no-caps class="btn-one" unelevated @click="openAdd">
                         <q-icon name="add" />
-                        Add Area
+                        <span>{{userRole != 'GA' ? 'Add Area' : 'Area Distributor'}}</span>
                     </q-btn>
                 </div>
             </div>
@@ -34,9 +40,8 @@
     
         <template v-slot:title-content>
             <div class="text-h6"> 
-                <span v-if="edit">Edit</span> 
-                <span v-else>Add New </span>
-                Budget Area
+                <span v-if="edit">Edit </span> 
+                <span v-else>Add New </span>Budget <span> {{userRole == 'GA' ? 'Distributor' : 'Area'  }}</span>
             </div>
         </template>
 
@@ -44,9 +49,9 @@
             <div class="text-grey1">Budget Limit</div>
             <div class="text-h6">Rp {{formatRibuan(budgetlimits)}}</div>
             <div class="row q-col-gutter-sm q-mt-sm">
-                <select-dropdown url="area" :isNormal="false" :islogin="false" v-model:selected="kode_area" class="q-mb-md col" nameLabel="Kode Area" />
+                <select-dropdown url="area" :isNormal="false" :islogin="false" v-model:selected="kode_area" class="q-mb-md col" :nameLabel="userRole == 'GA' ? 'Kode Distributor' : 'Kode Area'" />
                 <div class="col">
-                    <label for="Nama Area">Nama Area</label>
+                    <label for="Nama Area">{{userRole == 'GA' ? 'Nama Distributor' : 'Nama Area'}}</label>
                     <q-input v-model="nama_area" type="text" disable id="Nama Area" dense bg-color="grey4" filled style="border:1px solid #B7C4D6;border-radius:4px;"/>
                 </div>
             </div>
@@ -96,6 +101,13 @@ export default {
                 area.push({ name:'actions',align:'left',label:'',field:'kode_area'})
             }
         })
+        const areaDepo = [
+            { name: 'kode', label: 'Kode Distributor', align: 'left', field: 'kode_area' },
+            { name: 'nama_area',  align: 'left',label: 'Nama Distributor', field: 'nama_area'},
+            { name: 'persentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
+            { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget)}`},
+            { name:'actions',align:'left',label:'',field:'kode_area'}
+        ]
 
         const modalAdd = ref(false)
         const edit = ref(false)
@@ -173,8 +185,8 @@ export default {
                     successNotif('Budget Area Berhasil ditambahkan')
                     request.value = {
                         pagination : {
-                                        page : 1
-                                    }
+                            page : 1
+                        }
                     }
                     emit('updateArea')
                 })
@@ -245,6 +257,7 @@ export default {
         }
         return{
             area,
+            areaDepo,
             modalAdd,openAdd,openEdit,edit,
             kode_area,nama_area,nama_region,alamat,budget,areaid,
             showLoading,hideLoading,successNotif,
@@ -257,7 +270,13 @@ export default {
         'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
         'add-data' : defineAsyncComponent(()=> import('../../Modal/AddData')),
         'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown'))
-    }
+    },
+    computed:{
+        userRole(){
+            let role = this.$store.state.auth.user.kode_group.substr(0,2)
+            return ['SA','DI'].indexOf(role) >= 0 ? '' : role
+        },
+    },
 }
 </script>
 

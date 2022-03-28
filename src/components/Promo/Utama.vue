@@ -3,8 +3,8 @@
     <template v-slot:breadcrumb-content>
         <q-breadcrumbs-el label="Promo" style="color:#00000073;"/>
     </template>
-    <template v-slot:rightside-content v-if="userRole">
-        <q-btn color="secondary"  no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="modalPromo = !modalPromo">
+    <template v-slot:rightside-content v-if="userRole != 'GA'">
+        <q-btn color="secondary"  no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="openAdd">
             <q-icon name="add" />
             Add New
         </q-btn>
