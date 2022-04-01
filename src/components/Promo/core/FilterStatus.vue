@@ -16,7 +16,8 @@
             <q-btn :outline="status === 'Approve' ? false : true " color="primary" label="Approve" unelevated @click="filterStatus('Approve')" :class="status === 'Approve' ? '' : 'bg-primary4'" no-caps/>
             <q-btn :outline="status === 'Need Approval' ? false : true " color="primary" label="Need Approval" unelevated @click="filterStatus('Need Approval')" :class="status === 'Need Approval' ? '' : 'bg-primary4'" no-caps/>
             <q-btn :outline="status === 'Reject' ? false : true " color="primary" label="Reject" unelevated @click="filterStatus('Reject')" :class="status === 'Reject' ? '' : 'bg-primary4'" no-caps/>
-            <q-btn :outline="status === 'Draft' ? false : true " color="primary" label="Draft" unelevated @click="filterStatus('Draft')" :class="status === 'Draft' ? '' : 'bg-primary4'" no-caps v-if="['AD','HO'].indexOf(role) >= 0"/>
+            <q-btn :outline="status === 'Draft' ? false : true " color="primary" label="Draft" unelevated @click="filterStatus('Draft')" :class="status === 'Draft' ? '' : 'bg-primary4'" no-caps v-if="role !== 'GA' && !isApprove"/>
+            <q-btn :outline="status === 'New Promo' ? false : true " color="primary" label="New Promo" unelevated @click="filterStatus('New Promo')" :class="status === 'New Promo' ? '' : 'bg-primary4'" no-caps v-if="role === 'GA' && !isApprove"/>
         </q-btn-group>
     </q-card-section>
 </template>
@@ -25,7 +26,15 @@
 import { ref } from 'vue'
 export default {
     name:'filter-status',
-    props:['role'],
+    props:{
+        role:{
+            type:String
+        },
+        isApprove:{
+            type:Boolean,
+            default:false
+        }
+    },
     setup(props,{emit}){
         const spend_type = ref('All')
         const status = ref('All')

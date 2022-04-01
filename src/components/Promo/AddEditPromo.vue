@@ -213,7 +213,7 @@ export default {
                         successNotif('Promo berhasil diedit')
                         hideLoading()
                         emit('update:modalPromo',false)
-                        emit('initData')
+                        emit('initData','promo')
                     })
                     .catch(err=>{
                         console.log('error add edit promo,',err)

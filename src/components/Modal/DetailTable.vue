@@ -84,7 +84,6 @@ export default {
         .then(res=>{
             emit('update:dataDetail',res.data.data)
             dataModal.value = res.data.data
-            // console.log("dataModal",dataModal.value)
             valid.value = true
         })
 

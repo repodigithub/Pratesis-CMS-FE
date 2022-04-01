@@ -1,5 +1,5 @@
 <template>
-  <q-page >
+  <q-page>
     <router-view> </router-view>
   </q-page>
 </template>

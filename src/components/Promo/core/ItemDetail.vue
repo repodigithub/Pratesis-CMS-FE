@@ -1,11 +1,11 @@
 <template>
-  <breadcrumb  :upload="false" :leftside="false">
+<!-- <breadcrumb  :upload="false" :leftside="false">
     <template v-slot:breadcrumb-content>
         <q-breadcrumbs-el label="Promo" class="text-primary" :to="{name: 'Promo'}"/>
         <q-breadcrumbs-el label="Detail Promo" style="color:#00000073;"/>
     </template>
-    <template v-slot:rightside-content v-if="userRole && isDraft">
-        <q-btn color="secondary" outline no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="onPromoSubmit">
+    <template v-slot:rightside-content>
+        <q-btn color="secondary" outline no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="onPromoSubmit" v-if="isDraft && ['GA','AD','HO'].indexOf(role) >= 0">
             <q-img
                 src="~assets/icon/file-check.svg"
                 spinner-color="primary"
@@ -17,7 +17,7 @@
             Submit
         </q-btn>
     </template>
-</breadcrumb>
+</breadcrumb> -->
 <div class="row q-pa-lg">
     <div class="col-12 q-mb-md">
         <q-card class="own-card">
@@ -30,7 +30,7 @@
                     <div class="col-12 row ">
                         <div class="font-big">{{judul.nama_promo}}</div>
                         <q-space />
-                        <q-btn color="secondary" no-caps unelevated class="btn-one" @click="modalPromo = !modalPromo" v-if="userRole && isDraft">
+                        <q-btn color="secondary" no-caps unelevated class="btn-one" @click="modalPromo = !modalPromo" v-if="isDraft && ['AD','HO'].indexOf(role) >= 0">
                             <q-icon name="edit" style="font-size:18px;" class="q-mr-sm"/>
                             <div>Edit</div>
                         </q-btn>
@@ -46,7 +46,7 @@
                     <div class="col-8" style="padding-right:60px;">
                         <div class="row">
                             <div class="col-4">
-                                Donut Chart
+                                PIE Chart Soon
                             </div>
                             <div class="col-8">
                                 <div class="row justify-between items-center" style="margin-bottom:10px;">
@@ -67,7 +67,7 @@
                                     </div>
                                     <div class="text-primary font-16"> <span style="opacity:0.4;">Rp</span> {{formatRibuan(budget)}}</div>
                                 </div>
-                                <div class="row justify-between items-center" style="margin-bottom:10px;">
+                                <div class="row justify-between items-center" style="margin-bottom:10px;" v-if="['AD','HO'].indexOf(role) >=0">
                                     <div class="row items-center">
                                         <div
                                             style="border-radius:10px;width:36px;height:36px;background: #0065FF;margin-right:15px;"
@@ -91,7 +91,7 @@
                                     </span>
                                     </div>
                                 </div>
-                                <div class="row justify-between items-center" style="margin-bottom:10px;">
+                                <div class="row justify-between items-center" style="margin-bottom:10px;" v-if="['AD','HO'].indexOf(role) >=0">
                                     <div class="row items-center">
                                         <div
                                             style="border-radius:10px;width:36px;height:36px;background: #FF7B7B;margin-right:15px;"
@@ -151,7 +151,7 @@
                                     </div>
                                     <div class="text-primary font-16"><span style="opacity:0.4;">Rp</span> {{formatRibuan(judul.outstanding_claim)}}</div>
                                 </div>
-                                <div class="row justify-between items-center" style="margin-bottom:12px;">
+                                <div class="row justify-between items-center" style="margin-bottom:12px;" v-if="['AD','HO','GA'].indexOf(role) >=0">
                                     <div class="row items-center">
                                         <div
                                             style="border-radius:10px;width:36px;height:36px;background: #2ECE8C;margin-right:15px;"
@@ -165,15 +165,21 @@
                                                 height="24px"
                                             />
                                         </div>
-                                        <div class="font-16">Budget Area</div>
+                                        <div class="font-16">Budget {{['AD','HO'].indexOf(role) >=0 ? 'Area' : 'Distributor'}}</div>
                                     </div>
-                                    <div class="text-primary font-16">
+                                    <div class="text-primary font-16" v-if="['AD','HO'].indexOf(role) >=0">
                                         <span v-if="loadbudgetarea">Loading...</span>
                                         <span v-else>
                                             <span style="opacity:0.4;">Rp</span> {{formatRibuan(budget_area)}}
                                             ({{persentaseBudgetarea}} %)
                                         </span>
-
+                                    </div>
+                                    <div class="text-primary font-16" v-if="['GA'].indexOf(role) >=0">
+                                        <span v-if="loadbudgetdistributor">Loading...</span>
+                                        <span v-else>
+                                            <span style="opacity:0.4;">Rp</span> {{formatRibuan(budget_distributor)}}
+                                            ({{persentaseBudgetdistributor}} %)
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -232,12 +238,13 @@
             </q-card-section>
         </q-card>
     </div>
-    <promo-image />
+    <promo-image v-model:role="role" v-model:status="status"/>
+
     <div class="col-12 q-mb-md" v-if="produkShow">
-        <budget-produk v-model:budget_update="budget_left" @updateProduk="getUpdateBudget" v-model:isDraft="isDraft"/>
+        <budget-produk v-model:budget_update="budget_left" @updateProduk="getUpdateBudget" v-model:isDraft="isDraft" v-model:role="role" v-model:budget="budget"/>
     </div>
-    <div class="col-12" v-if="areaShow">
-        <budget-area v-model:budgetlimit="budgetlimitarea" @updateArea="getBudgetArea" v-model:isDraft="isDraft"/>
+    <div class="col-12" v-if="areaShow && ['AD','HO','GA'].indexOf(role) >= 0 ">
+        <budget-area v-model:budgetlimit="budgetlimitareadistributor" @updateAreaDistributor="updateAreaDistributor" v-model:isDraft="isDraft" v-model:role="role"/>
     </div>
 </div>
 <add-edit-promo v-model:modalPromo="modalPromo" v-if="modalPromo" edit @initData="initData"/>
@@ -251,30 +258,34 @@ import { useCustom  } from 'src/composeables/useCustom'
 import { usePratesis } from 'src/composeables/usePratesis'
 
 export default {
-    setup(){
-        
-        const { getData,postData,putData,deleteData } = useService()
+    props:['roles','isDrafter','statusDetail','promoId'],
+    setup(props,{ emit }){
+        const { getData,putData } = useService()
         const loadjudul = ref(false)
         const judul = ref({})
         const { showLoading,hideLoading,successNotif,formatTglPromo,colorStatusPromo,statusPromo,colorStatusSpend,errorNotif  } = useCustom()
         
-        const { formatRibuan } = usePratesis()
+        const { formatRibuan,role } = usePratesis()
         
         const route = useRoute()
-        const budget_area = ref(0)
         const budget = ref(0)
-        const budget_update = ref(0)
-        const budget_left = ref(0)
-        const documentClaim = ref(null)
+        const documentClaim = ref('')
         const status = ref('undefined')
         const produkShow = ref(false)
+
+        const budget_area = ref(0)
+        const budget_update = ref(0)
+        const budget_left = ref(0)
+
+        const budget_distributor = ref(0)
+
         const areaShow = ref(false)
 
-        function initData(){
+        function initData(url){
             loadjudul.value = true
             produkShow.value = false
             areaShow.value = false
-            getData(`promo/${route.params.id}`)
+            getData(`${url}/${route.params.id}`)
             .then(res=>{
                 let result = res.data.data
                 judul.value.nama_promo = result.nama_promo
@@ -287,21 +298,35 @@ export default {
                 judul.value.outstanding_claim = result.statistics.outstanding_claim
                 judul.value.kode_budget_holder = result.kode_budget_holder
                 budget.value = result.budget
+
                 budget_update.value = result.statistics.budget_update
                 budget_left.value = result.statistics.budget_left
                 budget_area.value = result.statistics.budget_area
+
+                budget_distributor.value = result.statistics.budget_distributor
+
                 documentClaim.value = result.document
-                status.value = result.status
+                status.value = role.value == 'DI' ? result.status_promo : result.status
                 loadjudul.value = false
                 produkShow.value = true
                 areaShow.value = true
+                emit('update:roles',role.value)
+                emit('update:isDrafter',isDraft.value)
+                emit('update:statusDetail',status.value)
+                emit('update:promoId',result.id)
             })
             .catch(err=>{
                 console.log('error,',err)
             })
         }
         onMounted(()=>{
-            initData()
+            if (['AD','HO'].indexOf(role.value) >= 0) {
+                initData('promo')
+            }else if(role.value === 'GA'){
+                initData('promo-depot')
+            }else{
+                initData('promo-distributor')
+            }
         })
         const persentaseBudgetarea = computed(()=>{
             return (budget_area.value/budget.value)*100
@@ -320,6 +345,37 @@ export default {
                 budget_area.value = result.statistics.budget_area
             })
         }
+
+        const persentaseBudgetdistributor = computed(()=>{
+            return (budget_distributor.value/budget.value)*100
+        })
+        const budgetlimitdistributor = computed(()=>{
+            return budget.value - budget_distributor.value
+        })
+
+        const loadbudgetdistributor = ref(false)
+        function getBudgetdistributor(){
+            loadbudgetdistributor.value = true
+            getData(`promo-depot/${route.params.id}`)
+            .then(res=>{
+                loadbudgetdistributor.value = false
+                let result = res.data.data
+                budget_distributor.value = result.statistics.budget_distributor
+            })
+        }
+
+        const budgetlimitareadistributor = computed(()=>{
+            return role.value == 'GA' ? budgetlimitdistributor.value : budgetlimitarea.value
+        })
+
+        function updateAreaDistributor(){
+            if (role.value == 'GA') {
+                getBudgetdistributor()
+            }else{
+                getBudgetArea()
+            }
+        }
+
         const loadbudgetproduk = ref(false)
         function getUpdateBudget(){
             loadbudgetproduk.value = true
@@ -333,10 +389,9 @@ export default {
         }
 
         const isDraft = computed(()=>{
-            return ['draft','reject'].indexOf(status.value) >= 0 ? true : false
+            return ['draft','reject','new_promo'].indexOf(status.value) >= 0 ? true : false
         })
-
-        function onPromoSubmit(){
+        function onSubmitHO(){
             if (budget_left.value !== 0 && budget_area.value === budget.value) { //baru bisa disubmit
                 errorNotif('Sisa budget harus bernilai 0 rupiah')
             }else if(budget_left.value === 0 && budget_area.value !== budget.value){
@@ -349,8 +404,7 @@ export default {
                     status: "need_approval"
                 })
                 .then(res=>{
-                    console.log('res',res)
-                    initData()
+                    initData('promo')
                     hideLoading()
                 })
                 .catch(err=>{
@@ -358,34 +412,60 @@ export default {
                 })
             }
         }
+        function onSubmitDepot(){
+            if (budget_distributor.value !== budget.value) { //baru bisa disubmit
+                errorNotif('budget distributor harus bernilai 100%')
+            }else {
+                showLoading()
+                putData(`promo-depot/${route.params.id}/status`,{
+                    status: "need_approval"
+                })
+                .then(res=>{
+                    initData('promo-depot')
+                    hideLoading()
+                })
+                .catch(err=>{
+                    console.log('err',err)
+                })
+            }
+        }
+        function onPromoSubmit(){
+            if (['HO','AD'].indexOf(role.value) >= 0) {
+                onSubmitHO()
+            }else{
+                onSubmitDepot()
+            }
+        }
         const active = ref(true)
         const modalPromo = ref(false)
         return {
+            role,
             loadjudul,judul,budget,
+
             persentaseBudgetarea,budget_area,getBudgetArea,loadbudgetarea,budgetlimitarea,
+
             showLoading,hideLoading,successNotif,formatTglPromo,
             formatRibuan,
+
             getUpdateBudget,loadbudgetproduk,budget_update,budget_left,
+
             documentClaim,
             status,isDraft,
             onPromoSubmit,
             colorStatusPromo,statusPromo,colorStatusSpend,active,
             modalPromo,
-            initData,errorNotif,areaShow,produkShow
+            initData,errorNotif,areaShow,produkShow,
+
+            budget_distributor,persentaseBudgetdistributor,budgetlimitdistributor,loadbudgetdistributor,getBudgetdistributor,
+            budgetlimitareadistributor,updateAreaDistributor
         }
     },
     components:{
-        'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
+        // 'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
         'budget-area' : defineAsyncComponent(()=> import('../area/BudgetArea')),
         'budget-produk' : defineAsyncComponent(()=> import('../produk/BudgetProduk')),
         'promo-image' : defineAsyncComponent(()=> import('../Image/PromoImage')),
         'add-edit-promo' : defineAsyncComponent(()=> import('../AddEditPromo'))
-    },
-    computed:{
-        userRole(){
-            let role = this.$store.state.auth.user.kode_group.substr(0,2)
-            return ['SA','DI'].indexOf(role) >= 0 ? '' : role
-        },
     },
 }
 </script>

@@ -15,7 +15,7 @@
                 @request="onRequest"
                 hide-pagination
                 binary-state-sort
-                @row-click="onRowClick"
+                @row-click="openDetail"
                 :selection="canSelect ? 'multiple' : 'none'"
                 :selected-rows-label="getSelectedString"
                 v-model:selected="selected"
@@ -102,7 +102,8 @@ export default {
     },
     setup(props, { emit }){
         const { pagination,rows,loading,init,onRequest,pagesNumber,modalDetail,openDetail,dataDetail } = usePratesis()
-        init(props.url,props.option,props.islogin, props.detailLinked)
+
+        init(props.url,props.option,props.islogin,props.detailLinked)
 
         function gotoPage(page){
             let request = {}
@@ -132,14 +133,6 @@ export default {
         watch(()=>props.resultSelect,val=>{
             selected.value = val
         })
-
-        function onRowClick(evt,row,index){
-            if (props.normalDetail) {
-                openDetail(evt,row)
-            }else{ //detail yang tidak normal seperti detail budget produk di promo
-                emit('rowClick',row)
-            }
-        }
         
         return {
             rows,
@@ -153,7 +146,6 @@ export default {
             openDetail,
             dataDetail,
             selected,getSelectedString,
-            onRowClick
         }
     },
     components:{

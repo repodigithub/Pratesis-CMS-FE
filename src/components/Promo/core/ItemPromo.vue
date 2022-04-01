@@ -6,9 +6,10 @@
             spinner-size="82px"
             width="80px"
             height="80px"
+            class="q-ml-md"
         />
         <div class="q-ml-md">
-            <div class="font-medium text-bold">{{item.nama_promo}}</div>
+            <div class="font-medium text-bold">{{item.nama_promo}} </div>
             <div style="font-weight:500;" class="q-mb-sm">{{item.opso_id}}</div>
             <div class="row">
                 <q-badge outline :label="item.kode_spend_type" class="q-mr-md" :class="active ? colorStatusSpend(item.kode_spend_type) : ''"/>
@@ -35,9 +36,20 @@
             </div>
         </div>
         <q-space />
-        <div class="status-promo">
+        <div class="status-promo" v-if="role == 'DI'">
+            <div class="row">
+                <div class="col-12 text-right q-mb-md">
+                    <q-badge outline :label="statusPromo(item.status_promo)" class="q-mr-md" :class="active ? colorStatusPromo(item.status_promo) : ''"
+                style="padding-top:5px;padding-bottom:5px;" />
+                </div>
+                <div class="col-12">
+                    <q-btn :class="item.status_promo == 'claim' ? 'bg-secondary' : 'bg-grey3' " no-caps unelevated class="btn-one text-white" label="Claim"  @click.stop="$router.push({name : 'Klaim Promo'})" :disable="item.status_promo != 'claim' ? true : false"/>
+                </div>
+            </div>
+        </div>
+        <div class="status-promo" v-else-if="['AD','HO','GA'].indexOf(role) >= 0">
             <q-badge outline :label="statusPromo(item.status)" class="q-mr-md" :class="active ? colorStatusPromo(item.status) : ''"
-            style="padding-top:5px;padding-bottom:5px;"/>
+            style="padding-top:5px;padding-bottom:5px;" />
         </div>
     </div>
 </template>
@@ -50,34 +62,20 @@ export default {
     props:{
         item:{
             type:Object
+        },
+        role:{
+            type:String
         }
     },
-    setup(){
+    setup(props,{emit}){
         const { promoTgl,colorStatusPromo,statusPromo,colorStatusSpend } = useCustom()
         const active = ref(true)
-
         return {
             promoTgl,
             active,
-            colorStatusPromo,statusPromo,colorStatusSpend
+            colorStatusPromo,statusPromo,colorStatusSpend,
         }
     },
     
 }
 </script>
-
-<style lang="scss">
-.item-promo{
-    border:1px solid $grey3;
-    border-radius:5px;
-    margin-bottom:10px;
-    padding-top:15px;
-    padding-bottom:15px;
-    transition: transform .28s, background-color .28s;
-    // &:hover{
-    //     transform: scale(0.98);
-    //     cursor:pointer;
-    // }
-}
-
-</style>

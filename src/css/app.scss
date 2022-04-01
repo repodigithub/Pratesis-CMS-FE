@@ -120,9 +120,13 @@
 .grey2{
     color: $grey2;
 }
+.bg-grey3{
+    background: $grey3 !important;
+}
 .grey4{
     background: $grey4;
 }
+
 .bg-grey4{
     background: $grey4 !important;
 }
@@ -175,7 +179,13 @@
     border-radius:4px !important;
 }
 .btn-two {
-    padding:4px 10px !important;
+    padding:3px 10px !important;
+    border-radius:4px !important;
+   
+}
+.btn-approve{
+    width:90px !important;
+    height:26px !important;
 }
 
 .option-one .q-field__inner .q-field__control {
@@ -251,6 +261,9 @@
     .border{
         width:80px;height:80px;border: 1px dashed #B7C4D6;border-radius: 5px;
     }
+    
+}
+.can-upload{
     &:hover{
         cursor: pointer;
         filter: brightness(90%);
@@ -272,4 +285,17 @@
 .draft{
     color:$info1;
     background:$info3;
+}
+
+.item-promo{
+    border:1px solid $grey3;
+    border-radius:5px;
+    margin-bottom:10px;
+    padding-top:15px;
+    padding-bottom:15px;
+    transition: transform .28s, background-color .28s;
+    // &:hover{
+    //     transform: scale(0.98);
+    //     cursor:pointer;
+    // }
 }

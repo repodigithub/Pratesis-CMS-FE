@@ -14,7 +14,7 @@ export const useCustom = () => {
     }
 
     const successNotif = msg => {
-        $q.notify({
+        return $q.notify({
             message: msg,
             icon:'check',
             type: 'positive',
@@ -49,15 +49,21 @@ export const useCustom = () => {
                 monthsShort: ['Jan', 'Feb', 'Mar','Apr','Mei','Jun','Jul','Agus','Sept','Okt','Nov','Des'],
             })
     }
+    const formatTglPromo2 = tgl => {
+        return date.formatDate(tgl,'DD MMMM YYYY',{
+                months: ['Januari', 'Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
+                monthsShort: ['Jan', 'Feb', 'Mar','Apr','Mei','Jun','Jul','Agus','Sept','Okt','Nov','Des'],
+            })
+    }
 
     const colorStatusPromo = value => {
-            if(value == 'draft'){
+            if(['draft','new_promo'].indexOf(value) >= 0){
                 return 'draft'
             }else if(value == 'reject'){
                 return 'reject'
             }else if(value == 'need_approval'){
                 return 'need'
-            }else if(value == 'approve'){
+            }else if(['approve','claim'].indexOf(value) >= 0){
                 return 'approve'
             }else{
                 return ''
@@ -92,7 +98,7 @@ export const useCustom = () => {
         errorNotif,
         formatTgl,
         promoTgl,
-        formatTglPromo,
+        formatTglPromo,formatTglPromo2,
         colorStatusPromo, //styling status promo
         statusPromo, //tulisan status promo
         colorStatusSpend, //styling status spend type

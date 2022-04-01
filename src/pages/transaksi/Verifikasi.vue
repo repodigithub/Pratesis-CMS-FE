@@ -1,4 +1,5 @@
 <template>
+<q-page>
     <div class="row q-pa-lg">
         <div class="col-12">
             <core-table
@@ -36,6 +37,7 @@
             </core-table>
         </div>
     </div>
+</q-page>
 </template>
 
 <script>

@@ -11,10 +11,10 @@
                 </div>
             </q-card-section>
             <q-card-section v-else>
-                <q-scroll-area style="height: 230px; max-width: 1000px;">
+                <q-scroll-area style="height: 230px; max-width: 100%;">
                 <div class="row no-wrap" v-if="promoimage.length <= 0">
-                    <div v-for="n in 6" :key="n" style="width: 200px" class="q-pa-sm" >
-                        <div class="row items-center justify-center box-uploadimage" @click="upload = !upload">
+                    <div v-for="n in 6" :key="n" style="width: 100%" class="q-pa-sm" >
+                        <div class="row items-center justify-center box-uploadimage" @click="openUpload" :class="['AD','HO'].indexOf(role) >= 0  && ['draft','reject'].indexOf(status) >= 0 ? 'can-upload' : ''">
                             <div class="row items-center justify-center border">
                                 <q-img
                                     src="~assets/icon/image-polaroid.svg"
@@ -38,7 +38,7 @@
                                 height="180px"
                             />
                         </div>
-                        <div class="row items-center justify-center box-uploadimage" @click="upload = !upload" v-else>
+                        <div class="row items-center justify-center box-uploadimage" @click="openUpload" v-else :class="['AD','HO'].indexOf(role) >= 0  && ['draft','reject'].indexOf(status) >= 0 ? 'can-upload' : ''">
                             <div class="row items-center justify-center border">
                                 <q-img
                                     src="~assets/icon/image-polaroid.svg"
@@ -64,19 +64,20 @@ import { useService } from 'src/composeables/useService'
 import { useRoute } from 'vue-router'
 export default {
     name:'promo-image',
+    props:['role','status'],
     components:{
         'upload-image' : defineAsyncComponent(()=>import('./UploadImage'))
     },
-    setup(){
+    setup(props){
         const upload = ref(false)
         const { getData } = useService()
         const route = useRoute()
         const promoimage = ref([])
         const loading = ref(true)
 
-        function initData(){
+        function initData(url){
             loading.value = true
-            getData(`promo/${route.params.id}/image`)
+            getData(`${url}/${route.params.id}/image`)
             .then(res=>{
                 let result = res.data.data.data
                 result.forEach(item=>{
@@ -87,11 +88,21 @@ export default {
                 loading.value = false
             })
         }
+        function openUpload(){
+            upload.value = ['AD','HO'].indexOf(props.role) >= 0  && ['draft','reject'].indexOf(props.status) >= 0 ? true : false
+        }
+
         onMounted(()=>{
-            initData()
+            if (['AD','HO'].indexOf(props.role) >= 0) {
+                initData('promo')
+            }else if(props.role === 'GA'){
+                initData('promo-depot')
+            }else{
+                initData('promo-distributor')
+            }
         })
         return {
-            upload,promoimage,initData,loading
+            upload,promoimage,initData,loading,openUpload
         }
     }
 }

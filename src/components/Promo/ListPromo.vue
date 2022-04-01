@@ -3,11 +3,12 @@
     <template v-slot:breadcrumb-content>
         <q-breadcrumbs-el label="Promo" style="color:#00000073;"/>
     </template>
-    <template v-slot:rightside-content v-if="['GA','DI'].indexOf(role) < 0">
-        <q-btn color="secondary"  no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="modalPromo = !modalPromo">
+    <template v-slot:rightside-content >
+        <q-btn color="secondary"  no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="modalPromo = !modalPromo" v-if="['GA','DI'].indexOf(role) < 0">
             <q-icon name="add" />
             Add New
         </q-btn>
+        
     </template>
 </breadcrumb>
 
@@ -23,7 +24,7 @@
             </div>
             <div v-else>
                 <div v-if="itemPromo.length > 0">
-                    <item-promo v-for="item in itemPromo" :key="item" :item="item"/>
+                    <item-promo v-for="item in itemPromo" :key="item" :item="item" v-model:role="role" class="q-mt-md"/>
                     <div class="row justify-end q-mt-md col-12" v-if="itemPromo.length > 0">
                         <q-pagination
                             v-model="pagination.page"
@@ -56,31 +57,38 @@
 </template>
 
 <script>
-import { defineAsyncComponent,ref,onMounted,computed } from 'vue'
+import { defineAsyncComponent,ref,onMounted } from 'vue'
 import { useService } from 'src/composeables/useService'
 import { usePratesis } from 'src/composeables/usePratesis'
-import { useStore } from 'vuex'
+
 export default {
     setup(){
         const modalPromo = ref(false)
 
-        const spend_type = ref('')
         const status = ref('')
-        const filter = ref({})
+        function onStatus(statusKey){
+            status.value = statusKey
+            gotoPage()
+        }
 
+        const spend_type = ref('')
+        function onSpend(spendKey){
+            spend_type.value = spendKey
+            gotoPage()
+        }
+
+        const filter = ref({})
+        function onFilter(filterKey){
+            filter.value = {...filterKey}
+            gotoPage()
+        }
 
         const loading = ref(false)
         const { getData } = useService()
 
-        const { pagination,pagesNumber } = usePratesis()
+        const { pagination,pagesNumber,role } = usePratesis()
         const itemPromo = ref([])
         const url = ref('')
-
-        const store = useStore()
-
-        const role = computed(()=>{
-            return store.state.auth.user?.kode_group?.substr(0,2)
-        })
 
         onMounted(()=>{
             if (['AD','HO'].indexOf(role.value) >= 0) {
@@ -128,7 +136,12 @@ export default {
             .then(res=>{
                 loading.value = false
                 let result = res.data.data
-                itemPromo.value = result.data.filter(item=> item.status)
+                if (role.value == 'DI') {
+                    itemPromo.value = result.data
+                    console.log('itemPromo',itemPromo.value)
+                }else{
+                    itemPromo.value = result.data.filter(item=> item.status)
+                }
                 pagination.value.page = result.current_page
                 pagination.value.rowsPerPage = result.per_page
                 pagination.value.rowsNumber = result.total
@@ -136,28 +149,6 @@ export default {
             .catch(err=>{
                 console.log('error,',err)
             })
-            getData('promo-depot')
-            .then(res=>{
-                console.log('promo depot',res)
-            })
-        }
-
-        function onFilter(filterKey){
-            filter.value = {...filterKey}
-            console.log('filter',filterKey)
-            gotoPage()
-        }
-
-        function onStatus(statusKey){
-            status.value = statusKey
-            console.log('status',statusKey)
-            gotoPage()
-        }
-
-        function onSpend(spendKey){
-            spend_type.value = spendKey
-            console.log('spend',spendKey)
-            gotoPage()
         }
 
         const gotoPage = page => {
@@ -173,10 +164,10 @@ export default {
     },
     components:{
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
-        'add-edit-promo' : defineAsyncComponent(()=> import('../AddEditPromo')),
-        'filter-promo': defineAsyncComponent(()=> import('./FilterPromo')),
-        'filter-status' : defineAsyncComponent(()=> import('./FilterStatus')),
-        'item-promo' : defineAsyncComponent(()=> import('./ItemPromo')),
+        'add-edit-promo' : defineAsyncComponent(()=> import('./AddEditPromo')),
+        'filter-promo': defineAsyncComponent(()=> import('./core/FilterPromo')),
+        'filter-status' : defineAsyncComponent(()=> import('./core/FilterStatus')),
+        'item-promo' : defineAsyncComponent(()=> import('./core/ItemPromo')),
     },
 }
 </script>
