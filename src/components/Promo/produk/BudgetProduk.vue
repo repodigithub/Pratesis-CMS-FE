@@ -11,8 +11,7 @@
                     <div class="font-medium">Budget Produk</div>
                     <div class="text-primary" style="font-weight:500;font-size:16px;">Brand</div>
                 </div>
-                <!-- v-if="userRole != 'GA'" -->
-                <div class="d" >
+                <div class="d" v-if="userRole != 'GA'">
                     <q-btn color="secondary"  no-caps class="btn-one" unelevated @click="$router.push({ name:'Add budget Produk',params:{id:$route.params.id},query:{budget:budget_update} })">
                         <q-icon name="add" />
                         Add Produk
@@ -20,7 +19,7 @@
                 </div>
             </div>
         </template>
-        <template v-slot:body-cell-actions="props">
+        <template v-slot:body-cell-actions="props" v-if="userRole != 'GA'">
             <q-td key="action" :props="props">
                 <q-btn color="primary" round flat icon="edit" no-caps @click.stop="openEditProduk(props.row)" unelevated class=" btn-two"/>
                 <q-btn round color="secondary" flat unelevated @click.stop="oneDeleteProduk(props.row.id)">
@@ -55,7 +54,7 @@ export default {
             { name: 'produk_aktif',  align: 'left',label: 'Jumlah Produk Aktif', field: 'produk_aktif'},
             { name: 'persentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
             { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget_brand)}`},
-            { name:'actions',align:'left',label:'',field:'kode_brand'}
+            // { name:'actions',align:'left',label:'',field:'kode_brand'}
         ]
         const request = ref(null)
         const { showLoading,hideLoading,successNotif } = useCustom()

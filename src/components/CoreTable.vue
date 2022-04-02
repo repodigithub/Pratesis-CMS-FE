@@ -1,5 +1,5 @@
 <template>
-    <q-card class="own-card" flat>
+    <q-card :class="classStyle" flat>
         <q-card-section>
             <slot name="toptable" />
             <q-table
@@ -98,6 +98,10 @@ export default {
         detailLinked: {
             type: Boolean,
             default: false
+        },
+        classStyle: {
+            type: String,
+            default: "own-card"
         }
     },
     setup(props, { emit }){
