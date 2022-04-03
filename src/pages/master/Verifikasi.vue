@@ -10,11 +10,6 @@
                         <div class="content-title">
                             <div class="font-medium">Klaim</div>
                         </div>
-                        <div class="d" >
-                            <q-btn color="primary" no-caps class="btn-one" unelevated @click="$router.push({ name:'Add budget Produk',params:{id:$route.params.id},query:{budget:budget_update} })">
-                                Refresh
-                            </q-btn>
-                        </div>
                     </div>
                 </template>
                 <template v-slot:body-cell-actions="props">
@@ -22,13 +17,13 @@
                         <q-btn color="positive" outline  no-caps class="btn-one q-mr-md" unelevated @click="openSidebarModal">
                             Submit
                         </q-btn>
-                        <q-img
+                        <!-- <q-img
                             src="~assets/icon/check.svg"
                             spinner-color="primary"
                             spinner-size="5px"
                             width="20px"
                             height="20px"
-                        />
+                        /> -->
                     </q-td>
                 </template>
             </core-table>
@@ -314,20 +309,21 @@ import { useService } from 'src/composeables/useService'
 export default {
     data() {
         return {
-            dialogDetail: false,
+            dialogDetail: true,
             isInvoice: false
         }
     },
     setup(){
         const { formatRibuan } = usePratesis()
         const klaim = [
-            { name: 'kode', label: 'Kode Distributor', align: 'left', field: 'kode_brand' },
-            { name: 'nama_brand',  align: 'left',label: 'Nama Distributor', field: 'nama_brand'},
-            { name: 'produk_aktif',  align: 'left',label: 'Coding ULI', field: 'produk_aktif'},
-            { name: 'kode', label: 'Tanggal', align: 'left', field: 'kode_brand' },
-            { name: 'kode', label: 'Jenis Kegiatan', align: 'left', field: 'kode_brand' },
-            { name: 'budget',  align: 'left',label: 'Rp Klaim', field: row => `Rp ${formatRibuan(row.budget_brand)}`},
-            { name: 'budget',  align: 'left',label: 'Rp Dibayar', field: row => `Rp ${formatRibuan(row.budget_brand)}`},
+            { name: 'kode', label: 'Coding ULI', align: 'left', field: 'kode_brand' },
+            { name: 'nama_brand',  align: 'left',label: 'Ket', field: 'nama_brand'},
+            { name: 'produk_aktif',  align: 'left',label: 'Tanggal Kirim', field: 'produk_aktif'},
+            { name: 'kode', label: 'Tanggal Terima', align: 'left', field: 'kode_brand' },
+            { name: 'budget',  align: 'left',label: 'Rp Klaim', field: row => `${formatRibuan(row.budget_brand)}`},
+            { name: 'kode',  align: 'left',label: 'PPN', field: 'kode'},
+            { name: 'budget',  align: 'left',label: 'PPH', field: row => `${formatRibuan(row.budget_brand)}`},
+            { name: 'budget',  align: 'left',label: 'Rp Dibayar', field: row => `${formatRibuan(row.budget_brand)}`},
             { name: 'actions',align:'left',label:'Status',field:'kode_brand'}
         ]
         const isInvoice = ref(false)

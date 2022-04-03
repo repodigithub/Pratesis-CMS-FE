@@ -1,15 +1,15 @@
 <template>
-<breadcrumb  :upload="false" :leftside="false">
-    <template v-slot:breadcrumb-content>
-        <q-breadcrumbs-el label="Promo" style="color:#00000073;"/>
-    </template>
-    <template v-slot:rightside-content v-if="userRole != 'GA'">
-        <q-btn color="secondary"  no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="openAdd">
-            <q-icon name="add" />
-            Add New
-        </q-btn>
-    </template>
-</breadcrumb>
+    <breadcrumb  :upload="false" :leftside="false">
+        <template v-slot:breadcrumb-content>
+            <q-breadcrumbs-el label="Promo" style="color:#00000073;"/>
+        </template>
+        <template v-slot:rightside-content v-if="userRole != 'GA'">
+            <q-btn color="secondary"  no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="openAdd">
+                <q-icon name="add" />
+                Add New
+            </q-btn>
+        </template>
+    </breadcrumb>
     <div class="row q-pa-lg">
         <component :is="userTampil"/>
     </div>

@@ -43,6 +43,15 @@ const menu = [
                 },
             },
             {
+                title:'Laporan Claim',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                },
+            },
+            {
                 title:'Sales Hierarchy',
                 submenu:[
                     {title : 'Region'},
@@ -250,6 +259,16 @@ const menu = [
             },
             {
                 title:'Ubah Profil',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Setup Invoice',
                 access:{
                     AD:true,
                     GA:true,

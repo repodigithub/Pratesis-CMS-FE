@@ -1,6 +1,6 @@
 <template>
     <div v-show="isValid">
-        <label for="selectdrop" class="font-normal" style="font-size: 14px;">{{nameLabel}}</label>
+        <label for="selectdrop" class="font-normal">{{nameLabel}}</label>
         <q-select  outlined dense :modelValue="selected"
             @update:modelValue="event => $emit('update:selected', event)" :options="options" hide-bottom-space :class="master ? 'option-three' : ''"
             emit-value

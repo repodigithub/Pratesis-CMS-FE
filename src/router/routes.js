@@ -55,6 +55,7 @@ const routes = [
         }
       },
       { path: 'verifikasi', name:'Verifikasi', component: () => import('pages/master/Verifikasi.vue')},
+      { path: 'laporan-claim', name:'Laporan Claim', component: () => import('pages/master/LaporanClaim.vue')},
       { path: 'document-claim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue'),
         meta:{
             master:true
@@ -138,6 +139,11 @@ const routes = [
           }
       },
       { path: 'ubahprofil',name:'Ubah Profil', component: () => import('pages/laporan/UbahProfil.vue'),
+        meta:{
+          laporan:true
+        } 
+      },
+      { path: 'setupinvoice',name:'Setup Invoice', component: () => import('pages/laporan/SetupInvoice.vue'),
         meta:{
           laporan:true
         } 
