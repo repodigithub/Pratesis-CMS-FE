@@ -8,6 +8,7 @@
             use-input
             hide-selected
             fill-input
+            :placeholder="placeHold"
             input-debounce="1000"
             @filter="onFilter"
             :loading="loading"
@@ -34,6 +35,10 @@ import { useService } from 'src/composeables/useService'
 export default {
     name:'select-dropdown',
     props: {
+        placeHold: {
+            type: String,
+            default: ""
+        },
         url: {
             type: String,
         },

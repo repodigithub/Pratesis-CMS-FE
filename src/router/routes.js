@@ -148,6 +148,31 @@ const routes = [
           laporan:true
         } 
       },
+      { path: 'laporan/master',name:'Master', component: () => import('pages/laporan/Master.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'laporan/promo',name:'Laporan Promo', component: () => import('pages/laporan/PromoReport.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'laporan/alokasi',name:'Alokasi', component: () => import('pages/laporan/Alokasi.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'laporan/alokasi',name:'Tpr Distributor', component: () => import('pages/laporan/Tpr.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'laporan/klaim',name:'Verifikasi Claim', component: () => import('pages/laporan/Verify.vue'),
+        meta:{
+          laporan:true
+        }
+      },
     ],
     meta:{
       requireAuth:true,

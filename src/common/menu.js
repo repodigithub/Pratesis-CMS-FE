@@ -277,6 +277,56 @@ const menu = [
                     SA:true,
                 }
             },
+            {
+                title:'Master',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Laporan Promo',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Alokasi',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Tpr Distributor',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Verifikasi Claim',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
             // {
             //     title:'Upload Paid Claim',
             //     access:{
