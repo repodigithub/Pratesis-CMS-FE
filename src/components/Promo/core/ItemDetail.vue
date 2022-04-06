@@ -1,32 +1,14 @@
 <template>
-<!-- <breadcrumb  :upload="false" :leftside="false">
-    <template v-slot:breadcrumb-content>
-        <q-breadcrumbs-el label="Promo" class="text-primary" :to="{name: 'Promo'}"/>
-        <q-breadcrumbs-el label="Detail Promo" style="color:#00000073;"/>
-    </template>
-    <template v-slot:rightside-content>
-        <q-btn color="secondary" outline no-caps class="btn-one" style="padding-left:10px!important;" unelevated @click="onPromoSubmit" v-if="isDraft && ['GA','AD','HO'].indexOf(role) >= 0">
-            <q-img
-                src="~assets/icon/file-check.svg"
-                spinner-color="primary"
-                spinner-size="5px"
-                width="14px"
-                height="18px"
-                class="q-mr-sm"
-            />
-            Submit
-        </q-btn>
-    </template>
-</breadcrumb> -->
+
 <div class="row q-pa-lg">
     <div class="col-12 q-mb-md">
         <q-card class="own-card">
             <q-card-section>
-                <div class="row justify-center q-mt-lg" v-if="loadjudul">
+                <div class="row justify-center q-mt-lg" v-show="loadjudul">
                     <q-spinner-grid class="col-4 text-primary"/>
                     <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
                 </div>
-                <div class="row justify-between" v-else>
+                <div class="row justify-between" v-show="!loadjudul">
                     <div class="col-12 row ">
                         <div class="font-big">{{judul.nama_promo}}</div>
                         <q-space />
@@ -45,10 +27,12 @@
                     </div>
                     <div class="col-8" style="padding-right:60px;">
                         <div class="row">
-                            <div class="col-4">
-                                PIE Chart Soon
+                            <div class="col-5">
+                                <div class="chart-place">
+                                    <canvas id="chart-budget"></canvas>
+                                </div>
                             </div>
-                            <div class="col-8">
+                            <div class="col-7">
                                 <div class="row justify-between items-center" style="margin-bottom:10px;">
                                     <div class="row items-center">
                                         <div
@@ -251,11 +235,13 @@
 </template>
 
 <script>
-import { defineAsyncComponent,ref,watch,onMounted,computed } from 'vue'
+import { defineAsyncComponent,ref,watch,onMounted,computed,onUnmounted } from 'vue'
 import { useService } from 'src/composeables/useService'
 import { useRoute } from 'vue-router'
 import { useCustom  } from 'src/composeables/useCustom'
 import { usePratesis } from 'src/composeables/usePratesis'
+
+import { Chart, ArcElement, PieController, Tooltip } from 'chart.js'
 
 export default {
     props:['roles','isDrafter','statusDetail','promoId'],
@@ -280,6 +266,70 @@ export default {
         const budget_distributor = ref(0)
 
         const areaShow = ref(false)
+
+        const chartBudget = ref(null)
+        Chart.register(ArcElement,PieController,Tooltip)
+
+        function initChart(){
+            const ctx = document.getElementById('chart-budget')
+            let chartInner = []
+            let chartOutside = []
+                chartInner.push(persentaseBudgetclaim.value,persentaseBudgetoutstandingclaim.value)
+            let chartLabels = []
+
+            if (['AD','HO'].indexOf(role.value) >= 0) {
+                chartInner.push(persentaseBudgetLeft.value)
+                chartOutside.push(persentaseBudgetarea.value,100-persentaseBudgetarea.value)
+                chartLabels.push('Budget Area','Budget Kurang Area')
+            }else if(role.value === 'GA'){
+                chartOutside.push(persentaseBudgetdistributor.value,100-persentaseBudgetdistributor.value)
+                chartLabels.push('Budget Distributor','Budget Kurang Distributor')
+            }
+            chartLabels.push('Outstanding Claim', 'Claim ', 'Sisa Budget','Null')
+            let sumPersen = chartInner.reduce((prev,curr)=>prev+curr)
+            if (sumPersen > 0) {
+                let hasil = 100-sumPersen
+                chartInner.push(hasil)
+            }else{
+                chartInner.push(0)
+            }
+
+            const dataChart = {
+                labels: chartLabels,
+                datasets: [
+                    {
+                        backgroundColor: ['#2ECE8C','white'],
+                        data: chartOutside
+                    },
+                    {
+                        backgroundColor: ['#A484FF', '#FFC977','#FF7070','white'],
+                        data:chartInner
+                    },
+                ]
+            }
+    
+            const config = {
+                type: 'pie',
+                data: dataChart,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                            label: function(context) {
+                                const labelIndex = (context.datasetIndex * 2) + context.dataIndex;
+                                return context.chart.data.labels[labelIndex] + ': ' + context.formattedValue + '%';
+                            }
+                            }
+                        }
+                    },
+                    layout:{
+                        padding:1
+                    }
+                },
+            }
+            return new Chart(ctx,config)
+        }
 
         function initData(url){
             loadjudul.value = true
@@ -314,6 +364,8 @@ export default {
                 emit('update:isDrafter',isDraft.value)
                 emit('update:statusDetail',status.value)
                 emit('update:promoId',result.id)
+                chartBudget.value = initChart()
+                chartBudget.value.update('active')
             })
             .catch(err=>{
                 console.log('error,',err)
@@ -328,6 +380,24 @@ export default {
                 initData('promo-distributor')
             }
         })
+        onUnmounted(()=>{
+            if (chartBudget.value) {
+                chartBudget.value.destroy()
+            }
+        })
+
+        const persentaseBudgetclaim = computed(()=>{
+            return (judul.value.claim/budget.value)*100
+        })
+
+        const persentaseBudgetoutstandingclaim = computed(()=>{
+            return (judul.value.outstanding_claim/budget.value)*100
+        })
+
+        const persentaseBudgetLeft = computed(()=>{
+            return (budget_left.value/budget.value)*100
+        })
+
         const persentaseBudgetarea = computed(()=>{
             return (budget_area.value/budget.value)*100
         })
@@ -349,6 +419,7 @@ export default {
         const persentaseBudgetdistributor = computed(()=>{
             return (budget_distributor.value/budget.value)*100
         })
+
         const budgetlimitdistributor = computed(()=>{
             return budget.value - budget_distributor.value
         })
@@ -457,11 +528,12 @@ export default {
             initData,errorNotif,areaShow,produkShow,
 
             budget_distributor,persentaseBudgetdistributor,budgetlimitdistributor,loadbudgetdistributor,getBudgetdistributor,
-            budgetlimitareadistributor,updateAreaDistributor
+            budgetlimitareadistributor,updateAreaDistributor,
+
+            chartBudget,
         }
     },
     components:{
-        // 'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
         'budget-area' : defineAsyncComponent(()=> import('../area/BudgetArea')),
         'budget-produk' : defineAsyncComponent(()=> import('../produk/BudgetProduk')),
         'promo-image' : defineAsyncComponent(()=> import('../Image/PromoImage')),
@@ -471,5 +543,12 @@ export default {
 </script>
 
 <style>
-
+.chart-place{
+    background: white;
+    padding:10px;
+    box-shadow: 0px 8px 14px rgba(102, 128, 197, 0.08), 0px 1px 1px rgba(184, 184, 184, 0.13);
+    border-radius:50%;
+    width:220px;
+    height:220px;
+}
 </style>

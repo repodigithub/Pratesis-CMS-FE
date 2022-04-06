@@ -71,7 +71,7 @@ export const useCustom = () => {
     }
 
     const statusPromo = value =>{
-        return value.replace(/_/g," ").replace(/(?:^|\s)\S/g,function(a){ return a.toUpperCase()})
+        return value ? value.replace(/_/g," ").replace(/(?:^|\s)\S/g,function(a){ return a.toUpperCase()}) : ''
     }
 
     const colorStatusSpend = value =>{

@@ -154,10 +154,10 @@ export default {
             if(role.value === 'GA'){
                 url.value = 'promo-depot'
             }
-            getPromo(1,true)
+            getPromo()
         })
 
-        function getPromo(page = '',isInit = false){
+        function getPromo(page = ''){
             loading.value = true
             itemPromo.value = []
             let key = ''
@@ -185,13 +185,7 @@ export default {
 
             let pages = page ? `&page=${page}` : ''
             let limit = `?limit=5`
-            let urlInit = ''
-            if (isInit) {
-                urlInit = `${url.value}?status=approve,need_approval,reject`
-            }else{
-                urlInit = url.value + limit + key + pages
-            }
-            getData(urlInit)
+            getData(url.value + limit + key + pages + '&status=approve,need_approval,reject')
             .then(res=>{
                 loading.value = false
                 let result = res.data.data

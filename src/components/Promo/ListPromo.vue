@@ -137,8 +137,7 @@ export default {
                 loading.value = false
                 let result = res.data.data
                 if (role.value == 'DI') {
-                    itemPromo.value = result.data
-                    console.log('itemPromo',itemPromo.value)
+                    itemPromo.value = result.data.filter(item=> item.status_promo)
                 }else{
                     itemPromo.value = result.data.filter(item=> item.status)
                 }

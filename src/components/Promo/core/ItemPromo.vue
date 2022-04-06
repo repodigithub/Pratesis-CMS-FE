@@ -1,9 +1,9 @@
 <template>
     <div class="row item-promo cursor-pointer" @click="$router.push({ name:'Detail Promo',params:{ id : item.id } })">
         <q-img
-            src="~assets/dummy/dummypromo.png"
+            :src="item.thumbnail ? item.thumbnail : require('assets/icon/image-polaroid.svg')"
             spinner-color="primary"
-            spinner-size="82px"
+            spinner-size="20px"
             width="80px"
             height="80px"
             class="q-ml-md"
@@ -43,7 +43,7 @@
                 style="padding-top:5px;padding-bottom:5px;" />
                 </div>
                 <div class="col-12">
-                    <q-btn :class="item.status_promo == 'claim' ? 'bg-secondary' : 'bg-grey3' " no-caps unelevated class="btn-one text-white" label="Claim"  @click.stop="$router.push({name : 'Klaim Promo'})" :disable="item.status_promo != 'claim' ? true : false"/>
+                    <q-btn :class="item.status_promo != 'claim' ? 'bg-grey3' : 'bg-secondary' " no-caps unelevated class="btn-one text-white" label="Claim"  @click.stop="$router.push({name : 'Klaim Promo'})" :disable="item.status_promo != 'claim' ? true : false"/>
                 </div>
             </div>
         </div>

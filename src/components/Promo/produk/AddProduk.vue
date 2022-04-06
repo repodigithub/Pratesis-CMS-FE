@@ -70,8 +70,9 @@
                 </div>
                 <div class="row" v-if="products.length > 0">
                     <div class="col-12 q-mt-md">Product</div>
-                    <div class="col-12 row" style="max-height:380px;overflow-y:auto;">
-                        <div class="col-12 row q-mb-md" v-for="(product,index) in products" :key="product.id">
+                     <div class="col-12">
+                        <q-scroll-area style="height: 380px;">
+                        <div class="row q-mb-md" v-for="(product,index) in products" :key="product.id">
                             <q-checkbox
                               :modelValue="product.status"
                               @update:modelValue="updateStatus"
@@ -98,6 +99,7 @@
                                 </q-input>
                             </div>
                         </div>
+                        </q-scroll-area>
                     </div>
                 </div>
                 <div class="row justify-between" style="margin-bottom:30px;margin-top:56px;">

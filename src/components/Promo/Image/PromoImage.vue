@@ -12,7 +12,7 @@
             </q-card-section>
             <q-card-section v-else>
                 <q-scroll-area style="height: 230px; max-width: 100%;">
-                <div class="row no-wrap" v-if="promoimage.length <= 0">
+                <div class="row no-wrap" v-if="promoimage.length <= 0" style="max-width:1189px;">
                     <div v-for="n in 6" :key="n" style="width: 100%" class="q-pa-sm" >
                         <div class="row items-center justify-center box-uploadimage" @click="openUpload" :class="['AD','HO'].indexOf(role) >= 0  && ['draft','reject'].indexOf(status) >= 0 ? 'can-upload' : ''">
                             <div class="row items-center justify-center border">
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row no-wrap" v-else>
+                <div class="row no-wrap" v-else style="max-width:1189px;">
                     <div v-for="index in 6" :key="index" style="width: 200px" class="q-pa-sm" >
                         <div class="d" v-if="promoimage[index-1]">
                             <q-img
@@ -75,8 +75,16 @@ export default {
         const promoimage = ref([])
         const loading = ref(true)
 
-        function initData(url){
+        function initData(){
             loading.value = true
+            let url = ''
+            if (['AD','HO'].indexOf(props.role) >= 0) {
+                url = 'promo'
+            }else if(props.role === 'GA'){
+                url = 'promo-depot'
+            }else{
+                url = 'promo-distributor'
+            }
             getData(`${url}/${route.params.id}/image`)
             .then(res=>{
                 let result = res.data.data.data
@@ -93,13 +101,7 @@ export default {
         }
 
         onMounted(()=>{
-            if (['AD','HO'].indexOf(props.role) >= 0) {
-                initData('promo')
-            }else if(props.role === 'GA'){
-                initData('promo-depot')
-            }else{
-                initData('promo-distributor')
-            }
+            initData()
         })
         return {
             upload,promoimage,initData,loading,openUpload
