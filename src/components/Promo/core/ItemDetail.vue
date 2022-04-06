@@ -4,11 +4,11 @@
     <div class="col-12 q-mb-md">
         <q-card class="own-card">
             <q-card-section>
-                <div class="row justify-center q-mt-lg" v-show="loadjudul">
+                <div class="row justify-center q-mt-lg" v-if="loadjudul">
                     <q-spinner-grid class="col-4 text-primary"/>
                     <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
                 </div>
-                <div class="row justify-between" v-show="!loadjudul">
+                <div class="row justify-between" v-else>
                     <div class="col-12 row ">
                         <div class="font-big">{{judul.nama_promo}}</div>
                         <q-space />
@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="col-5">
                                 <div class="chart-place">
-                                    <canvas id="chart-budget"></canvas>
+                                    <pie-chart v-model:chartData="fixDataChart"/>
                                 </div>
                             </div>
                             <div class="col-7">
@@ -235,13 +235,11 @@
 </template>
 
 <script>
-import { defineAsyncComponent,ref,watch,onMounted,computed,onUnmounted } from 'vue'
+import { defineAsyncComponent,ref,onMounted,computed } from 'vue'
 import { useService } from 'src/composeables/useService'
 import { useRoute } from 'vue-router'
 import { useCustom  } from 'src/composeables/useCustom'
 import { usePratesis } from 'src/composeables/usePratesis'
-
-import { Chart, ArcElement, PieController, Tooltip } from 'chart.js'
 
 export default {
     props:['roles','isDrafter','statusDetail','promoId'],
@@ -267,69 +265,58 @@ export default {
 
         const areaShow = ref(false)
 
-        const chartBudget = ref(null)
-        Chart.register(ArcElement,PieController,Tooltip)
-
-        function initChart(){
-            const ctx = document.getElementById('chart-budget')
-            let chartInner = []
-            let chartOutside = []
-                chartInner.push(persentaseBudgetclaim.value,persentaseBudgetoutstandingclaim.value)
-            let chartLabels = []
-
+        const chartInner = computed(()=>{
+            let result = []
+            result.push(persentaseBudgetclaim.value,persentaseBudgetoutstandingclaim.value)
             if (['AD','HO'].indexOf(role.value) >= 0) {
-                chartInner.push(persentaseBudgetLeft.value)
-                chartOutside.push(persentaseBudgetarea.value,100-persentaseBudgetarea.value)
-                chartLabels.push('Budget Area','Budget Kurang Area')
-            }else if(role.value === 'GA'){
-                chartOutside.push(persentaseBudgetdistributor.value,100-persentaseBudgetdistributor.value)
-                chartLabels.push('Budget Distributor','Budget Kurang Distributor')
+                result.push(persentaseBudgetLeft.value)
             }
-            chartLabels.push('Outstanding Claim', 'Claim ', 'Sisa Budget','Null')
-            let sumPersen = chartInner.reduce((prev,curr)=>prev+curr)
+            let sumPersen = result.reduce((prev,curr)=>prev+curr)
             if (sumPersen > 0) {
                 let hasil = 100-sumPersen
-                chartInner.push(hasil)
+                result.push(hasil)
             }else{
-                chartInner.push(0)
+                result.push(0)
             }
+            return result
+        })
 
-            const dataChart = {
-                labels: chartLabels,
-                datasets: [
-                    {
-                        backgroundColor: ['#2ECE8C','white'],
-                        data: chartOutside
-                    },
-                    {
-                        backgroundColor: ['#A484FF', '#FFC977','#FF7070','white'],
-                        data:chartInner
-                    },
-                ]
+        const chartOutside = computed(()=>{
+            let result = []
+            if (['AD','HO'].indexOf(role.value) >= 0) {
+                result.push(persentaseBudgetarea.value,100-persentaseBudgetarea.value)
+            }else if(role.value === 'GA'){
+                result.push(persentaseBudgetdistributor.value,100-persentaseBudgetdistributor.value)
             }
-    
-            const config = {
-                type: 'pie',
-                data: dataChart,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                            label: function(context) {
-                                const labelIndex = (context.datasetIndex * 2) + context.dataIndex;
-                                return context.chart.data.labels[labelIndex] + ': ' + context.formattedValue + '%';
-                            }
-                            }
-                        }
-                    },
-                    layout:{
-                        padding:1
-                    }
-                },
+            return result
+        })
+
+        const chartLabels = computed(()=>{
+            let result = []
+            if (['AD','HO'].indexOf(role.value) >= 0) {
+                result.push('Budget Area','Null')
+            }else if(role.value === 'GA'){
+                result.push('Budget Distributor','Null')
             }
-            return new Chart(ctx,config)
-        }
+            result.push('Outstanding Claim', 'Claim ', 'Sisa Budget','Null')
+            return result
+        })
+
+        const fixDataChart = computed(()=>{
+            return {
+                    labels:chartLabels.value,
+                    datasets: [
+                        {
+                            backgroundColor: ['#2ECE8C','white'],
+                            data: chartOutside.value
+                        },
+                        {
+                            backgroundColor: ['#A484FF', '#FFC977','#FF7070','white'],
+                            data:chartInner.value
+                        },
+                    ]
+                }
+        })
 
         function initData(url){
             loadjudul.value = true
@@ -364,8 +351,6 @@ export default {
                 emit('update:isDrafter',isDraft.value)
                 emit('update:statusDetail',status.value)
                 emit('update:promoId',result.id)
-                chartBudget.value = initChart()
-                chartBudget.value.update('active')
             })
             .catch(err=>{
                 console.log('error,',err)
@@ -378,11 +363,6 @@ export default {
                 initData('promo-depot')
             }else{
                 initData('promo-distributor')
-            }
-        })
-        onUnmounted(()=>{
-            if (chartBudget.value) {
-                chartBudget.value.destroy()
             }
         })
 
@@ -530,14 +510,15 @@ export default {
             budget_distributor,persentaseBudgetdistributor,budgetlimitdistributor,loadbudgetdistributor,getBudgetdistributor,
             budgetlimitareadistributor,updateAreaDistributor,
 
-            chartBudget,
+            chartLabels,chartInner,chartOutside,fixDataChart
         }
     },
     components:{
         'budget-area' : defineAsyncComponent(()=> import('../area/BudgetArea')),
         'budget-produk' : defineAsyncComponent(()=> import('../produk/BudgetProduk')),
         'promo-image' : defineAsyncComponent(()=> import('../Image/PromoImage')),
-        'add-edit-promo' : defineAsyncComponent(()=> import('../AddEditPromo'))
+        'add-edit-promo' : defineAsyncComponent(()=> import('../AddEditPromo')),
+        'pie-chart' : defineAsyncComponent(()=> import('./PieChart'))
     },
 }
 </script>
