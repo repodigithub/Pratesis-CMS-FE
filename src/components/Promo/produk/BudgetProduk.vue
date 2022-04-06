@@ -65,41 +65,6 @@
             </div>
         </q-card-section>
     </q-card>
-    <!-- <core-table
-        :url="url"
-        :columns="produk"
-        :canOpenDetail="true"
-        :detailLinked="true"
-        v-model:requesting="request" v-if="init">
-        <template v-slot:toptable>
-            <div class="row justify-between">
-                <div class="content-title">
-                    <div class="font-medium">Budget Produk</div>
-                    <div class="text-primary" style="font-weight:500;font-size:16px;">Brand</div>
-                </div>
-                <div class="d" v-if="isDraft && ['AD','HO'].indexOf(role) >= 0">
-                    <q-btn color="secondary"  no-caps class="btn-one" unelevated @click="$router.push({ name:'Add budget Produk',params:{id:$route.params.id},query:{budget:budget_update} })">
-                        <q-icon name="add" />
-                        Add Produk
-                    </q-btn>
-                </div>
-            </div>
-        </template>
-        <template v-slot:body-cell-actions="props" v-if="isDraft  && ['AD','HO'].indexOf(role) >= 0">
-            <q-td key="action" :props="props" >
-                <q-btn color="primary" round flat icon="edit" no-caps @click.stop="openEditProduk(props.row)" unelevated class=" btn-two"/>
-                <q-btn round color="secondary" flat unelevated @click.stop="oneDeleteProduk(props.row.id)">
-                <q-img
-                    src="~assets/icon/trash-alt.svg"
-                    spinner-color="primary"
-                    spinner-size="5px"
-                    width="20px"
-                    height="20px"
-                />
-                </q-btn>
-            </q-td>
-        </template>
-    </core-table> -->
 </template>
 
 <script>

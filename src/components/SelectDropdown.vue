@@ -1,6 +1,6 @@
 <template>
     <div v-show="isValid">
-        <label for="selectdrop" class="font-normal" style="font-size: 14px;">{{nameLabel}}</label>
+        <label for="selectdrop" class="font-normal">{{nameLabel}}</label>
         <q-select  outlined dense :modelValue="selected"
             @update:modelValue="event => $emit('update:selected', event)" :options="options" hide-bottom-space :class="master ? 'option-three' : ''"
             emit-value
@@ -8,6 +8,7 @@
             use-input
             hide-selected
             fill-input
+            :placeholder="placeHold"
             input-debounce="1000"
             @filter="onFilter"
             :loading="loading"
@@ -34,6 +35,10 @@ import { useService } from 'src/composeables/useService'
 export default {
     name:'select-dropdown',
     props: {
+        placeHold: {
+            type: String,
+            default: ""
+        },
         url: {
             type: String,
         },

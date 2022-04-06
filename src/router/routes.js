@@ -65,7 +65,8 @@ const routes = [
           master:true
         }
       },
-      
+      { path: 'verifikasi', name:'Verifikasi', component: () => import('pages/master/Verifikasi.vue')},
+      { path: 'laporan-claim', name:'Laporan Claim', component: () => import('pages/master/LaporanClaim.vue')},
       { path: 'document-claim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue'),
         meta:{
             master:true
@@ -164,10 +165,36 @@ const routes = [
             utility:true
           }
       },
-      /////END FITUR UTILITY ////////////////////////////////////////////////////
-
-     
-
+      { path: 'setupinvoice',name:'Setup Invoice', component: () => import('pages/laporan/SetupInvoice.vue'),
+        meta:{
+          laporan:true
+        } 
+      },
+      { path: 'laporan/master',name:'Master', component: () => import('pages/laporan/Master.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'laporan/promo',name:'Laporan Promo', component: () => import('pages/laporan/PromoReport.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'laporan/alokasi',name:'Alokasi', component: () => import('pages/laporan/Alokasi.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'laporan/alokasi',name:'Tpr Distributor', component: () => import('pages/laporan/Tpr.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'laporan/klaim',name:'Verifikasi Claim', component: () => import('pages/laporan/Verify.vue'),
+        meta:{
+          laporan:true
+        }
+      },
     ],
     meta:{
       requireAuth:true,

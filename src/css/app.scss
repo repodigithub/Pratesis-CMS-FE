@@ -72,7 +72,9 @@
 .fs-38 {
     font-size: 38px !important;
 }
-
+.align-middle {
+    vertical-align: middle;
+}
 .font-big{
     font-size: 30px;
 }
@@ -95,7 +97,13 @@
 .btn-radius{
     border-radius: 10px;
 }
+.m-auto {
+    margin: auto;
+}
 // COLOR
+.bg-white {
+    background: #fff;
+}
 .bg-admin{
     background:$admin;
 }
@@ -209,7 +217,18 @@
         color:$primary;
     }
 }
-
+.t-primary {
+  color: $primary
+}
+.t-secondary {
+    color: $secondary2
+}
+.t-grey {
+    color: $grey
+}
+.pointer {
+    cursor: pointer;
+}
 .box-upload{
     height:250px;
     width:400px;

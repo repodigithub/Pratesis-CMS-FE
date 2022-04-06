@@ -39,6 +39,15 @@ const menu = [
             //     },
             // },
             {
+                title:'Laporan Claim',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                },
+            },
+            {
                 title:'Sales Hierarchy',
                 submenu:[
                     {title : 'Region'},
@@ -230,6 +239,66 @@ const menu = [
             // },
             {
                 title:'Ubah Profil',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Setup Invoice',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Master',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Laporan Promo',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Alokasi',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Tpr Distributor',
+                access:{
+                    AD:true,
+                    GA:true,
+                    HO:true,
+                    DI:true,
+                    SA:true,
+                }
+            },
+            {
+                title:'Verifikasi Claim',
                 access:{
                     AD:true,
                     GA:true,
