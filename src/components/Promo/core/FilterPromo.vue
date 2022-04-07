@@ -88,7 +88,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </q-card-section>
     </q-card>
 </template>

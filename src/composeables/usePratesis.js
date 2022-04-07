@@ -218,8 +218,6 @@ export const usePratesis = () => {
         return string.replace(/(\d)(?=(\d{3})+(?!\d))/g,"\$1.")
     }
 
-    
-
     return {
         rows,
         ...toRefs(state),

@@ -117,6 +117,9 @@ export default {
             if (filter.value.area_id) {
                 key += `&area_id=${filter.value.area_id}`
             }
+            if (filter.value.distributor_id) {
+                key += `&distributor_id=${filter.value.distributor_id}`
+            }
             if (filter.value.start_date) {
                 key += `&start_date=${filter.value.start_date}`
             }

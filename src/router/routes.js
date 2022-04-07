@@ -5,7 +5,7 @@ const routes = [
     redirect:{name:'Overview'},
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'overview',name:'Overview', component: () => import('pages/Index.vue')},
+      { path: 'overview',name:'Overview', component: () => import('pages/Overview.vue')},
 
       /////FITUR LAPORAN ////////////////////////////////////////////////////
       { path: 'ubahprofil',name:'Ubah Profil', component: () => import('pages/laporan/UbahProfil.vue'),
@@ -65,7 +65,7 @@ const routes = [
           master:true
         }
       },
-      { path: 'verifikasi', name:'Verifikasi', component: () => import('pages/master/Verifikasi.vue')},
+      // { path: 'verifikasi', name:'Verifikasi', component: () => import('pages/master/Verifikasi.vue')},
       { path: 'laporan-claim', name:'Laporan Claim', component: () => import('pages/master/LaporanClaim.vue')},
       { path: 'document-claim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue'),
         meta:{
