@@ -5,7 +5,17 @@ const routes = [
     redirect:{name:'Overview'},
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'overview',name:'Overview', component: () => import('pages/Index.vue')},
+      { path: 'overview',name:'Overview', component: () => import('pages/Overview.vue')},
+
+      /////FITUR LAPORAN ////////////////////////////////////////////////////
+      { path: 'ubahprofil',name:'Ubah Profil', component: () => import('pages/laporan/UbahProfil.vue'),
+        meta:{
+          laporan:true
+        } 
+      },
+      /////END FITUR LAPORAN ////////////////////////////////////////////////////
+
+      //////FITUR MASTER//////////////////////////////////////////////////
       // Master - Sales Hierarchy
       { path: 'area',name:'Area', component: () => import('pages/master/Area.vue'),
         meta:{
@@ -35,11 +45,11 @@ const routes = [
       { path: 'promo',name:'promo', component: () => import('pages/master/Promo.vue'),
         redirect:{name : 'Promo'},
         children:[
-          { path:'',name:'Promo',component:()=> import('components/Promo/Utama.vue')},
+          { path:'',name:'Promo',component:()=> import('components/Promo/ListPromo.vue')},
           { path:'detail-promo/:id',name:'Detail Promo',component:()=> import('components/Promo/DetailPromo.vue')},
           { path:'detail-promo/:id/produk',name:'Add budget Produk',component:()=> import('components/Promo/produk/AddProduk.vue')},
           { path:'detail-promo/:id/produk/:produk',name:'Edit budget Produk',component:()=> import('components/Promo/produk/EditProduk.vue')},
-          { path:'detail-promo/:id/detail-produk/:produk',name:'Detail Produk',component:()=> import('components/Promo/DetailProduk.vue')},
+          { path:'detail-promo/:id/detail-produk/:produk',name:'Detail Produk',component:()=> import('components/Promo/produk/DetailProduk.vue')},
         ],
         meta:{
           master:true
@@ -48,13 +58,14 @@ const routes = [
       { path: 'approval',name:'approval', component: () => import('pages/master/Approval.vue'),
         redirect: {name : 'Approval'},
         children:[
-          { path:'',name:'Approval',component:()=> import('components/Approval/Index.vue')},
+          { path:'',name:'Approval',component:()=> import('components/Approval/ListApproval.vue')},
+          { path:'detail-promo/:id',name:'Detail Approval Promo',component:()=> import('components/Approval/DetailApproval.vue')},
         ],
         meta:{
           master:true
         }
       },
-      { path: 'verifikasi', name:'Verifikasi', component: () => import('pages/master/Verifikasi.vue')},
+      // { path: 'verifikasi', name:'Verifikasi', component: () => import('pages/master/Verifikasi.vue')},
       { path: 'laporan-claim', name:'Laporan Claim', component: () => import('pages/master/LaporanClaim.vue')},
       { path: 'document-claim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue'),
         meta:{
@@ -123,6 +134,22 @@ const routes = [
         }
       },
       // End Produk Hierarchy
+      //////END FITUR MASTER//////////////////////////////////////////////////
+
+       /////FITUR TRANSAKSI ////////////////////////////////////////////////////
+      { path: 'klaim-promo',name:'Klaim Promo', component: () => import('pages/transaksi/KlaimPromo.vue'),
+        meta:{
+          transaksi:true
+        } 
+      },
+      { path: 'verifikasi', name:'Verifikasi', component: () => import('pages/transaksi/Verifikasi.vue'),
+        meta:{
+          transaksi:true
+        } 
+      },
+      /////END FITUR TRANSAKSI ////////////////////////////////////////////////////
+
+      /////FITUR UTILITY ////////////////////////////////////////////////////
       { path: 'user',name:'User', component: () => import('pages/utility/User.vue'),
         meta:{
             utility:true
@@ -137,11 +164,6 @@ const routes = [
         meta:{
             utility:true
           }
-      },
-      { path: 'ubahprofil',name:'Ubah Profil', component: () => import('pages/laporan/UbahProfil.vue'),
-        meta:{
-          laporan:true
-        } 
       },
       { path: 'setupinvoice',name:'Setup Invoice', component: () => import('pages/laporan/SetupInvoice.vue'),
         meta:{

@@ -27,7 +27,7 @@
                     <slot :name="slot" v-bind="props" />
                 </template>
             </q-table>
-            <div class="row justify-end q-mt-md" v-if="rows.length > 0">
+            <div class="row justify-end q-mt-md" v-if="rows.length > 0 && showPaginate">
                 <q-pagination
                     v-model="pagination.page"
                     color="black"
@@ -102,11 +102,16 @@ export default {
         classStyle: {
             type: String,
             default: "own-card"
+        },
+        showPaginate:{
+            type:Boolean,
+            default: true
         }
     },
     setup(props, { emit }){
         const { pagination,rows,loading,init,onRequest,pagesNumber,modalDetail,openDetail,dataDetail } = usePratesis()
-        init(props.url,props.option,props.islogin, props.detailLinked)
+
+        init(props.url,props.option,props.islogin,props.detailLinked)
 
         function gotoPage(page){
             let request = {}
@@ -148,7 +153,7 @@ export default {
             modalDetail,//data detail table
             openDetail,
             dataDetail,
-            selected,getSelectedString
+            selected,getSelectedString,
         }
     },
     components:{

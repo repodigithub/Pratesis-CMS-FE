@@ -1,7 +1,13 @@
 <template>
     <div v-if="multiple">
-      <q-btn color="secondary" icon="close" label="Reject" no-caps @click.stop="onClick(selected,'reject')" unelevated class="q-mr-lg q-px-sm" />
-      <q-btn color="positive" icon="check" label="Approve" no-caps @click.stop="onClick(selected,'approve')" unelevated class="q-px-sm"/>
+      <q-btn color="secondary" no-caps @click.stop="onClick(selected,'reject')" unelevated class="q-mr-lg btn-two btn-approve">
+          <q-icon name="close" size="16px"/>
+          <div class="fs-12" style="line-height:16px;">Reject</div>
+        </q-btn>
+      <q-btn color="positive" no-caps @click.stop="onClick(selected,'approve')" unelevated class="btn-two btn-approve">
+        <q-icon name="check" size="16px"/>
+        <div class="fs-12" style="line-height:16px;">Approve</div>
+      </q-btn>
     </div>
     <q-table
             class="my-sticky-header-table q-mt-md btn-radius col-12"
@@ -26,8 +32,14 @@
         </template>
         <template v-slot:body-cell-action="props">
           <q-td key="action" :props="props">
-              <q-btn color="secondary" icon="close" label="Reject" no-caps @click.stop="onClick(props.row.id,'reject')" unelevated class="q-mr-lg btn-two"/>
-              <q-btn color="positive" icon="check" label="Approve" no-caps @click.stop="onClick(props.row.id,'approve')" unelevated class="q-mr-lg btn-two"/>
+              <q-btn color="secondary" no-caps @click.stop="onClick(props.row.id,'reject')" unelevated class="q-mr-lg btn-two btn-approve">
+                <q-icon name="close" size="16px"/>
+                <div class="fs-12" style="line-height:16px;">Reject</div>
+              </q-btn>
+              <q-btn color="positive"  no-caps @click.stop="onClick(props.row.id,'approve')" unelevated class="q-mr-lg btn-two btn-approve">
+                <q-icon name="check" size="16px"/>
+                <div class="fs-12" style="line-height:16px;">Approve</div>
+              </q-btn>
           </q-td>
         </template>
         <!-- <template v-slot:body-cell-requestdate="props">
@@ -179,7 +191,7 @@
 
 import { usePratesis } from 'src/composeables/usePratesis'
 import RequestAction from './RequestAction.vue'
-import { ref, defineAsyncComponent} from 'vue'
+import { ref, defineAsyncComponent,watch } from 'vue'
 import { useCustom } from 'src/composeables/useCustom'
 import { useService } from 'src/composeables/useService'
 import UserDetail from './UserDetail.vue'
@@ -213,11 +225,17 @@ export default {
         if(selected.value.length === 0){
           return ''
         }else {
-          multiple.value = true
           return `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${pagination.value.rowsNumber}`
         }
-        
       }
+
+      watch(()=>selected.value,val=>{
+        if (val.length > 0) {
+          multiple.value = true
+        }else{
+          multiple.value = false
+        }
+      })
 
       const daction = ref(false)
       const dload = ref(false)

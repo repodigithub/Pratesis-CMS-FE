@@ -52,7 +52,7 @@
             </q-td>
         </template>
     </q-table>
-    <div class="row justify-end q-mt-md col-12">
+    <div class="row justify-end q-mt-md col-12" v-if="rows.length > 0">
         <q-pagination
             v-model="pagination.page"
             color="black"

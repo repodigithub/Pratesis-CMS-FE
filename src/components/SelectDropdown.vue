@@ -79,7 +79,7 @@ export default {
                 response = Object.values(item)
                 if(props.isNormal){
                     optalt.push({
-                        label:response[2],
+                        label:`${response[1]} - ${response[2]}`,
                         value:response[1],
                     })
                 }else{
@@ -116,7 +116,7 @@ export default {
                             response = Object.values(item)
                             if(props.isNormal){
                                 options.value.push({
-                                    label:response[2],
+                                    label:`${response[1]} - ${response[2]}`,
                                     value:response[1],
                                 })
                             }else{
@@ -151,7 +151,7 @@ export default {
                             response = Object.values(item)
                             if(props.isNormal){
                                 options.value.push({
-                                    label:response[2],
+                                    label:`${response[1]} - ${response[2]}`,
                                     value:response[1],
                                 })
                             }else{

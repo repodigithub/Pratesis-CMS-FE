@@ -1,4 +1,5 @@
 <template>
+<q-page>
     <div class="row q-pa-lg">
         <div class="col-12">
             <core-table
@@ -276,6 +277,7 @@
             </q-dialog>
         </div>
     </div>
+</q-page>
 </template>
 <style>
 .q-dialog__inner--minimized > div {

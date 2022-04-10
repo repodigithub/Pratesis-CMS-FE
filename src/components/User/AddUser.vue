@@ -33,7 +33,7 @@
             <q-card-section class=" q-pb-none">
                 <div class="row">
                     <select-dropdown url="user-group" v-model:selected="send.kode_group" :islogin="false" :master="false" class="q-mb-md col-12" nameLabel="User Level"/>
-                    <div class="row col-12 justify-between" v-show="send.kode_group.includes('DI') || send.kode_group.includes('SA')">
+                    <div class="row col-12 justify-between" v-show="send.kode_group.includes('DI') || send.kode_group.includes('GA')">
                     <div class="col-6">
                         <select-dropdown url="area" v-model:selected="send.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo"/>
                     </div>

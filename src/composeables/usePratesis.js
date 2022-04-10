@@ -1,5 +1,5 @@
 import {toRefs, ref, reactive,computed} from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 // import { api,header } from 'boot/axios'
 // import { useQuasar,date } from 'quasar'
 import { useStore } from 'vuex'
@@ -7,7 +7,7 @@ import { useService } from './useService'
 export const usePratesis = () => {
     const router  = useRouter()
     const store = useStore()
-    // let token = store.state.auth.token
+    const route = useRoute()
     const rows = ref([])
     const state =   reactive({
         error:null,
@@ -23,6 +23,10 @@ export const usePratesis = () => {
     })
 
     const userLogin = ref(true)
+
+    const role = computed(()=>{
+        return store.state.auth.user?.kode_group?.substr(0,2)
+    })
 
     const success = res => {
         pagination.value.page = res.data.data.current_page
@@ -62,13 +66,6 @@ export const usePratesis = () => {
         .catch(err=>{
             error(err)
         })
-        // await api.get(state.url,localheader(url,islogin))
-        // .then(res=>{
-        //     success(res)
-        // })
-        // .catch(err=>{
-        //     error(err)
-        // })
     }
 
     const onRequest = request => {
@@ -141,7 +138,6 @@ export const usePratesis = () => {
             paginate += `&limit=${rowsPerPage}`
         }
         getData(state.url+paginate+filterKey,userLogin.value)
-        // api.get(state.url + paginate + filterKey,localheader(state.urlmurni,userLogin.value))
         .then(res=>{
             success(res)
         })
@@ -180,10 +176,11 @@ export const usePratesis = () => {
 
     const modalDetail = ref(false)
     const dataDetail = ref({})
+    
     const openDetail = (evt,row) => {
         if(state.detailLinked) {
             router.push({name: 'Detail Produk',params: {
-                id: 3,
+                id: route.params.id,
                 produk: row.id
             }})
         } else {
@@ -215,6 +212,7 @@ export const usePratesis = () => {
             return val.replace(/ /g,"-").toLowerCase()
         }
     }
+
     const formatRibuan = (val) =>{
         let string = String(val)
         return string.replace(/(\d)(?=(\d{3})+(?!\d))/g,"\$1.")
@@ -250,6 +248,8 @@ export const usePratesis = () => {
         name,
         randomColor,
         changeData,
-        formatRibuan //change ribuan
+        formatRibuan, //change ribuan
+        role,
+        
     }
 }

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent} from 'vue'
+import { defineAsyncComponent } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 
 export default {

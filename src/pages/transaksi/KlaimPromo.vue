@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <h1>Overview</h1>
+    <h1>Klaim Promo</h1>
     <!-- <q-select
       filled
       v-model="model"

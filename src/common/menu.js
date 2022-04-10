@@ -30,25 +30,18 @@ const menu = [
                     AD:true,
                     GA:true,
                     HO:true,
-                    DI:true,
                 },
             },
-            {
-                title:'Verifikasi',
-                access:{
-                    AD:true,
-                    GA:true,
-                    HO:true,
-                    DI:true,
-                },
-            },
+            // {
+            //     title:'Verifikasi',
+            //     access:{
+            //         GA:true,
+            //     },
+            // },
             {
                 title:'Laporan Claim',
                 access:{
-                    AD:true,
                     GA:true,
-                    HO:true,
-                    DI:true,
                 },
             },
             {
@@ -61,7 +54,6 @@ const menu = [
                 ],
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -76,7 +68,6 @@ const menu = [
                 ],
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -84,7 +75,6 @@ const menu = [
                 title:'Document Claim',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -92,7 +82,6 @@ const menu = [
                 title:'Alasan',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -100,7 +89,6 @@ const menu = [
                 title:'Pajak',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -108,7 +96,6 @@ const menu = [
                 title:'Spend Type',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -116,7 +103,6 @@ const menu = [
                 title:'Type Promo',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -124,7 +110,6 @@ const menu = [
                 title:'Investment',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -132,7 +117,6 @@ const menu = [
                 title:'Budget Holder',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -148,20 +132,19 @@ const menu = [
         title:'Transaksi',
         icon:'transaksi',
         submenu:[
+            {
+                title: 'Klaim Promo',
+                access:{
+                    DI: true,
+                }
+            },
             // {
-            //     title: 'Klaim Promo',
+            //     title: 'Edit Budget',
             //     access:{
             //         GA: true,
             //         superadmin:true,
             //     }
             // },
-            {
-                title: 'Edit Budget',
-                access:{
-                    GA: true,
-                    superadmin:true,
-                }
-            },
             {
                 title: 'Verifikasi',
                 access:{
@@ -169,19 +152,17 @@ const menu = [
                     superadmin:true,
                 }
             },
-            {
-                title: 'Cetak Ulang BPP',
-                access:{
-                    GA: true,
-                    superadmin:true,
-                }
-            },
+            // {
+            //     title: 'Cetak Ulang BPP',
+            //     access:{
+            //         GA: true,
+            //         superadmin:true,
+            //     }
+            // },
         ],
         access:{
-            superadmin:true,
-            distributor:true,
-            depot:true,
-            GA: true
+            GA: true,
+            DI: true
         },
     },
     {
@@ -192,7 +173,6 @@ const menu = [
                 title:'Master Data',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -228,7 +208,6 @@ const menu = [
                 title:'User',
                 access:{
                     AD:true,
-                    GA:true,
                     HO:true
                 }
             },
@@ -242,7 +221,6 @@ const menu = [
         ],
         access:{
             AD:true,
-            GA:true,
             HO:true
         },
     },
@@ -250,13 +228,6 @@ const menu = [
         title:'Laporan',
         icon:'laporan',
         submenu:[
-            {
-                title:'Master',
-                access:{
-                    GA:true,
-                    // headoffice:true
-                }
-            },
             {
                 title:'Ubah Profil',
                 access:{
@@ -273,97 +244,36 @@ const menu = [
                     AD:true,
                     GA:true,
                     HO:true,
-                    DI:true,
-                    SA:true,
                 }
             },
             {
                 title:'Master',
                 access:{
-                    AD:true,
                     GA:true,
-                    HO:true,
-                    DI:true,
-                    SA:true,
                 }
             },
             {
                 title:'Laporan Promo',
                 access:{
-                    AD:true,
                     GA:true,
-                    HO:true,
-                    DI:true,
-                    SA:true,
                 }
             },
             {
                 title:'Alokasi',
                 access:{
-                    AD:true,
                     GA:true,
-                    HO:true,
-                    DI:true,
-                    SA:true,
                 }
             },
             {
                 title:'Tpr Distributor',
                 access:{
-                    AD:true,
                     GA:true,
-                    HO:true,
-                    DI:true,
-                    SA:true,
                 }
             },
             {
                 title:'Verifikasi Claim',
                 access:{
-                    AD:true,
                     GA:true,
-                    HO:true,
-                    DI:true,
-                    SA:true,
-                }
-            },
-            // {
-            //     title:'Upload Paid Claim',
-            //     access:{
-            //         superadmin:true,
-            //         headoffice:true
-            //     }
-            // },
-            {
-                title:'Data Promosi',
-                access:{
-                    GA:true,
-                    superadmin:true,
-                    headoffice:true
-                }
-            },
-            {
-                title:'Alokasi',
-                access:{
-                    GA:true,
-                    superadmin:true,
-                    headoffice:true
-                }
-            },
-            {
-                title:'Klaim',
-                access:{
-                    GA:true,
-                    superadmin:true,
-                    headoffice:true
-                }
-            },
-            {
-                title:'Tpr Distributor',
-                access:{
-                    GA:true,
-                    superadmin:true,
-                    headoffice:true
                 }
             },
         ],

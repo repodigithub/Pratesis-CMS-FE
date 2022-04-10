@@ -76,8 +76,9 @@
                 </div>
                 <div class="row" v-if="products.length > 0">
                     <div class="col-12 q-mt-md">Product</div>
-                    <div class="col-12 row" style="max-height:380px;overflow-y:auto;">
-                        <div class="col-12 row q-mb-md" v-for="(product,index) in products" :key="product.id">
+                    <div class="col-12">
+                        <q-scroll-area style="height: 380px;">
+                        <div class="row q-mb-md" v-for="(product,index) in products" :key="product.id">
                             <q-checkbox
                               :modelValue="product.status"
                               @update:modelValue="updateStatus"
@@ -94,9 +95,9 @@
                                   id="Budget"
                                   filled
                                   dense
-                                  :bg-color="product.status && isOtomatis ? '':'grey4'" 
-                                  :class="product.status && isOtomatis ? '' : 'input-disable'"
-                                  :disable="product.status && isOtomatis ? false : true"
+                                  :bg-color="product.status && isManual ? '':'grey4'" 
+                                  :class="product.status && isManual ? '' : 'input-disable'"
+                                  :disable="product.status && isManual ? false : true"
                                   >
                                     <template v-slot:prepend>
                                         <div class="font-normal">Rp</div>
@@ -104,7 +105,9 @@
                                 </q-input>
                             </div>
                         </div>
+                        </q-scroll-area>
                     </div>
+                   
                 </div>
                 <div class="row justify-between" style="margin-bottom:30px;margin-top:56px;">
                     <q-btn color="secondary" label="Cancel"  no-caps unelevated outline @click="$router.push({name: 'Detail Promo'})" class="btn-one"/>
@@ -176,7 +179,7 @@ export default {
         })
 
         const otomatis = ref('0')
-        const isOtomatis = computed(()=>{
+        const isManual = computed(()=>{
             return otomatis.value == '0' ? true  : false
         })
 
@@ -222,8 +225,22 @@ export default {
         const sisaBudget = computed(()=>{
             return parseInt(budgetbrand.value) - totalBudgetProduk.value
         })
+
+        watch(()=>budgetbrand.value,val=>{
+            let statustrue = products.value.filter(item=>item.status).length
+            let budgetRata = ''
+            if (statustrue > 0) {
+                budgetRata = parseInt(val) / statustrue
+            }
+            if (!isManual.value) {
+                products.value.map(item=>{
+                    if(item.status){
+                        item.budget = budgetRata
+                    }
+                })
+            }
+        })
         
-    
         const senditemProduct = computed(()=>{
             let result = []
             products.value.forEach(item=>{
@@ -283,7 +300,7 @@ export default {
             formatRibuan,
             budgetbrand,
             kode_brand,brand,products,altproducts,
-            otomatis,isOtomatis,
+            otomatis,isManual, 
             updateStatus,
             totalBudgetProduk,sisaBudget,
             onSubmit,showLoading,hideLoading,successNotif,errorNotif,
