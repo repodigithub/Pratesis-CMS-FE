@@ -1,21 +1,215 @@
 <template>
 <q-page>
+    <breadcrumb  :upload="true" :leftside="false" @openModal="openUpload">
+        <template v-slot:breadcrumb-content>
+            <q-breadcrumbs-el label="Klaim" style="color:#00000073;"/>
+        </template>
+    </breadcrumb>
+    <q-dialog v-model="addNewModal">
+        <q-card :style="{height:'100%',width: isInvoice ? '1000px' : '500px'}">
+            <div  style="padding: 15px;">
+                <p style="font-size: 24px;" class="q-mb-none">Add new</p>
+                <div class="row q-col-gutter-sm q-mb-md col-12">
+                    <div class="col-4">
+                        <p class="fs-12 q-mb-sm">Opso ID :</p>
+                        <select-dropdown url="promo-distributor" v-model:selected="opsoId" :islogin="true" nameLabel=""/>
+                    </div>
+                    <div class="col-8">
+                        <p class="fs-12 q-mb-sm">Nama Promo :</p>
+                        <q-input  type="text" class="q-pb-none" outlined dense/>
+                    </div>
+                </div>
+                <p class="q-mb-sm">Periode :</p>
+                <div class="row q-col-gutter-sm q-mb-md col-12">
+                    <div class="col-4">
+                        <p class="fs-12 q-mb-sm">Start Date :</p>
+                        <q-input
+                            type="date"
+                            dense
+                            outlined
+                            hide-bottom-space
+                            class="option-two col-9">
+                        </q-input>
+                    </div>
+                    <div class="col-4">
+                        <p class="fs-12 q-mb-sm">End Date :</p>
+                        <q-input
+                            type="date"
+                            dense
+                            outlined
+                            hide-bottom-space
+                            class="option-two col-9">
+                        </q-input>
+                    </div>
+                </div>
+                <div class="row q-col-gutter-sm q-mb-md col-12">
+                    <div class="col-4">
+                        <p class="fs-12 q-mb-sm">Budget :</p>
+                        <q-input  type="text" class="q-pb-none" outlined dense lazy-rules v-model="budgetAmount"/>
+                    </div>
+                    <div class="col-4">
+                       <p class="fs-12 q-mb-sm">Rp Klaim :</p>
+                        <q-input  type="number" class="q-pb-none" outlined dense lazy-rules v-model="claimAmount"/>
+                    </div>
+                    <div class="col-4">
+                       <p class="fs-12 q-mb-sm">Sisa Budget :</p>
+                        <q-input  type="text" class="q-pb-none" outlined dense lazy-rules v-model="sisaBudgetAmount"/>
+                    </div>
+                </div>
+                <p class="q-mb-sm">Batas Maximal Claim :</p>
+                <div class="row q-col-gutter-sm q-mb-md col-12">
+                    <div class="col-6">
+                        <p class="fs-12 q-mb-sm">Tanggal Awal :</p>
+                        <q-input
+                            type="date"
+                            dense
+                            outlined
+                            hide-bottom-space
+                            class="option-two col-9">
+                        </q-input>
+                    </div>
+                    <div class="col-6">
+                        <p class="fs-12 q-mb-sm">Tanggal Akhir :</p>
+                        <q-input
+                            type="date"
+                            dense
+                            outlined
+                            hide-bottom-space
+                            class="option-two col-9">
+                        </q-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8 m-auto">
+                        Laporan TPR Barang
+                    </div>
+                    <div class="col-4 text-right">
+                        <q-btn color="primary" v-if="tprBarang" no-caps @click="openFile('tpr_barang')" flat>
+                            <span class="q-mr-sm">Lihat</span>
+                            <q-img
+                                src="~assets/icon/search_blue.svg"
+                                spinner-color="primary"
+                                spinner-size="82px"
+                                width="16px"
+                                height="16px"
+                            />
+                        </q-btn>
+                         <q-btn color="secondary" v-else no-caps @click="uploadFileType('tpr_barang')" flat>
+                            <span class="q-mr-sm">Upload</span>
+                            <q-img
+                                src="~assets/icon/upload_orange.svg"
+                                spinner-color="primary"
+                                spinner-size="82px"
+                                width="16px"
+                                height="16px"
+                            />
+                        </q-btn>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8 m-auto">
+                        Laporan TPR Uang
+                    </div>
+                    <div class="col-4 text-right">
+                        <q-btn color="primary" v-if="tprUang" no-caps @click="openFile('tpr_uang')" flat>
+                            <span class="q-mr-sm">Lihat</span>
+                            <q-img
+                                src="~assets/icon/search_blue.svg"
+                                spinner-color="primary"
+                                spinner-size="82px"
+                                width="16px"
+                                height="16px"
+                            />
+                        </q-btn>
+                         <q-btn color="secondary" v-else no-caps @click="uploadFileType('tpr_uang')" flat>
+                            <span class="q-mr-sm">Upload</span>
+                            <q-img
+                                src="~assets/icon/upload_orange.svg"
+                                spinner-color="primary"
+                                spinner-size="82px"
+                                width="16px"
+                                height="16px"
+                            />
+                        </q-btn>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8 m-auto">
+                        Faktur Pajak
+                    </div>
+                    <div class="col-4 text-right">
+                        <q-btn color="primary" v-if="fakturPajak" no-caps @click="openFile('pajak')" flat>
+                            <span class="q-mr-sm">Lihat</span>
+                            <q-img
+                                src="~assets/icon/search_blue.svg"
+                                spinner-color="primary"
+                                spinner-size="82px"
+                                width="16px"
+                                height="16px"
+                            />
+                        </q-btn>
+                         <q-btn color="secondary" v-else no-caps @click="uploadFileType('pajak')" flat>
+                            <span class="q-mr-sm">Upload</span>
+                            <q-img
+                                src="~assets/icon/upload_orange.svg"
+                                spinner-color="primary"
+                                spinner-size="82px"
+                                width="16px"
+                                height="16px"
+                            />
+                        </q-btn>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p class="fs-12 q-mb-none">Keterangan :</p>
+                        <textarea name="" id="" cols="30" rows="3" placeholder="Masukan keterangan(Optional)" class="input-textarea fs-12 q-px-sm" v-model="description"></textarea>
+                    </div>
+                </div>
+                <div class="row q-my-md">
+                    <div class="col-4">
+                        <q-btn color="secondary" outline class="btn-one q-mr-md txt-capitalize" unelevated>
+                            Cancel
+                        </q-btn>
+                    </div>
+                    <div class="col-4 text-center">
+                        <q-btn :disable="!opsoId || claimAmount <= 0" color="secondary" class="btn-one q-mr-md txt-capitalize" @click="saveClaim('draft')">
+                            Save
+                        </q-btn>
+                    </div>
+                    <div class="col-4 text-right">
+                        <q-btn :disable="isSubmit" :color="isSubmit ? 'grey' : 'secondary'" class="btn-one q-mr-md txt-capitalize" unelevated @click="saveClaim('submit')">
+                            Submit
+                        </q-btn>
+                    </div>
+                </div>
+            </div>
+        </q-card>
+    </q-dialog>
     <div class="row q-pa-lg">
         <div class="col-12">
             <core-table
-                :url="`claim`"
+                :url="`claim?level=${userRole =='DI' ? 'distributor' : 'depot'}`"
                 :columns="klaim"
                 :canOpenDetail="false">
                 <template v-slot:toptable>
-                    <div class="row justify-between">
-                        <div class="content-title">
-                            <div class="font-medium">Klaim</div>
+                    <div class="row">
+                        <div class="col-6">
+                             <div class="font-medium">Klaim</div>
+                        </div>
+                        <div class="col-6 text-right">
+                            <q-btn color="primary"  class="btn-one q-mr-md txt-capitalize" unelevated @click="createNew">
+                                <img  src="~assets/icon/plus.svg" alt="" class="q-mr-sm"> New
+                            </q-btn>
+                            <q-btn color="primary"  class="btn-one q-mr-md txt-capitalize" unelevated>
+                                 Refresh
+                            </q-btn>
                         </div>
                     </div>
                 </template>
                 <template v-slot:body-cell-status="props">
                     <q-td key="status" :props="props">
-                        <q-btn color="positive" outline  no-caps class="btn-one q-mr-md" unelevated @click="openSidebarModal(props.row)">
+                        <q-btn :color="props.row.status == 'approve' ? 'positive' :'negative'" outline  no-caps class="btn-one q-mr-md txt-capitalize" unelevated @click="openSidebarModal(props.row)">
                             {{props.row.status}}
                         </q-btn>
                         <!-- <q-img
@@ -243,7 +437,7 @@
                                         <img src="~assets/icon/file_blue.svg" alt="" class="align-middle">
                                     </div>
                                 </div>
-                                <div class="row wrapper-child q-my-sm t-primary">
+                                <div class="row wrapper-child q-my-sm">
                                     <div class="col-8 fs-12">
                                         Faktur Pajak
                                     </div>
@@ -277,6 +471,7 @@
             </q-dialog>
         </div>
     </div>
+    <upload-file v-model:upload="modalUpload" v-if="modalUpload" :menu="'claim'" @onUploadSuccess="callBackFuncFile"/>
 </q-page>
 </template>
 <style>
@@ -302,7 +497,7 @@
 }
 </style>
 <script>
-import { defineAsyncComponent,ref,watch } from 'vue'
+import { defineAsyncComponent,ref,watch, computed } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 import { useCustom } from 'src/composeables/useCustom'
 import {  useRouter } from 'vue-router'
@@ -315,12 +510,22 @@ export default {
         }
     },
     setup(){
+        const description = ref("")
+        const claimAmount = ref(0)
+        const sisaBudgetAmount = ref(0)
+        const budgetAmount = ref(0)
+        const fakturPajak = ref("")
+        const tprBarang = ref("")
+        const tprUang = ref("")
+        const typeFile = ref("")
+        const opsoId = ref("")
         const dialogDetail = ref(false)
+        const addNewModal = ref(false)
         const details = ref({})
         const alasan = ref('')
-        const { promoTgl, successNotif } = useCustom()
+        const { promoTgl, successNotif, errorNotif } = useCustom()
         const { getData, postData, putData } = useService()
-        const { formatRibuan } = usePratesis()
+        const { formatRibuan, openUpload, modalUpload } = usePratesis()
         const klaim = [
             { name: 'kode_distributor', label: 'Kode Distributor', align: 'left', field: 'kode_distributor' },
             { name: 'nama_distributor',  align: 'left',label: 'Nama Distributor', field: 'nama_distributor'},
@@ -347,14 +552,79 @@ export default {
             .then(res=>{
                 if(res.status == 200) {
                     successNotif(`Berhasil ${type} Claim`)
+                    dialogDetail.value = false;
                 }
             })
             .catch(err=>{
                 console.log('err',err)
             })
         }
+        function createNew() {
+            addNewModal.value = true
+        }
+        function callBackFuncFile(val) {
+            if(typeFile.value == "pajak") fakturPajak.value = val.res.data
+            if(typeFile.value == "tpr_barang") tprBarang.value = val.res.data
+            if(typeFile.value == "tpr_uang") tprUang.value = val.res.data
+        }
+        function openFile(val) {
+            let link =""
+            if(typeFile.value == "pajak") link = fakturPajak.value
+            if(typeFile.value == "tpr_barang") link = tprBarang.value
+            if(typeFile.value == "tpr_uang") link = tprUang.value
+            window.open(link,'_blank');
+        }
+        function uploadFileType(type) {
+            typeFile.value = type
+            openUpload()
+        }
+        function  saveClaim(type) {
+            const payload = {
+                promo_distributor_id: opsoId.value,
+                amount: claimAmount.value,
+                status: type,
+                laporan_tpr_barang: tprBarang.value,
+                laporan_tpr_uang: tprUang.value,
+                faktur_pajak: fakturPajak.value,
+                description: description.value
+            }
+            postData(`/claim`,payload)
+            .then(res=>{
+                if(res.status == 200) {
+                    successNotif(`Berhasil menyimpan Claim`)
+                    addNewModal.value = false;
+                }
+            })
+            .catch(err=>{
+                errorNotif(err.response.data.message)
+                addNewModal.value = false;
+            })
+        }
+        const isSubmit = computed(()=>{
+            return !opsoId.value || claimAmount.value <= 0 || !fakturPajak.value || !tprBarang.value || !tprUang.value
+        })
         const isInvoice = ref(false)
         return {
+            fakturPajak,
+            tprBarang,
+            tprUang,
+            openFile,
+
+            //amount
+            claimAmount,
+            sisaBudgetAmount,
+            budgetAmount,
+
+            isSubmit,
+            saveClaim,
+            description,
+            opsoId,
+            uploadFileType,
+            callBackFuncFile,
+            createNew,
+            addNewModal,
+            modalUpload,
+            openUpload,
             alasan,
             submitClaim,
             promoTgl,
@@ -366,6 +636,9 @@ export default {
         }
     },
     components:{
+        'select-dropdown' : defineAsyncComponent(()=> import('components/SelectDropdown')),
+        'upload-file': defineAsyncComponent(() => import('components/Modal/UploadFile')),
+        'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
         'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
     },
     computed:{

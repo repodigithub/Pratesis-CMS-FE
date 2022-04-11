@@ -139,11 +139,12 @@ export default {
                 let kirim = new FormData()
                 kirim.append('file',filesupload.value)
                 postData(`${props.menu}/upload`,kirim)
-                .then(()=>{
+                .then((res)=>{
                     waiting.value = setTimeout(() => {
                         uploading.value = false
                         result.value = true
                         emit('onUploadSuccess',{
+                            res: res.data,
                             pagination : {
                                 page : 1
                             }
