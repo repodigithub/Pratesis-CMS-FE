@@ -38,12 +38,12 @@ const menu = [
             //         GA:true,
             //     },
             // },
-            {
-                title:'Laporan Claim',
-                access:{
-                    GA:true,
-                },
-            },
+            // {
+            //     title:'Laporan Claim',
+            //     access:{
+            //         GA:true,
+            //     },
+            // },
             {
                 title:'Sales Hierarchy',
                 submenu:[
@@ -263,6 +263,13 @@ const menu = [
                 access:{
                     GA:true,
                 }
+            },
+            {
+                title:'Laporan Klaim',
+                access:{
+                    GA:true,
+                    DI:true
+                },
             },
             {
                 title:'Tpr Distributor',

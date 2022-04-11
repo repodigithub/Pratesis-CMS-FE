@@ -2,7 +2,7 @@
     <q-dialog :model-value="upload" @hide="$emit('update:upload',false)">
         <q-card style="width:460px;">
             <q-card-section class="row items-center" v-if="!result">
-                <span class="text-h6 text-center col-12" v-text="uploading ? 'Uploading Your File' : 'Upload Your File'"></span>
+                <span class="text-h6 text-center col-12" v-text="uploading ? 'Uploading Your File' : titleModal"></span>
             </q-card-section>
             <q-card-section class="q-pt-sm" style="padding-right:30px; padding-left:30px;" v-if="!uploading && !result">
                 <div class="row bg-primary4 justify-center box-upload" @dragover="dragover" @dragleave="dragleave" @drop="drop">
@@ -15,13 +15,13 @@
                             height="68px"
                         />
                         <div style="margin-top:30px;">Drop your file or <span class="text-primary">Browse</span> </div>
-                        <div class="text-grey" style="margin-top:14px;font-size:10px;">Only Microsoft Excel files with max size 15mb</div>
+                        <div class="text-grey" style="margin-top:14px;font-size:10px;">Only  {{ typeFileUpload == '.xlsx' ?'Microsoft Excel' : 'pdf'}} files with max size 15mb</div>
                         <q-chip removable @remove="removeFile" color="primary" text-color="white" icon="description" v-if="filesupload">
                             {{filesupload.name}}
                         </q-chip>
                     </label>
                     <!-- <input type="file" id="inputfile" @change="onFileSelected" ref="file"/> -->
-                    <q-file borderless v-model="filesupload" label="Borderless" accept=".xlsx" max-file-size="15000048"  @rejected="onRejected" for="inputfile" style="display:none;"/>
+                    <q-file borderless v-model="filesupload" label="Borderless" :accept="typeFileUpload" max-file-size="15000048"  @rejected="onRejected" for="inputfile" style="display:none;"/>
                 </div>
             </q-card-section>
             <q-card-section v-if="uploading && !result">
@@ -82,19 +82,36 @@
 </template>
 
 <script>
-// import { usePratesis } from 'src/composeables/usePratesis'
 import { useService } from 'src/composeables/useService'
 import { useCustom } from 'src/composeables/useCustom'
 import { ref } from 'vue'
 export default {
     name:'upload-file',
-    props: ['upload','menu'],
+    // props: ['upload','menu'],
+    props: {
+        upload:{
+            type:Boolean,
+            default:false
+        },
+        menu:{
+            type:String,
+            default:''
+        },
+        titleModal:{
+            type:String,
+            default:'Upload Your File'
+        },
+        typeFileUpload:{
+            type:String,
+            default:'.xlsx'
+        }
+    },
     setup(props, { emit }){
         const { postData } = useService()
         const { errorNotif } = useCustom()
         function onRejected(reject){
             if(reject[0].failedPropValidation === 'accept') {
-                errorNotif('File harus berupa file berekstensi .xlsx')
+                errorNotif(`File harus berupa file berekstensi ${props.typeFileUpload}`)
             }
             else if (reject[0].failedPropValidation === 'max-file-size'){
                 errorNotif('File maksimal berukuran 15MB')
@@ -139,14 +156,15 @@ export default {
                 let kirim = new FormData()
                 kirim.append('file',filesupload.value)
                 postData(`${props.menu}/upload`,kirim)
-                .then(()=>{
+                .then(res=>{
                     waiting.value = setTimeout(() => {
                         uploading.value = false
                         result.value = true
                         emit('onUploadSuccess',{
                             pagination : {
                                 page : 1
-                            }
+                            },
+                            data : res
                         })
                     }, 100);
                     filesupload.value = null

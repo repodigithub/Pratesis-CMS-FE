@@ -4,7 +4,7 @@
             <q-form
             @submit.prevent.stop="onSave" ref="form"
                 style="width:400px;height:100%;">
-            <div class="data-detail">
+            <div :class="canEdit ? 'data-detail' : 'data-detail-show'">
                 <q-card-section class="row items-start q-pb-none">
                     <div class="text-h6">{{$route.name}} Detail </div>
                     <q-space />
@@ -54,7 +54,6 @@ export default {
             type: Boolean,
             default: true
         },
-        
     },
     setup(props, { emit }){
         const { putData,getData } = useService()
@@ -74,12 +73,11 @@ export default {
 
         const url = ref(null)
         url.value = `${route.path.substr(1)}/${props.dataDetail.id}`
-
         if(props.options){
             let x = {...props.options}
             url.value += `?include=${x.include}`
         }
-
+        
         getData(url.value,props.islogin)
         .then(res=>{
             emit('update:dataDetail',res.data.data)

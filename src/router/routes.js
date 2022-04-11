@@ -13,6 +13,11 @@ const routes = [
           laporan:true
         } 
       },
+      { path: 'laporan-claim', name:'Laporan Klaim', component: () => import('pages/laporan/LaporanKlaim.vue'),
+        meta:{
+          laporan:true
+        }
+      },
       /////END FITUR LAPORAN ////////////////////////////////////////////////////
 
       //////FITUR MASTER//////////////////////////////////////////////////
@@ -66,7 +71,7 @@ const routes = [
         }
       },
       // { path: 'verifikasi', name:'Verifikasi', component: () => import('pages/master/Verifikasi.vue')},
-      { path: 'laporan-claim', name:'Laporan Claim', component: () => import('pages/master/LaporanClaim.vue')},
+      
       { path: 'document-claim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue'),
         meta:{
             master:true

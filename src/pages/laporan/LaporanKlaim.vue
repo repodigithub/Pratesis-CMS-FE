@@ -1,0 +1,246 @@
+<template>
+    <q-page>
+        <breadcrumb  :rightside="false"/>
+        <div class="row q-pa-lg">
+            <div class="col-12">
+                <q-card class="own-card q-mb-lg" flat>
+                <q-card-section>
+                    <div class="row items-end">
+                        <div class="col-3">
+                            <div class="q-pr-md">
+                                <select-dropdown url="distributor" v-model:selected="sort.distributor_id" nameLabel="Distributor :"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="q-pl-md">
+                                <label for="statusDrop">Status Klaim :</label>
+                                <q-select
+                                    v-model="sort.status"
+                                    :options="options"
+                                    outlined
+                                    dense
+                                    class="option-three"
+                                    id="statusDrop"
+                                    dropdown-icon="expand_more" />
+                            </div>
+                        </div>
+                        <div class="col-6 text-right">
+                            <q-btn color="primary"  no-caps class="btn-one q-mr-md" unelevated @click="onFilter" >
+                                Search
+                            </q-btn>
+                        </div>
+                    </div>
+                </q-card-section>
+                </q-card>
+            </div>
+            <div class="col-12">
+                <core-table
+                    :columns="columns"
+                    :option="optionTable"
+                    url="laporan-claim"
+                    :canEdit="false"
+                    ref="Coretable"
+                    :requesting="requesting"
+                    >
+                    <template v-slot:body-cell-status="props">
+                        <q-td key="status" :props="props">
+                            <q-badge outline :label="statusPromo(props.row.status_claim)"  :class="active ? colorStatusPromo(props.row.status_claim) : ''"
+                style="padding-top:5px;padding-bottom:5px;" />
+                        </q-td>
+                    </template>
+                    <template v-slot:detail-content="props">
+                        <div class="laporan-klaim">
+                            <q-scroll-area class="fit">
+                                <div class="row q-my-sm">
+                            <div class="col-12 wrapper-primary">
+                                <p class="fs-10 q-mb-none">Keterangan :</p>
+                                <span class="fs-12">{{props.tampil.description}}</span>
+                            </div>
+                        </div>
+                        <div class="row items-center q-mt-md">
+                                <div>Code ULI</div>
+                                <q-space />
+                                <div >{{props.tampil.kode_uli}}</div>
+                        </div>
+                        <div class="row items-center q-mt-md">
+                                <div>Tanggal Kirim</div>
+                                <q-space />
+                                <div >{{GeneralFormatDate(props.tampil.created_at,'DD/MM/YYYY')}}</div>
+                        </div>
+                        <div class="row items-center q-mt-md">
+                                <div>Tanggal Terima</div>
+                                <q-space />
+                                <div >{{GeneralFormatDate(props.tampil.approved_date,'DD/MM/YYYY')}}</div>
+                        </div>
+                        <div class="row items-center q-mt-md">
+                                <div>Klaim</div>
+                                <q-space />
+                                <div>{{formatRibuan(props.tampil.amount)}}</div>
+                        </div>
+                        <div class="row items-center q-mt-md">
+                                <div>Total PPN</div>
+                                <q-space />
+                                <div>{{formatRibuan(props.tampil.ppn_amount)}}</div>
+                        </div>
+                        <div class="row items-center q-mt-md">
+                                <div>Total PPh</div>
+                                <q-space />
+                                <div >{{formatRibuan(props.tampil.pph_amount)}}</div>
+                        </div>
+                        <div class="row items-center q-mt-md">
+                                <div>Dibayar</div>
+                                <q-space />
+                                <div>{{formatRibuan(props.tampil.total_amount)}}</div>
+                        </div>
+                        <div class="row items-center q-mt-md">
+                                <div>Status</div>
+                                <q-space />
+                                <q-badge outline :label="statusPromo(props.tampil.status_claim)" :class="active ? colorStatusPromo(props.tampil.status_claim) : ''"
+                style="padding-top:5px;padding-bottom:5px;" />
+                        </div>
+                        <div class="row items-center q-mt-md bg-primary4" style="border-radius: 8px;
+    padding: 5px 10px;">
+                                <div>Bukti Bayar</div>
+                                <q-space />
+                                <q-btn color="primary" flat no-caps class="q-pr-none" v-if="buktibayar" type="a" :href="buktibayar" target="_blank" download>
+                                    <div class="row fs-12">
+                                        <span class="q-mr-sm">
+                                            Lihat
+                                        </span>
+                                        <img src="~assets/icon/file-search.svg" alt="" class="align-middle">
+                                    </div>
+                                </q-btn>
+                                <q-btn color="primary" flat no-caps class="q-pr-none" v-if="props.tampil.bukti_bayar" type="a" :href="props.tampil.bukti_bayar" target="_blank" download>
+                                    <div class="row fs-12">
+                                        <span class="q-mr-sm">
+                                            Lihat
+                                        </span>
+                                        <img src="~assets/icon/file-search.svg" alt="" class="align-middle">
+                                    </div>
+                                </q-btn>
+                                <q-btn color="secondary" flat no-caps class="q-pr-none" @click="openUpload" v-if="role == 'GA' && !buktibayar && !props.tampil.bukti_bayar">
+                                    <div class="row fs-12">
+                                        <span class="q-mr-sm">
+                                            Upload
+                                        </span>
+                                        <img src="~assets/icon/upload_docs.svg" alt="" class="align-middle">
+                                    </div>
+                                </q-btn>
+                                
+                        </div>
+                            </q-scroll-area>
+                            <div class="row justify-between q-pt-sm" v-if="role == 'GA' && !props.tampil.bukti_bayar">
+                                <q-btn color="secondary" label="Cancel" outline no-caps unelevated class="q-px-sm btn-one" v-close-popup />
+                                <q-btn color="secondary" label="Submit" no-caps unelevated class="q-px-sm btn-one" @click="submitLaporan(props.tampil.id)"/>
+                            </div>
+                        </div>
+                    </template>
+                </core-table>
+            </div>
+        </div>
+        <upload-file v-model:upload="modalUpload" v-if="modalUpload" :menu="$route.path.substr(1)" titleModal="Invoice (Tanpa Materai)" @onUploadSuccess="reloadBukti" typeFileUpload=".pdf"/>
+    </q-page>
+</template>
+
+<script>
+import { defineAsyncComponent,ref,computed } from 'vue'
+import { useService } from 'src/composeables/useService'
+import { usePratesis } from 'src/composeables/usePratesis'
+import { useCustom } from 'src/composeables/useCustom'
+
+
+export default {
+    components:{
+        'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
+        'select-dropdown' : defineAsyncComponent(()=> import('components/SelectDropdown')),
+        'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
+        'upload-file': defineAsyncComponent(() => import('components/Modal/UploadFile')),
+    },
+    setup(){
+        const { formatRibuan,role,modalUpload,openUpload } = usePratesis()
+        const { GeneralFormatDate,colorStatusPromo,statusPromo,showLoading,hideLoading,successNotif,errorNotif } = useCustom()
+
+        const sort = ref({
+            distributor_id:'',
+            status:''
+        })
+        const options = ref(['Semua','Sudah Bayar','Layak Bayar'])
+
+        const columns = [
+            { name: 'kode', label: 'Coding ULI', align: 'left', field: 'kode_uli' },
+            { name: 'keterangan',  align: 'left',label: 'Ket', field: 'description'},
+            { name: 'tgl_kirim',  align: 'left',label: 'Tanggal Kirim', field: row => `${GeneralFormatDate(row.created_at,'DD/MM/YYYY')}`},
+            { name: 'tgl_terima', label: 'Tanggal Terima', align: 'left', field:row => `${GeneralFormatDate(row.approved_date,'DD/MM/YYYY')}` },
+            { name: 'rp_klaim',  align: 'left',label: 'Rp Klaim', field: row => `${formatRibuan(row.claim)}`},
+            { name: 'ppn',  align: 'left',label: 'PPN', field: 'ppn_amount'},
+            { name: 'pph',  align: 'left',label: 'PPH', field: 'pph_amount'},
+            { name: 'rp_dibayar',  align: 'left',label: 'Rp Dibayar', field: row => `${formatRibuan(row.amount)}`},
+            { name: 'status',align:'left',label:'Status',field:'status_claim'}
+        ]
+        const optionTable = computed(()=>{
+            let level = '?level='
+            if (['AD','HO'].indexOf(role.value) >= 0) {
+                level += 'ho'
+                return { level: level }
+            }else if(role.value == 'GA'){
+                level += 'depot'
+                return { level: level }
+            }else if(role.value == 'DI'){
+                level += 'distributor'
+                return { level : level }
+            }else {
+                return null
+            }
+        })
+        const active = ref(true)
+        const { putData } = useService()
+
+        const buktibayar = ref(null)
+        const reloadBukti = result =>{
+            buktibayar.value = result.data.data.data
+        }
+        const Coretable = ref(null)
+        const requesting = ref(null)
+        const submitLaporan = idKlaim => {
+            if (buktibayar.value) {
+                showLoading()
+                putData(`laporan-claim/${idKlaim}`,{
+                    bukti_bayar : buktibayar.value
+                })
+                .then(()=>{
+                    hideLoading()
+                    successNotif(`Klaim Berhasil di update`)
+                    Coretable.value.modalDetail = false
+                    requesting.value = {
+                        pagination : {
+                            page : 1
+                        }
+                    } 
+                    buktibayar.value = null
+                })
+                .catch(err=>{
+                    console.log('error submit',err);
+                    hideLoading()
+                })
+            }else{
+                errorNotif('Upload Bukti Bayar terlebih dahulu')
+            }
+        }
+        return {
+            sort,options,columns,role,optionTable,active,
+            colorStatusPromo,statusPromo,formatRibuan,GeneralFormatDate,
+            modalUpload,openUpload,reloadBukti,buktibayar,
+            submitLaporan,Coretable,
+            showLoading,hideLoading,successNotif,errorNotif,
+            requesting
+        }
+    }
+}
+</script>
+<style >
+.laporan-klaim{
+    height: calc(100vh - 110px);
+    display: grid;
+    grid-template-rows: auto 36px;
+}
+</style>

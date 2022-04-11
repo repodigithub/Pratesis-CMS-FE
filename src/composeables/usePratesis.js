@@ -49,12 +49,15 @@ export const usePratesis = () => {
         userLogin.value = islogin
         if(option){
             state.option = option
-            const { status,include } = option
+            const { status,include,level } = option
             if(status){
                 state.url += `?status=${status}`
             }
             if(include){
                 state.url += `?include=${include}`
+            }
+            if(level){
+                state.url += level
             }
         }
 
@@ -123,8 +126,8 @@ export const usePratesis = () => {
  
         let paginate = ''
         if(state.option){
-            const { status,include } = state.option
-            if(status || include ){
+            const { status,include,level } = state.option
+            if(status || include || level){
                 paginate += `&`
             }
         }else{

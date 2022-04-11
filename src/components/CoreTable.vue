@@ -45,7 +45,7 @@
             </div>
         </q-card-section>
     </q-card>
-    <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail && canOpenDetail && !detailLinked" :dataDetail="dataDetail" @reloadTable="onRequest" :canEdit="canEdit" :options="optionsDetail">
+    <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail && canOpenDetail && !detailLinked" :dataDetail="dataDetail" @reloadTable="onRequest" :canEdit="canEdit" :options="optionsDetail" >
         <template v-for="(_, slot) in $slots" v-slot:[slot]="props">
             <slot :name="slot" v-bind="props" />
         </template>
@@ -106,7 +106,7 @@ export default {
         showPaginate:{
             type:Boolean,
             default: true
-        }
+        },
     },
     setup(props, { emit }){
         const { pagination,rows,loading,init,onRequest,pagesNumber,modalDetail,openDetail,dataDetail } = usePratesis()
