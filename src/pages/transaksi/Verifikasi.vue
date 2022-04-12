@@ -1,6 +1,6 @@
 <template>
 <q-page>
-    <breadcrumb  :upload="true" :leftside="false" @openModal="openUpload">
+    <breadcrumb  :upload="false" :leftside="false" @openModal="openUpload">
         <template v-slot:breadcrumb-content>
             <q-breadcrumbs-el label="Klaim" style="color:#00000073;"/>
         </template>
