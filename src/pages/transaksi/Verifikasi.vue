@@ -5,205 +5,16 @@
             <q-breadcrumbs-el label="Klaim" style="color:#00000073;"/>
         </template>
     </breadcrumb>
-    <q-dialog v-model="addNewModal">
-        <q-card :style="{height:'100%',width: isInvoice ? '1000px' : '500px'}">
-            <div  style="padding: 15px;">
-                <p style="font-size: 24px;" class="q-mb-none">Add new</p>
-                <div class="row q-col-gutter-sm q-mb-md col-12">
-                    <div class="col-4">
-                        <p class="fs-12 q-mb-sm">Opso ID :</p>
-                        <select-dropdown url="promo-distributor" v-model:selected="opsoId" :islogin="true" nameLabel=""/>
-                    </div>
-                    <div class="col-8">
-                        <p class="fs-12 q-mb-sm">Nama Promo :</p>
-                        <q-input  type="text" class="q-pb-none" outlined dense/>
-                    </div>
-                </div>
-                <p class="q-mb-sm">Periode :</p>
-                <div class="row q-col-gutter-sm q-mb-md col-12">
-                    <div class="col-4">
-                        <p class="fs-12 q-mb-sm">Start Date :</p>
-                        <q-input
-                            type="date"
-                            dense
-                            outlined
-                            hide-bottom-space
-                            class="option-two col-9">
-                        </q-input>
-                    </div>
-                    <div class="col-4">
-                        <p class="fs-12 q-mb-sm">End Date :</p>
-                        <q-input
-                            type="date"
-                            dense
-                            outlined
-                            hide-bottom-space
-                            class="option-two col-9">
-                        </q-input>
-                    </div>
-                </div>
-                <div class="row q-col-gutter-sm q-mb-md col-12">
-                    <div class="col-4">
-                        <p class="fs-12 q-mb-sm">Budget :</p>
-                        <q-input  type="text" class="q-pb-none" outlined dense lazy-rules v-model="budgetAmount"/>
-                    </div>
-                    <div class="col-4">
-                       <p class="fs-12 q-mb-sm">Rp Klaim :</p>
-                        <q-input  type="number" class="q-pb-none" outlined dense lazy-rules v-model="claimAmount"/>
-                    </div>
-                    <div class="col-4">
-                       <p class="fs-12 q-mb-sm">Sisa Budget :</p>
-                        <q-input  type="text" class="q-pb-none" outlined dense lazy-rules v-model="sisaBudgetAmount"/>
-                    </div>
-                </div>
-                <p class="q-mb-sm">Batas Maximal Claim :</p>
-                <div class="row q-col-gutter-sm q-mb-md col-12">
-                    <div class="col-6">
-                        <p class="fs-12 q-mb-sm">Tanggal Awal :</p>
-                        <q-input
-                            type="date"
-                            dense
-                            outlined
-                            hide-bottom-space
-                            class="option-two col-9">
-                        </q-input>
-                    </div>
-                    <div class="col-6">
-                        <p class="fs-12 q-mb-sm">Tanggal Akhir :</p>
-                        <q-input
-                            type="date"
-                            dense
-                            outlined
-                            hide-bottom-space
-                            class="option-two col-9">
-                        </q-input>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-8 m-auto">
-                        Laporan TPR Barang
-                    </div>
-                    <div class="col-4 text-right">
-                        <q-btn color="primary" v-if="tprBarang" no-caps @click="openFile('tpr_barang')" flat>
-                            <span class="q-mr-sm">Lihat</span>
-                            <q-img
-                                src="~assets/icon/search_blue.svg"
-                                spinner-color="primary"
-                                spinner-size="82px"
-                                width="16px"
-                                height="16px"
-                            />
-                        </q-btn>
-                         <q-btn color="secondary" v-else no-caps @click="uploadFileType('tpr_barang')" flat>
-                            <span class="q-mr-sm">Upload</span>
-                            <q-img
-                                src="~assets/icon/upload_orange.svg"
-                                spinner-color="primary"
-                                spinner-size="82px"
-                                width="16px"
-                                height="16px"
-                            />
-                        </q-btn>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-8 m-auto">
-                        Laporan TPR Uang
-                    </div>
-                    <div class="col-4 text-right">
-                        <q-btn color="primary" v-if="tprUang" no-caps @click="openFile('tpr_uang')" flat>
-                            <span class="q-mr-sm">Lihat</span>
-                            <q-img
-                                src="~assets/icon/search_blue.svg"
-                                spinner-color="primary"
-                                spinner-size="82px"
-                                width="16px"
-                                height="16px"
-                            />
-                        </q-btn>
-                         <q-btn color="secondary" v-else no-caps @click="uploadFileType('tpr_uang')" flat>
-                            <span class="q-mr-sm">Upload</span>
-                            <q-img
-                                src="~assets/icon/upload_orange.svg"
-                                spinner-color="primary"
-                                spinner-size="82px"
-                                width="16px"
-                                height="16px"
-                            />
-                        </q-btn>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-8 m-auto">
-                        Faktur Pajak
-                    </div>
-                    <div class="col-4 text-right">
-                        <q-btn color="primary" v-if="fakturPajak" no-caps @click="openFile('pajak')" flat>
-                            <span class="q-mr-sm">Lihat</span>
-                            <q-img
-                                src="~assets/icon/search_blue.svg"
-                                spinner-color="primary"
-                                spinner-size="82px"
-                                width="16px"
-                                height="16px"
-                            />
-                        </q-btn>
-                         <q-btn color="secondary" v-else no-caps @click="uploadFileType('pajak')" flat>
-                            <span class="q-mr-sm">Upload</span>
-                            <q-img
-                                src="~assets/icon/upload_orange.svg"
-                                spinner-color="primary"
-                                spinner-size="82px"
-                                width="16px"
-                                height="16px"
-                            />
-                        </q-btn>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <p class="fs-12 q-mb-none">Keterangan :</p>
-                        <textarea name="" id="" cols="30" rows="3" placeholder="Masukan keterangan(Optional)" class="input-textarea fs-12 q-px-sm" v-model="description"></textarea>
-                    </div>
-                </div>
-                <div class="row q-my-md">
-                    <div class="col-4">
-                        <q-btn color="secondary" outline class="btn-one q-mr-md txt-capitalize" unelevated>
-                            Cancel
-                        </q-btn>
-                    </div>
-                    <div class="col-4 text-center">
-                        <q-btn :disable="!opsoId || claimAmount <= 0" color="secondary" class="btn-one q-mr-md txt-capitalize" @click="saveClaim('draft')">
-                            Save
-                        </q-btn>
-                    </div>
-                    <div class="col-4 text-right">
-                        <q-btn :disable="isSubmit" :color="isSubmit ? 'grey' : 'secondary'" class="btn-one q-mr-md txt-capitalize" unelevated @click="saveClaim('submit')">
-                            Submit
-                        </q-btn>
-                    </div>
-                </div>
-            </div>
-        </q-card>
-    </q-dialog>
     <div class="row q-pa-lg">
         <div class="col-12">
             <core-table
-                :url="`claim?level=${userRole =='DI' ? 'distributor' : 'depot'}`"
+                :url="`claim?level=depot`"
                 :columns="klaim"
                 :canOpenDetail="false">
                 <template v-slot:toptable>
                     <div class="row">
                         <div class="col-6">
                              <div class="font-medium">Klaim</div>
-                        </div>
-                        <div class="col-6 text-right">
-                            <q-btn color="primary"  class="btn-one q-mr-md txt-capitalize" unelevated @click="createNew">
-                                <img  src="~assets/icon/plus.svg" alt="" class="q-mr-sm"> New
-                            </q-btn>
-                            <q-btn color="primary"  class="btn-one q-mr-md txt-capitalize" unelevated>
-                                 Refresh
-                            </q-btn>
                         </div>
                     </div>
                 </template>
@@ -636,7 +447,6 @@ export default {
         }
     },
     components:{
-        'select-dropdown' : defineAsyncComponent(()=> import('components/SelectDropdown')),
         'upload-file': defineAsyncComponent(() => import('components/Modal/UploadFile')),
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
         'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
