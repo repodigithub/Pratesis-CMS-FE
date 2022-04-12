@@ -68,7 +68,13 @@
                 <q-input v-model="alamat" type="text" disable id="Alamat" bg-color="grey4" filled dense class="q-mb-md" style="border:1px solid #B7C4D6;border-radius:4px;"/>
             </div>
             <label for="Budget">Budget</label>
-            <q-input v-model="budget" type="text"  id="Budget" outlined dense />
+            <q-input
+                :model-value="budget"
+                @update:model-value="budgetFormat"
+                type="text"
+                id="Budget"
+                outlined
+                dense />
         </template>
 
     </add-data>
@@ -168,7 +174,7 @@ export default {
             }else{
                 kode_area.value = area.kode_area
             }
-            budget.value = area.budget
+            budget.value = formatRibuan(String(area.budget).replaceAll('.', ''))
             budgetalt.value = area.budget
             idTable.value = area.id
         }
@@ -251,24 +257,24 @@ export default {
                 if (props.role == 'GA') { //depot
                     onEdit(`promo-depot/${route.params.id}/distributor/${idTable.value}`,{
                         kode_distributor : kode_distributor.value,
-                        budget : budget.value
+                        budget : budget.value.replaceAll('.', '')
                     })
                 }else{
                     onEdit(`promo/${route.params.id}/area/${idTable.value}`,{
                     kode_area : kode_area.value,
-                    budget : budget.value
+                    budget : budget.value.replaceAll('.', '')
                     })
                 }
             }else{
                 if (props.role == 'GA') {
                     onAdd(`promo-depot/${route.params.id}/distributor`,{
                         kode_distributor : kode_distributor.value,
-                        budget : budget.value
+                        budget : budget.value.replaceAll('.', '')
                     },false)
                 }else{
                     onAdd(`promo/${route.params.id}/area`,{
                         kode_area : kode_area.value,
-                        budget : budget.value
+                        budget : budget.value.replaceAll('.', '')
                     })
                 }
             }
@@ -353,6 +359,9 @@ export default {
                 })
             })
         }
+        function budgetFormat(value){
+            budget.value = formatRibuan(value.replaceAll('.', ''))
+        }
         return{
             modalAdd,openAdd,openEdit,edit,
             kode_area,nama_area,nama_region,alamat,budget,idTable,
@@ -363,7 +372,8 @@ export default {
 
             kode_distributor,nama_distributor,distributor_group,
 
-            urlTable,columns,initTable
+            urlTable,columns,initTable,
+            budgetFormat
         }
     },
     components:{

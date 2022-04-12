@@ -53,7 +53,6 @@ const routes = [
           { path:'',name:'Promo',component:()=> import('components/Promo/ListPromo.vue')},
           { path:'detail-promo/:id',name:'Detail Promo',component:()=> import('components/Promo/DetailPromo.vue')},
           { path:'detail-promo/:id/produk',name:'Add budget Produk',component:()=> import('components/Promo/produk/AddProduk.vue')},
-          { path:'detail-promo/:id/produk/:produk',name:'Edit budget Produk',component:()=> import('components/Promo/produk/EditProduk.vue')},
           { path:'detail-promo/:id/detail-produk/:produk',name:'Detail Produk',component:()=> import('components/Promo/produk/DetailProduk.vue')},
         ],
         meta:{
