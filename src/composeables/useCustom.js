@@ -32,6 +32,13 @@ export const useCustom = () => {
         })
     }
 
+    const GeneralFormatDate = (tgl,format) => {
+        return date.formatDate(tgl,format,{
+            months: ['Januari', 'Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
+            monthsShort: ['Jan', 'Feb', 'Mar','Apr','Mei','Jun','Jul','Agus','Sept','Okt','Nov','Des'],
+        })
+    }
+
     const formatTgl = tgl => {
         return date.formatDate(tgl,'DD/MM/YY')
     }
@@ -59,11 +66,11 @@ export const useCustom = () => {
     const colorStatusPromo = value => {
             if(['draft','new_promo'].indexOf(value) >= 0){
                 return 'draft'
-            }else if(value == 'reject'){
+            }else if(['reject','layak_bayar'].indexOf(value) >= 0){
                 return 'reject'
             }else if(value == 'need_approval'){
                 return 'need'
-            }else if(['approve','claim'].indexOf(value) >= 0){
+            }else if(['approve','claim','sudah_bayar'].indexOf(value) >= 0){
                 return 'approve'
             }else{
                 return ''
@@ -102,6 +109,7 @@ export const useCustom = () => {
         colorStatusPromo, //styling status promo
         statusPromo, //tulisan status promo
         colorStatusSpend, //styling status spend type
-        editTglPromo
+        editTglPromo,
+        GeneralFormatDate
     }
 }

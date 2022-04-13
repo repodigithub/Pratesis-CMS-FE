@@ -147,7 +147,6 @@ export default {
         }
 
         function onRequest(request){
-            state.loading = true
             const { page, rowsPerPage }  = request.pagination
             loading.value = true
             getData(`${url.value}&page=${page}`)
@@ -194,7 +193,7 @@ export default {
         function openEditProduk(produk){
             let id = produk.id
             let budget = props.budget_update + produk.budget_brand
-            router.push({name:'Edit budget Produk',params:{id:route.params.id,produk:id},query:{budget:budget}})
+            router.push({name:'Add budget Produk',params:{id:route.params.id},query:{budget:budget,produk:id,edit: true}})
         }
         function openDetail(evt,row){
             router.push({name:'Detail Produk',params:{id:route.params.id,produk:row.id}})

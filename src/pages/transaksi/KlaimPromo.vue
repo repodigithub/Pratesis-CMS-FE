@@ -1,26 +1,30 @@
 <template>
 <q-page>
-    <breadcrumb  :upload="true" :leftside="false" @openModal="openUpload">
-        <template v-slot:breadcrumb-content>
-            <q-breadcrumbs-el label="Klaim Promo" style="color:#00000073;"/>
-        </template>
-    </breadcrumb>
+    <breadcrumb :rightside="false"/>
     <q-dialog v-model="addNewModal">
         <q-card :style="{height:'100%',width: isInvoice ? '1000px' : '500px'}">
+            <q-card-section class="row items-center q-pb-none">
+                    <div class="text-h6">Add New Klaim Promo </div>
+                    <q-space />
+                    <q-btn icon="close" flat round dense v-close-popup />
+            </q-card-section>
             <div  style="padding: 15px;">
-                <p style="font-size: 24px;" class="q-mb-none">Add new</p>
                 <div class="row q-col-gutter-sm q-mb-md col-12">
                     <div class="col-4">
                         <p class="fs-12 q-mb-sm">Opso ID :</p>
-                        <select-dropdown url="promo-distributor" v-model:selected="opsoId" :islogin="true" nameLabel="" @update="onSelected"/>
+                        <select-dropdown
+                            url="promo-distributor?status=approve"
+                            v-model:selected="opsoId"
+                            placeHold="OPSO ID"
+                            @update="onSelected" />
                     </div>
                     <div class="col-8">
                         <p class="fs-12 q-mb-sm">Nama Promo :</p>
                         <q-input  type="text" class="q-pb-none" outlined dense disable v-model="namaPromo"/>
                     </div>
                 </div>
-                <p class="q-mb-sm">Periode :</p>
-                <div class="row q-col-gutter-sm q-mb-md col-12">
+                <p class="q-mb-sm fs-12 text-bold">Periode :</p>
+                <div class="row q-col-gutter-sm q-mb-md items-center">
                     <div class="col-4">
                         <p class="fs-12 q-mb-sm">Start Date :</p>
                         <q-input
@@ -29,8 +33,8 @@
                             dense
                             outlined
                             hide-bottom-space
-                            class="option-two col-9">
-                        </q-input>
+                            disable
+                            />
                     </div>
                     <div class="col-4">
                         <p class="fs-12 q-mb-sm">End Date :</p>
@@ -40,8 +44,11 @@
                             dense
                             outlined
                             hide-bottom-space
-                            class="option-two col-9">
-                        </q-input>
+                            disable
+                            />
+                    </div>
+                    <div class="col-4" v-if="kode_spend_type">
+                        <q-badge outline :label="kode_spend_type" :class="active ? colorStatusSpend(kode_spend_type) : ''" style="margin-left:50px;margin-top:20px;"/>
                     </div>
                 </div>
                 <div class="row q-col-gutter-sm q-mb-md col-12">
@@ -50,15 +57,15 @@
                         <q-input  type="text" class="q-pb-none" disable outlined dense lazy-rules v-model="budgetAmount"/>
                     </div>
                     <div class="col-4">
-                       <p class="fs-12 q-mb-sm">Rp Klaim :</p>
-                        <q-input  type="number" class="q-pb-none" outlined dense lazy-rules v-model="claimAmount"/>
+                        <p class="fs-12 q-mb-sm">Rp Klaim :</p>
+                        <input-budget v-model:budget="claimAmount"/>
                     </div>
                     <div class="col-4">
                        <p class="fs-12 q-mb-sm">Sisa Budget :</p>
                         <q-input  type="text" class="q-pb-none" disable outlined dense lazy-rules v-model="sisaBudgetAmount"/>
                     </div>
                 </div>
-                <p class="q-mb-sm">Batas Maximal Claim :</p>
+                <p class="q-mb-sm fs-12 text-bold">Batas Maximal Claim :</p>
                 <div class="row q-col-gutter-sm q-mb-md col-12">
                     <div class="col-6">
                         <p class="fs-12 q-mb-sm">Tanggal Awal :</p>
@@ -68,8 +75,8 @@
                             dense
                             outlined
                             hide-bottom-space
-                            class="option-two col-9">
-                        </q-input>
+                            disable
+                            />
                     </div>
                     <div class="col-6">
                         <p class="fs-12 q-mb-sm">Tanggal Akhir :</p>
@@ -79,8 +86,8 @@
                             dense
                             outlined
                             hide-bottom-space
-                            class="option-two col-9">
-                        </q-input>
+                            disable
+                            />
                     </div>
                 </div>
                 <div class="row">
@@ -202,7 +209,7 @@
                              <div class="font-medium">Klaim</div>
                         </div>
                         <div class="col-6 text-right">
-                            <q-btn color="primary"  class="btn-one q-mr-md txt-capitalize" unelevated @click="createNew">
+                            <q-btn color="primary"  class="btn-one q-mr-md txt-capitalize"  unelevated @click="createNew">
                                 <img  src="~assets/icon/plus.svg" alt="" class="q-mr-sm"> New
                             </q-btn>
                             <q-btn color="primary"  class="btn-one q-mr-md txt-capitalize" unelevated>
@@ -502,10 +509,10 @@
 </style>
 <script>
 import { date } from 'quasar'
-import { defineAsyncComponent,ref,watch, computed } from 'vue'
+import { defineAsyncComponent,ref, computed,onMounted } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 import { useCustom } from 'src/composeables/useCustom'
-import {  useRouter } from 'vue-router'
+import {  useRoute } from 'vue-router'
 import { useService } from 'src/composeables/useService'
 
 export default {
@@ -522,7 +529,7 @@ export default {
         const namaPromo = ref("")
         const description = ref("")
         const claimAmount = ref(0)
-        const sisaBudgetAmount = ref(0)
+        
         const budgetAmount = ref(0)
         const fakturPajak = ref("")
         const tprBarang = ref("")
@@ -533,9 +540,16 @@ export default {
         const addNewModal = ref(false)
         const details = ref({})
         const alasan = ref('')
-        const { promoTgl, successNotif, errorNotif, editTglPromo } = useCustom()
+        const kode_spend_type = ref(null)
+        const { promoTgl, successNotif, errorNotif, editTglPromo,colorStatusSpend } = useCustom()
         const { getData, postData, putData } = useService()
         const { formatRibuan, openUpload, modalUpload } = usePratesis()
+
+        const sisaBudgetAmount = computed(()=>{
+            let result = parseInt(String(budgetAmount.value).replaceAll('.','')) - parseInt(String(claimAmount.value).replaceAll('.',''))
+            return result ? formatRibuan(result) : 0
+        })
+
         const klaim = [
             { name: 'kode_distributor', label: 'Kode Distributor', align: 'left', field: 'kode_distributor' },
             { name: 'nama_distributor',  align: 'left',label: 'Nama Distributor', field: 'nama_distributor'},
@@ -571,6 +585,14 @@ export default {
         }
         function createNew() {
             addNewModal.value = true
+            namaPromo.value =''
+            startDate.value =''
+            endDate.value =''
+            budgetAmount.value =''
+            startDateMaxClaim.value =''
+            endDateMaxClaim.value =''
+            kode_spend_type.value =''
+            opsoId.value =''
         }
         function callBackFuncFile(val) {
             if(typeFile.value == "pajak") fakturPajak.value = val.res.data
@@ -615,18 +637,33 @@ export default {
         })
 
         function onSelected(val) {
-          console.log(val)
           namaPromo.value = val.nama_promo
           startDate.value = editTglPromo(val.start_date)
           endDate.value = editTglPromo(val.end_date)
           budgetAmount.value = formatRibuan(val.budget)
           //Calculation max date claim
           let startDateClaim = date.addToDate(val.end_date, { days: 1})
-          let endDateClaim = date.addToDate(startDateClaim, { days: 90})
+          let endDateClaim = date.addToDate(startDateClaim, { days: val.claim})
           startDateMaxClaim.value = editTglPromo(startDateClaim)
           endDateMaxClaim.value = editTglPromo(endDateClaim)
+          kode_spend_type.value = val.kode_spend_type
         }
         const isInvoice = ref(false)
+        const active = ref(true)
+        
+        const route = useRoute()
+        onMounted(()=>{
+            if(route.query.opsoId){
+                getData(`promo-distributor?opso_id=${route.query.opsoId}`)
+                .then(res=>{
+                    let val = res.data.data.data[0]
+                    onSelected(val)
+                    addNewModal.value = true
+                })
+                opsoId.value = route.query.opsoId
+            }
+        })
+        
         return {
             fakturPajak,
             tprBarang,
@@ -660,14 +697,17 @@ export default {
             dialogDetail,
             openSidebarModal,
             formatRibuan,
-            klaim
+            klaim,
+            colorStatusSpend,
+            active,kode_spend_type
         }
     },
     components:{
-        'select-dropdown' : defineAsyncComponent(()=> import('components/SelectDropdown')),
+        'select-dropdown' : defineAsyncComponent(()=> import('components/KlaimPromo/SelectDropdown')),
         'upload-file': defineAsyncComponent(() => import('components/Modal/UploadFile')),
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
         'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
+        'input-budget' : defineAsyncComponent(()=> import('components/Promo/InputBudget'))
     },
     computed:{
         userRole(){
@@ -675,5 +715,6 @@ export default {
             return ['SA','DI'].indexOf(role) >= 0 ? '' : role
         },
     },
+   
 }
 </script>

@@ -43,7 +43,7 @@
                 style="padding-top:5px;padding-bottom:5px;" />
                 </div>
                 <div class="col-12">
-                    <q-btn :class="item.status_promo != 'claim' ? 'bg-grey3' : 'bg-secondary' " no-caps unelevated class="btn-one text-white" label="Claim"  @click.stop="$router.push({name : 'Klaim Promo'})" :disable="item.status_promo != 'claim' ? true : false"/>
+                    <q-btn :class="item.status_promo != 'claim' ? 'bg-grey3' : 'bg-secondary' " no-caps unelevated class="btn-one text-white" label="Claim"  @click.stop="$router.push({name : 'Klaim Promo',query:{opsoId : item.opso_id}})" :disable="item.status_promo != 'claim' ? true : false"/>
                 </div>
             </div>
         </div>

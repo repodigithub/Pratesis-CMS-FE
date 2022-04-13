@@ -23,15 +23,13 @@
                     <q-input v-model="dataPromo.nama_promo" type="text" id="Nama Promo" outlined dense lazy-rules
                     :rules="[
                         val => val && val.length > 0 || 'Nama Promo tidak boleh kosong',
-                    ]" placeholder="Nama Promo"/>
+                    ]" placeholder="Nama Promo"
+                    />
                 </div>
 
                 <div class="col-12">
                     <label for="Budget">Budget</label>
-                    <q-input v-model="dataPromo.budget" id="Budget" type="number" outlined dense lazy-rules
-                    :rules="[
-                        val => val && val.length > 0 || 'Budget tidak boleh kosong',
-                    ]" placeholder="Budget"/>
+                    <input-budget v-model:budget="dataPromo.budget"/>
                 </div>
 
                 <div class="row q-col-gutter-sm q-mb-md col-12">
@@ -127,6 +125,7 @@
 import { defineAsyncComponent,ref,onMounted } from 'vue'
 import { useService } from 'src/composeables/useService'
 import { useCustom } from 'src/composeables/useCustom'
+import { usePratesis } from 'src/composeables/usePratesis'
 import { useRouter,useRoute } from 'vue-router'
 
 export default {
@@ -142,7 +141,8 @@ export default {
         }
     },
     components:{
-        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown'))
+        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown')),
+        'input-budget': defineAsyncComponent(()=> import('components/Promo/InputBudget'))
     },
     setup(props,{emit}){
 
@@ -152,10 +152,11 @@ export default {
         function removeFile(){
             filesupload.value = null
         }
-
         const { postData,getData } = useService()
         const { showLoading,hideLoading,successNotif,editTglPromo } = useCustom()
         const route = useRoute()
+        const { formatRibuan } = usePratesis()
+
         onMounted(()=>{
             if (props.edit) {
                 getData(`promo/${route.params.id}`)
@@ -164,7 +165,7 @@ export default {
                     dataPromo.value.id = result.id
                     dataPromo.value.opso_id = result.opso_id
                     dataPromo.value.nama_promo = result.nama_promo
-                    dataPromo.value.budget = String(result.budget)
+                    dataPromo.value.budget =formatRibuan(String(result.budget).replaceAll('.', '')) 
                     dataPromo.value.start_date = editTglPromo(result.start_date)
                     dataPromo.value.end_date = editTglPromo(result.end_date)
                     dataPromo.value.claim = result.claim
@@ -228,7 +229,7 @@ export default {
             let sendForm = new FormData()
             sendForm.append('opso_id',dataPromo.value.opso_id)
             sendForm.append('nama_promo',dataPromo.value.nama_promo)
-            sendForm.append('budget',dataPromo.value.budget)
+            sendForm.append('budget',dataPromo.value.budget.replaceAll('.', ''))
             sendForm.append('start_date',dataPromo.value.start_date)
             sendForm.append('end_date',dataPromo.value.end_date)
             sendForm.append('claim',dataPromo.value.claim)
@@ -244,6 +245,7 @@ export default {
                 onAdd(sendForm)
             }
         }
+        
 
         return {
             dataPromo,
@@ -251,7 +253,7 @@ export default {
             showLoading,hideLoading,successNotif,
             postData,
             filesupload,removeFile,
-            onAdd,onEdit
+            onAdd,onEdit,
         }
     }
 }

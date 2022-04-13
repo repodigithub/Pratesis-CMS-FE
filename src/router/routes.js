@@ -13,6 +13,11 @@ const routes = [
           laporan:true
         } 
       },
+      { path: 'laporan-claim', name:'Laporan Klaim', component: () => import('pages/laporan/LaporanKlaim.vue'),
+        meta:{
+          laporan:true
+        }
+      },
       /////END FITUR LAPORAN ////////////////////////////////////////////////////
 
       //////FITUR MASTER//////////////////////////////////////////////////
@@ -48,7 +53,6 @@ const routes = [
           { path:'',name:'Promo',component:()=> import('components/Promo/ListPromo.vue')},
           { path:'detail-promo/:id',name:'Detail Promo',component:()=> import('components/Promo/DetailPromo.vue')},
           { path:'detail-promo/:id/produk',name:'Add budget Produk',component:()=> import('components/Promo/produk/AddProduk.vue')},
-          { path:'detail-promo/:id/produk/:produk',name:'Edit budget Produk',component:()=> import('components/Promo/produk/EditProduk.vue')},
           { path:'detail-promo/:id/detail-produk/:produk',name:'Detail Produk',component:()=> import('components/Promo/produk/DetailProduk.vue')},
         ],
         meta:{
@@ -66,7 +70,7 @@ const routes = [
         }
       },
       // { path: 'verifikasi', name:'Verifikasi', component: () => import('pages/master/Verifikasi.vue')},
-      { path: 'laporan-claim', name:'Laporan Claim', component: () => import('pages/master/LaporanClaim.vue')},
+      
       { path: 'document-claim',name:'Document Claim', component: () => import('pages/master/DocumentClaim.vue'),
         meta:{
             master:true

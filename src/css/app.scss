@@ -281,6 +281,11 @@
     grid-template-rows:75px auto 70px;
     height:100%;
 }
+.data-detail-show{
+    display: grid;
+    grid-template-rows:75px auto;
+    height:100%;
+}
 
 .input-disable{
     border:1px solid #B7C4D6;
@@ -329,4 +334,11 @@
     //     transform: scale(0.98);
     //     cursor:pointer;
     // }
+}
+
+.wrapper-primary {
+    border: 1px solid #2684FF;
+    border-radius: 8px;
+    padding: 10px;
+    background: #F3F8FF;
 }

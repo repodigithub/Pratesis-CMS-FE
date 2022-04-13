@@ -159,12 +159,7 @@
 .q-dialog__inner--minimized > div {
     max-width: 1000px;
 }
-.wrapper-primary {
-    border: 1px solid #2684FF;
-    border-radius: 8px;
-    padding: 10px;
-    background: #F3F8FF;
-}
+
 .wrapper-child {
     background: #F3F8FF;
     border-radius: 8px;
@@ -178,7 +173,7 @@
 }
 </style>
 <script>
-import { defineAsyncComponent,ref,watch } from 'vue'
+import { defineAsyncComponent,ref,watch,onMounted } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 import { useCustom } from 'src/composeables/useCustom'
 import {  useRouter } from 'vue-router'
@@ -196,6 +191,13 @@ export default {
     },
     setup(){
         const { formatRibuan, modalUpload, reloadTable, openUpload } = usePratesis()
+        const { getData } = useService()
+        onMounted(()=>{
+            getData('laporan-claim?level=depot')
+            .then(res=>{
+                console.log('laporan claim,',res);
+            })
+        })
         const klaim = [
             { name: 'kode', label: 'Coding ULI', align: 'left', field: 'kode_brand' },
             { name: 'nama_brand',  align: 'left',label: 'Ket', field: 'nama_brand'},
