@@ -2,7 +2,7 @@
     <div v-show="isValid">
         <label for="selectdrop" class="font-normal">{{nameLabel}}</label>
         <q-select  outlined dense :modelValue="selected"
-            @update:modelValue="event => $emit('update:selected', event)" :options="options" hide-bottom-space :class="master ? 'option-three' : ''"
+            @update:modelValue="event => onSelected(event)" :options="options" hide-bottom-space :class="master ? 'option-three' : ''"
             emit-value
             map-options
             use-input
@@ -62,8 +62,9 @@ export default {
             default:true
         }
     },
-    setup(props){
+    setup(props, context){
         const loading = ref(false)
+        const dataOptions = ref([])
         const options = ref([])
         const { getData } = useService()
         const searchUrl = ref('')
@@ -75,6 +76,7 @@ export default {
         const isValid = ref(false)
         getData(props.url,props.islogin)
         .then(res=>{
+            dataOptions.value = res.data.data.data
             res.data.data.data.forEach((item)=>{
                 response = Object.values(item)
                 if(props.isNormal){
@@ -169,8 +171,16 @@ export default {
                 })
             }
         }
+        function onSelected(val) {
+            let findX = dataOptions.value.find(e => e.id == val)
+            if(findX) {
+                context.emit('update', findX)
+            }
+            context.emit('update:selected', val)
+        }
 
         return {
+            onSelected,
             isValid,
             options,
             loading,

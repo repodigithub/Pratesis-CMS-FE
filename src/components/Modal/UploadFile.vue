@@ -161,6 +161,7 @@ export default {
                         uploading.value = false
                         result.value = true
                         emit('onUploadSuccess',{
+                            res: res.data,
                             pagination : {
                                 page : 1
                             },

@@ -1,22 +1,27 @@
 <template>
 <q-page>
+    <breadcrumb  :upload="false" :leftside="false" @openModal="openUpload">
+        <template v-slot:breadcrumb-content>
+            <q-breadcrumbs-el label="Klaim" style="color:#00000073;"/>
+        </template>
+    </breadcrumb>
     <div class="row q-pa-lg">
         <div class="col-12">
             <core-table
-                :url="`promo/3/product`"
+                :url="`claim?level=depot`"
                 :columns="klaim"
                 :canOpenDetail="false">
                 <template v-slot:toptable>
-                    <div class="row justify-between">
-                        <div class="content-title">
-                            <div class="font-medium">Klaim</div>
+                    <div class="row">
+                        <div class="col-6">
+                             <div class="font-medium">Klaim</div>
                         </div>
                     </div>
                 </template>
-                <template v-slot:body-cell-actions="props">
-                    <q-td key="action" :props="props">
-                        <q-btn color="positive" outline  no-caps class="btn-one q-mr-md" unelevated @click="openSidebarModal">
-                            Submit
+                <template v-slot:body-cell-status="props">
+                    <q-td key="status" :props="props">
+                        <q-btn :color="props.row.status == 'approve' ? 'positive' :'negative'" outline  no-caps class="btn-one q-mr-md txt-capitalize" unelevated @click="openSidebarModal(props.row)">
+                            {{props.row.status}}
                         </q-btn>
                         <!-- <q-img
                             src="~assets/icon/check.svg"
@@ -41,9 +46,9 @@
                                 <div class="row q-mt-md" style="background: #2684FF; height: 14px;"></div>
                                 <div class="row q-my-md">
                                     <div class="col-8 fs-14">
-                                       <p class="q-mb-none">PT. Makmur Jaya</p>
-                                       <p style="color: #8195AF;" class="fs-12 q-mb-none">Kode Distributor : 095830492948</p>
-                                       <p style="color: #8195AF;" class="fs-12 q-mb-none"><img src="~assets/icon/calendar.svg" alt="" class="align-middle q-mr-sm"><span class="align-middle">12 Nov 2020</span></p>
+                                       <p class="q-mb-none">{{details.nama_distributor}}</p>
+                                       <p style="color: #8195AF;" class="fs-12 q-mb-none">Kode Distributor : {{details.nama_distributor}}</p>
+                                       <p style="color: #8195AF;" class="fs-12 q-mb-none"><img src="~assets/icon/calendar.svg" alt="" class="align-middle q-mr-sm"><span class="align-middle">{{promoTgl(details.created_at)}}</span></p>
                                     </div>
                                     <div class="col-4 text-right">
                                         <p style="color: #8195AF;" class="fs-10 q-mb-none">Nomor Invoice</p>
@@ -60,12 +65,12 @@
                                 </div>
                                 <div class="row q-px-sm">
                                     <div class="col-9 fs-12">
-                                        <p class="q-mb-none">Jasa Pemasaran Ice Cream 2021 SAR RSM IC 14 - 31 Mar 2011</p>
-                                        <p class="q-mb-none">OPSO ID 210019928817721662121</p>
-                                        <p><img src="~assets/icon/calendar_blue.svg" alt="" class="align-middle q-mr-sm"> <span class="align-middle">12 November 2020 - 20 Desember 2021</span></p>
+                                        <p class="q-mb-none">{{details.nama_promo}}</p>
+                                        <p class="q-mb-none">OPSO ID {{details.opso_id}}</p>
+                                        <p><img src="~assets/icon/calendar_blue.svg" alt="" class="align-middle q-mr-sm"> <span class="align-middle">{{promoTgl(details.start_date)}} - {{promoTgl(details.end_date)}}</span></p>
                                     </div>
                                     <div class="col-3 fs-12 text-right" style="margin: auto;">
-                                        Rp 980.000.000
+                                        Rp {{formatRibuan(details.amount)}}
                                     </div>
                                 </div>
                                 <div class="row q-px-sm">
@@ -77,7 +82,7 @@
                                                 Subtotal
                                             </div>
                                             <div class="col-8 text-right">
-                                                Rp 1.000.000.000
+                                                Rp {{formatRibuan(details.amount)}}
                                             </div>
                                         </div>
                                         <div class="row q-my-sm">
@@ -85,15 +90,15 @@
                                                 PPN
                                             </div>
                                             <div class="col-8 text-right">
-                                                Rp 1.000.000
+                                                Rp {{formatRibuan(details.ppn_amount)}}
                                             </div>
                                         </div>
                                         <div class="row q-my-sm">
                                             <div class="col-4">
-                                                PPN
+                                                PPH
                                             </div>
                                             <div class="col-8 text-right">
-                                                Rp 1.000.000
+                                                Rp {{formatRibuan(details.pph_amount)}}
                                             </div>
                                         </div>
                                          <div class="row q-my-sm">
@@ -101,7 +106,7 @@
                                                 Total
                                             </div>
                                             <div class="col-8 text-right">
-                                                Rp 1.002.000.000
+                                                Rp {{formatRibuan(details.total_amount)}}
                                             </div>
                                         </div>
                                     </div>
@@ -149,7 +154,7 @@
                                         Distributor
                                     </div>
                                     <div class="col-6 fs-12 text-right">
-                                        PT. Pakmu Mandiri Utama
+                                        {{details.nama_distributor}}
                                     </div>
                                 </div>
                                 <div class="row q-my-sm fs-12">
@@ -157,7 +162,7 @@
                                         Status
                                     </div>
                                     <div class="col-6 text-right">
-                                        Submit
+                                        {{details.status}}
                                     </div>
                                 </div>
                                 <div class="row q-my-sm fs-12">
@@ -165,7 +170,7 @@
                                         Code ULI
                                     </div>
                                     <div class="col-6 text-right">
-                                        10219919299991000129
+                                        {{details.kode_uli}}
                                     </div>
                                 </div>
                                 <div class="row q-my-sm fs-12">
@@ -173,7 +178,7 @@
                                         Tanggal
                                     </div>
                                     <div class="col-6 text-right">
-                                        15 Nov 2011
+                                        {{promoTgl(details.created_at)}}
                                     </div>
                                 </div>
                                 <div class="row q-my-sm fs-12">
@@ -181,7 +186,7 @@
                                         Jenis Kegiatan
                                     </div>
                                     <div class="col-6 text-right">
-                                        10 - TPR Barang
+                                        {{details.jenis_kegiatan}}
                                     </div>
                                 </div>
                                 <div class="row q-my-sm fs-12">
@@ -189,7 +194,7 @@
                                         Total
                                     </div>
                                     <div class="col-6 text-right">
-                                        250.000
+                                        {{formatRibuan(details.total_amount)}}
                                     </div>
                                 </div>
                                 <div class="row q-my-sm fs-12">
@@ -197,7 +202,7 @@
                                         Total PPN
                                     </div>
                                     <div class="col-6 text-right">
-                                        25.000
+                                        {{formatRibuan(details.ppn_amount)}}
                                     </div>
                                 </div>
                                 <div class="row q-my-sm fs-12">
@@ -205,7 +210,7 @@
                                         Total PPh
                                     </div>
                                     <div class="col-6 text-right">
-                                        0,00
+                                        {{formatRibuan(details.pph_amount)}}
                                     </div>
                                 </div>
                                 <div class="row q-my-sm fs-12">
@@ -213,7 +218,7 @@
                                         Total Net
                                     </div>
                                     <div class="col-6 text-right">
-                                        275.000
+                                        {{formatRibuan(details.total_amount)}}
                                     </div>
                                 </div>
                                 <div class="row wrapper-child q-my-sm">
@@ -243,7 +248,7 @@
                                         <img src="~assets/icon/file_blue.svg" alt="" class="align-middle">
                                     </div>
                                 </div>
-                                <div class="row wrapper-child q-my-sm t-primary">
+                                <div class="row wrapper-child q-my-sm">
                                     <div class="col-8 fs-12">
                                         Faktur Pajak
                                     </div>
@@ -255,17 +260,17 @@
                                 <div class="row q-my-sm">
                                     <div class="col-12">
                                         <p class="fs-12 q-mb-none">Alasan penolakan :</p>
-                                        <textarea name="" id="" cols="30" rows="2" placeholder="Masukan alasan penolakan..." class="input-textarea fs-12"></textarea>
+                                        <textarea name="" id="" cols="30" rows="2" placeholder="Masukan alasan penolakan..." class="input-textarea fs-12" v-model="alasan"></textarea>
                                     </div>
                                 </div>
                                 <div class="row q-my-md">
                                     <div class="col-6 fs-14">
-                                        <q-btn color="secondary" outline  no-caps unelevated>
+                                        <q-btn color="secondary" outline  no-caps unelevated @click="submitClaim('reject')">
                                             Reject
                                         </q-btn>
                                     </div>
                                     <div class="col-6 text-right text-primary">
-                                        <q-btn color="secondary"  no-caps unelevated>
+                                        <q-btn color="secondary"  no-caps unelevated @click="submitClaim('approve')">
                                             Approve
                                         </q-btn>
                                     </div>
@@ -277,6 +282,7 @@
             </q-dialog>
         </div>
     </div>
+    <upload-file v-model:upload="modalUpload" v-if="modalUpload" :menu="'claim'" @onUploadSuccess="callBackFuncFile"/>
 </q-page>
 </template>
 <style>
@@ -302,7 +308,7 @@
 }
 </style>
 <script>
-import { defineAsyncComponent,ref,watch } from 'vue'
+import { defineAsyncComponent,ref,watch, computed } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 import { useCustom } from 'src/composeables/useCustom'
 import {  useRouter } from 'vue-router'
@@ -311,35 +317,138 @@ import { useService } from 'src/composeables/useService'
 export default {
     data() {
         return {
-            dialogDetail: true,
             isInvoice: false
         }
     },
     setup(){
-        const { formatRibuan } = usePratesis()
+        const description = ref("")
+        const claimAmount = ref(0)
+        const sisaBudgetAmount = ref(0)
+        const budgetAmount = ref(0)
+        const fakturPajak = ref("")
+        const tprBarang = ref("")
+        const tprUang = ref("")
+        const typeFile = ref("")
+        const opsoId = ref("")
+        const dialogDetail = ref(false)
+        const addNewModal = ref(false)
+        const details = ref({})
+        const alasan = ref('')
+        const { promoTgl, successNotif, errorNotif } = useCustom()
+        const { getData, postData, putData } = useService()
+        const { formatRibuan, openUpload, modalUpload } = usePratesis()
         const klaim = [
-            { name: 'kode', label: 'Coding ULI', align: 'left', field: 'kode_brand' },
-            { name: 'nama_brand',  align: 'left',label: 'Ket', field: 'nama_brand'},
-            { name: 'produk_aktif',  align: 'left',label: 'Tanggal Kirim', field: 'produk_aktif'},
-            { name: 'kode', label: 'Tanggal Terima', align: 'left', field: 'kode_brand' },
-            { name: 'budget',  align: 'left',label: 'Rp Klaim', field: row => `${formatRibuan(row.budget_brand)}`},
-            { name: 'kode',  align: 'left',label: 'PPN', field: 'kode'},
-            { name: 'budget',  align: 'left',label: 'PPH', field: row => `${formatRibuan(row.budget_brand)}`},
-            { name: 'budget',  align: 'left',label: 'Rp Dibayar', field: row => `${formatRibuan(row.budget_brand)}`},
-            { name: 'actions',align:'left',label:'Status',field:'kode_brand'}
+            { name: 'kode_distributor', label: 'Kode Distributor', align: 'left', field: 'kode_distributor' },
+            { name: 'nama_distributor',  align: 'left',label: 'Nama Distributor', field: 'nama_distributor'},
+            { name: 'kode_uli',  align: 'left',label: 'Coding ULI', field: 'kode_uli'},
+            { name: 'created_at', label: 'Tanggal', align: 'left', field: row => `${promoTgl(row.created_at)}`},
+            { name: 'jenis_kegiatan',  align: 'left',label: 'Jenis Kegiatan', field: 'jenis_kegiatan'},
+            { name: 'claim',  align: 'left',label: 'Rp. Klaim', field: row => `${formatRibuan(row.claim)}`},
+            { name: 'amount',  align: 'left',label: 'Rp Dibayar', field: row => `${formatRibuan(row.amount)}`},
+            { name: 'status',align:'left',label:'Status',field:'status'}
         ]
+        function openSidebarModal(row){
+            getData(`claim/${row.id}`).then(res=>{
+                details.value = res.data.data;
+                dialogDetail.value = true;
+            })
+        }
+        function submitClaim(type){
+            const payload =
+            {
+                status: type,
+                alasan: alasan.value
+            }
+            putData(`/claim/${details.value.id}/status`,payload)
+            .then(res=>{
+                if(res.status == 200) {
+                    successNotif(`Berhasil ${type} Claim`)
+                    dialogDetail.value = false;
+                }
+            })
+            .catch(err=>{
+                console.log('err',err)
+            })
+        }
+        function createNew() {
+            addNewModal.value = true
+        }
+        function callBackFuncFile(val) {
+            if(typeFile.value == "pajak") fakturPajak.value = val.res.data
+            if(typeFile.value == "tpr_barang") tprBarang.value = val.res.data
+            if(typeFile.value == "tpr_uang") tprUang.value = val.res.data
+        }
+        function openFile(val) {
+            let link =""
+            if(typeFile.value == "pajak") link = fakturPajak.value
+            if(typeFile.value == "tpr_barang") link = tprBarang.value
+            if(typeFile.value == "tpr_uang") link = tprUang.value
+            window.open(link,'_blank');
+        }
+        function uploadFileType(type) {
+            typeFile.value = type
+            openUpload()
+        }
+        function  saveClaim(type) {
+            const payload = {
+                promo_distributor_id: opsoId.value,
+                amount: claimAmount.value,
+                status: type,
+                laporan_tpr_barang: tprBarang.value,
+                laporan_tpr_uang: tprUang.value,
+                faktur_pajak: fakturPajak.value,
+                description: description.value
+            }
+            postData(`/claim`,payload)
+            .then(res=>{
+                if(res.status == 200) {
+                    successNotif(`Berhasil menyimpan Claim`)
+                    addNewModal.value = false;
+                }
+            })
+            .catch(err=>{
+                errorNotif(err.response.data.message)
+                addNewModal.value = false;
+            })
+        }
+        const isSubmit = computed(()=>{
+            return !opsoId.value || claimAmount.value <= 0 || !fakturPajak.value || !tprBarang.value || !tprUang.value
+        })
         const isInvoice = ref(false)
         return {
+            fakturPajak,
+            tprBarang,
+            tprUang,
+            openFile,
+
+            //amount
+            claimAmount,
+            sisaBudgetAmount,
+            budgetAmount,
+
+            isSubmit,
+            saveClaim,
+            description,
+            opsoId,
+            uploadFileType,
+            callBackFuncFile,
+            createNew,
+            addNewModal,
+            modalUpload,
+            openUpload,
+            alasan,
+            submitClaim,
+            promoTgl,
+            details,
+            dialogDetail,
+            openSidebarModal,
             formatRibuan,
             klaim
         }
     },
-    methods: {
-        openSidebarModal() {
-            this.dialogDetail = true;
-        }
-    },
     components:{
+        'upload-file': defineAsyncComponent(() => import('components/Modal/UploadFile')),
+        'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
         'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
     },
     computed:{
