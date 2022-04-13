@@ -29,13 +29,7 @@
 
                 <div class="col-12">
                     <label for="Budget">Budget</label>
-                    <q-input  id="Budget" type="text" outlined dense lazy-rules
-                    :rules="[
-                        val => val && val.length > 0 || 'Budget tidak boleh kosong',
-                    ]" placeholder="Budget"
-                    :model-value="dataPromo.budget"
-                    @update:model-value="budgetFormat"
-                    />
+                    <input-budget v-model:budget="dataPromo.budget"/>
                 </div>
 
                 <div class="row q-col-gutter-sm q-mb-md col-12">
@@ -147,7 +141,8 @@ export default {
         }
     },
     components:{
-        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown'))
+        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown')),
+        'input-budget': defineAsyncComponent(()=> import('components/Promo/InputBudget'))
     },
     setup(props,{emit}){
 
@@ -160,6 +155,7 @@ export default {
         const { postData,getData } = useService()
         const { showLoading,hideLoading,successNotif,editTglPromo } = useCustom()
         const route = useRoute()
+        const { formatRibuan } = usePratesis()
 
         onMounted(()=>{
             if (props.edit) {
@@ -249,10 +245,7 @@ export default {
                 onAdd(sendForm)
             }
         }
-        const { formatRibuan } = usePratesis()
-        function budgetFormat(value){
-            dataPromo.value.budget = formatRibuan(value.replaceAll('.', ''))
-        }
+        
 
         return {
             dataPromo,
@@ -261,7 +254,6 @@ export default {
             postData,
             filesupload,removeFile,
             onAdd,onEdit,
-            budgetFormat
         }
     }
 }

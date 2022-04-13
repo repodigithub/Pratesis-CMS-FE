@@ -68,13 +68,7 @@
                 <q-input v-model="alamat" type="text" disable id="Alamat" bg-color="grey4" filled dense class="q-mb-md" style="border:1px solid #B7C4D6;border-radius:4px;"/>
             </div>
             <label for="Budget">Budget</label>
-            <q-input
-                :model-value="budget"
-                @update:model-value="budgetFormat"
-                type="text"
-                id="Budget"
-                outlined
-                dense />
+            <input-budget v-model:budget="budget"/>
         </template>
 
     </add-data>
@@ -359,9 +353,6 @@ export default {
                 })
             })
         }
-        function budgetFormat(value){
-            budget.value = formatRibuan(value.replaceAll('.', ''))
-        }
         return{
             modalAdd,openAdd,openEdit,edit,
             kode_area,nama_area,nama_region,alamat,budget,idTable,
@@ -373,13 +364,13 @@ export default {
             kode_distributor,nama_distributor,distributor_group,
 
             urlTable,columns,initTable,
-            budgetFormat
         }
     },
     components:{
         'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
         'add-data' : defineAsyncComponent(()=> import('../../Modal/AddData')),
-        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown'))
+        'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown')),
+        'input-budget': defineAsyncComponent(()=> import('components/Promo/InputBudget'))
     },
 }
 </script>
