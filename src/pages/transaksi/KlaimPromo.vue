@@ -179,7 +179,7 @@
                 </div>
                 <div class="row q-my-md">
                     <div class="col-4">
-                        <q-btn color="secondary" outline class="btn-one q-mr-md txt-capitalize" unelevated>
+                        <q-btn color="secondary" outline class="btn-one q-mr-md txt-capitalize" unelevated @click="addNewModal = false">
                             Cancel
                         </q-btn>
                     </div>
@@ -482,7 +482,7 @@
             </q-dialog>
         </div>
     </div>
-    <upload-file v-model:upload="modalUpload" v-if="modalUpload" :menu="'claim'" @onUploadSuccess="callBackFuncFile"/>
+    <upload-file v-model:upload="modalUpload" v-if="modalUpload" :menu="'claim'" :typeFileUpload="'.pdf'" @onUploadSuccess="callBackFuncFile"/>
 </q-page>
 </template>
 <style>
