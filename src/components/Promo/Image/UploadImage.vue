@@ -19,7 +19,7 @@
                         <div style="margin-top:30px;">Drop your image or <span class="text-primary">Browse</span> </div>
                         <div class="text-grey" style="margin-top:14px;font-size:10px;">PNG or JPG less than 3 MB</div>
                     </label>
-                    <q-file borderless v-model="filesupload" label="Borderless" @rejected="onRejected" for="inputfile" style="display:none;" multiple />
+                    <q-file borderless v-model="filesupload" label="Borderless" @rejected="onRejected" for="inputfile" style="display:none;" multiple accept="image/*" max-file-size="3000048" />
                 </div>
             </q-card-section>
             <q-card-section v-if="filesupload.length > 0 && !uploading">

@@ -539,7 +539,7 @@
             </q-dialog>
         </div>
     </div>
-    <upload-file v-model:upload="modalUpload" v-if="modalUpload" :menu="'claim'" :typeFileUpload="'.pdf'" @onUploadSuccess="callBackFuncFile"/>
+    <upload-file v-model:upload="modalUpload" v-if="modalUpload" menu="claim" typeFileUpload=".pdf" @onUploadSuccess="callBackFuncFile"/>
 </q-page>
 </template>
 <style>

@@ -273,7 +273,7 @@ export default {
             }
             let sumPersen = result.reduce((prev,curr)=>prev+curr)
             if (sumPersen > 0) {
-                let hasil = 100-sumPersen
+                let hasil = 300-sumPersen
                 result.push(hasil)
             }else{
                 result.push(0)
@@ -298,7 +298,7 @@ export default {
             }else if(role.value === 'GA'){
                 result.push('Budget Distributor','Null')
             }
-            result.push('Outstanding Claim', 'Claim ', 'Sisa Budget','Null')
+            result.push('Claim', 'Outstanding Claim', 'Sisa Budget','Null')
             return result
         })
 
@@ -311,7 +311,7 @@ export default {
                             data: chartOutside.value
                         },
                         {
-                            backgroundColor: ['#A484FF', '#FFC977','#FF7070','white'],
+                            backgroundColor: ['#FFC977', '#A484FF','#FF7070','white'],
                             data:chartInner.value
                         },
                     ]

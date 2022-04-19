@@ -34,7 +34,7 @@
 <script>
 import { defineAsyncComponent,computed } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
-
+// import { useService } from 'src/composeables/useService'
 export default{
   
   setup(){
@@ -50,6 +50,11 @@ export default{
         return ''
       }
     })
+    // const { getData } = useService()
+    // getData('dashboard/mini-data')
+    // .then(res=>{
+    //   console.log('mini data',res);
+    // })
 
     return {
       role,sectionShow
