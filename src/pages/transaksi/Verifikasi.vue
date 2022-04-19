@@ -448,9 +448,9 @@ export default {
         }
         function openFile(val) {
             let link =""
-            if(typeFile.value == "pajak") link = fakturPajak.value
-            if(typeFile.value == "tpr_barang") link = tprBarang.value
-            if(typeFile.value == "tpr_uang") link = tprUang.value
+            if(val == "pajak") link = fakturPajak.value
+            if(val == "tpr_barang") link = tprBarang.value
+            if(val == "tpr_uang") link = tprUang.value
             window.open(link,'_blank');
         }
         function printInvoice() {
@@ -482,28 +482,6 @@ export default {
             typeFile.value = type
             openUpload()
         }
-        function  saveClaim(type) {
-            const payload = {
-                promo_distributor_id: opsoId.value,
-                amount: claimAmount.value,
-                status: type,
-                laporan_tpr_barang: tprBarang.value,
-                laporan_tpr_uang: tprUang.value,
-                faktur_pajak: fakturPajak.value,
-                description: description.value
-            }
-            postData(`/claim`,payload)
-            .then(res=>{
-                if(res.status == 200) {
-                    successNotif(`Berhasil menyimpan Claim`)
-                    addNewModal.value = false;
-                }
-            })
-            .catch(err=>{
-                errorNotif(err.response.data.message)
-                addNewModal.value = false;
-            })
-        }
         const isSubmit = computed(()=>{
             return !opsoId.value || claimAmount.value <= 0 || !fakturPajak.value || !tprBarang.value || !tprUang.value
         })
@@ -522,7 +500,6 @@ export default {
             reload,
 
             isSubmit,
-            saveClaim,
             description,
             opsoId,
             uploadFileType,
