@@ -418,7 +418,7 @@
                                         {{formatRibuan(details.total_amount)}}
                                     </div>
                                 </div>
-                                <div class="row wrapper-child q-my-sm" v-if="true">
+                                <div class="row wrapper-child q-my-sm" v-if="fakturPajak && tprBarang && tprUang">
                                     <div class="col-8 fs-12 m-auto">Invoice (Tanpa Materai)
                                     </div>
                                     <div class="col-4 fs-12 text-right">
