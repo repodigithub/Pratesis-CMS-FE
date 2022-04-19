@@ -149,7 +149,6 @@ const menu = [
                 title: 'Verifikasi',
                 access:{
                     GA: true,
-                    superadmin:true,
                 }
             },
             // {
@@ -246,24 +245,24 @@ const menu = [
                     HO:true,
                 }
             },
-            {
-                title:'Master',
-                access:{
-                    GA:true,
-                }
-            },
-            {
-                title:'Laporan Promo',
-                access:{
-                    GA:true,
-                }
-            },
-            {
-                title:'Alokasi',
-                access:{
-                    GA:true,
-                }
-            },
+            // {
+            //     title:'Master',
+            //     access:{
+            //         GA:true,
+            //     }
+            // },
+            // {
+            //     title:'Laporan Promo',
+            //     access:{
+            //         GA:true,
+            //     }
+            // },
+            // {
+            //     title:'Alokasi',
+            //     access:{
+            //         GA:true,
+            //     }
+            // },
             {
                 title:'Laporan Klaim',
                 access:{
@@ -271,18 +270,18 @@ const menu = [
                     DI:true
                 },
             },
-            {
-                title:'Tpr Distributor',
-                access:{
-                    GA:true,
-                }
-            },
-            {
-                title:'Verifikasi Claim',
-                access:{
-                    GA:true,
-                }
-            },
+            // {
+            //     title:'Tpr Distributor',
+            //     access:{
+            //         GA:true,
+            //     }
+            // },
+            // {
+            //     title:'Verifikasi Claim',
+            //     access:{
+            //         GA:true,
+            //     }
+            // },
         ],
         access:{
             AD:true,

@@ -169,7 +169,7 @@ const routes = [
             utility:true
           }
       },
-      { path: 'setupinvoice',name:'Setup Invoice', component: () => import('pages/laporan/SetupInvoice.vue'),
+      { path: 'setup-invoice',name:'Setup Invoice', component: () => import('pages/laporan/SetupInvoice.vue'),
         meta:{
           laporan:true
         } 

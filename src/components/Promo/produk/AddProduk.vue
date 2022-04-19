@@ -30,7 +30,10 @@
                     <q-space />
                     <div style="width:268px;">
                         <label for="Budget">Budget Brand</label>
-                        <q-input
+                        <input-budget
+                                v-model:budget="budgetbrand"
+                        />
+                        <!-- <q-input
                           :model-value="budgetbrand"
                           @update:model-value="budgetFormat"
                           type="text"
@@ -40,7 +43,7 @@
                             <template v-slot:prepend>
                                 <div class="font-normal">Rp</div>
                             </template>
-                        </q-input>
+                        </q-input> -->
                     </div>
                 </div>
                 <q-separator spaced style="margin-top:30px;" />
@@ -121,7 +124,7 @@ export default {
     components:{
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
         'select-dropdown':defineAsyncComponent(()=> import('components/SelectDropdown')),
-        'input-budget': defineAsyncComponent(() => import('./InputBudget'))
+        'input-budget': defineAsyncComponent(() => import('components/Promo/InputBudget'))
     },
     setup () {
         const { formatRibuan } = usePratesis()
@@ -291,10 +294,6 @@ export default {
             }
         }
 
-        function budgetFormat(value){
-            budgetbrand.value = formatRibuan(value.replaceAll('.', ''))
-        }
-
         onMounted(()=>{
             if (route.query.edit) {
                 getData(`promo/${route.params.id}/product/${route.query.produk}`)
@@ -303,7 +302,6 @@ export default {
                     budgetbrand.value = formatRibuan(result.budget_brand)
                     otomatis.value =  result.method == 'otomatis' ? '1' : '0'
                     let produk = result.products
-                    
                     altproducts.value = produk
                     kode_brand.value = result.kode_brand
                 })
@@ -314,7 +312,6 @@ export default {
                 loaditem.value = false
             }
         })
-        
         return {
             budgetbrand,
             kode_brand,brand,products,
@@ -336,7 +333,8 @@ export default {
                 width: '9px',
                 opacity: 0.2
             },
-            formatRibuan,budgetFormat,loaditem
+            formatRibuan,
+            loaditem
         }
     } 
 }

@@ -1,28 +1,24 @@
 <template>
-    <breadcrumb  :upload="false" :leftside="false" @openModal="openUpload">
-        <template v-slot:breadcrumb-content>
-            <q-breadcrumbs-el label="Laporan > Setup Invoice" style="color:#00000073;"/>
-        </template>
-    </breadcrumb>
+    <breadcrumb  :rightside="false" />
     <div class="row q-pa-lg">
         <div class="col-5">
             <q-card flat>
                 <q-card-section class="q-py-sm">
                     <div class="row justify-between items-center">
-                        <p class="t-grey fs-18">Note Invoice</p>
+                        <p class="t-grey fs-20">Note Invoice</p>
                     </div>
-                    <div class="row q-my-sm" v-for="i in 3" :key="i">
+                    <div class="row q-my-sm" v-for="(note,index) in notes" :key="index">
                         <div class="col-12">
-                            <p class="fs-12 t-grey q-mb-sm">Message {{i}} :</p>
-                            <textarea name="" id="" cols="30" rows="3" placeholder="Note Invoice" class="input-textarea fs-12 q-pa-sm"></textarea>
+                            <p class="fs-12 t-grey q-mb-sm">Message {{index+1}} :</p>
+                            <q-input v-model="note.msg" type="textarea" autogrow outlined placeholder="Note Invoice" :disable="role == 'GA' ? true : false" />
                         </div>
                     </div>
                     <div class="row q-mt-xl q-mb-md">
                         <div class="col-6">
-                            <q-btn color="grey" outline label="Cancel" no-caps class="btn-one" unelevated/>
+                            <q-btn :color="role == 'GA' ? 'grey' : 'secondary' " :disable="role == 'GA' ? true : false" outline label="Cancel" no-caps class="btn-one" unelevated/>
                         </div>
                         <div class="col-6 text-right">
-                            <q-btn color="grey" label="Submit" no-caps class="btn-one" unelevated/>
+                            <q-btn :color="role == 'GA' ? 'grey' : 'secondary' " :disable="role == 'GA' ? true : false" label="Submit" no-caps class="btn-one" unelevated @click="onSetupNote"/>
                         </div>
                     </div>
                 </q-card-section>
@@ -33,16 +29,24 @@
             <q-card flat class="col-11">
                 <q-card-section class="q-py-sm">
                     <div class="row justify-between items-center">
-                        <p class="fs-18">Setup Tanda Tangan</p>
+                        <p class="fs-20">Setup Tanda Tangan</p>
                     </div>
+                    <q-form
+                        @submit="onSetupSign"
+                        class="row"
+                    >
+                        
+                        
                     <div class="row">
                         <div class="col-12 text-center">
-                            <p class="q-mb-none fs-18">Upload Your File</p>
+                            <p class="q-mb-none fs-20">Upload Your File</p>
                         </div>
                         <div class="col-6 text-center">
-                            <div class="wrapper-img">
-                                <div class="row items-center justify-center body-img">
-                                    <div class="row items-center justify-center content-img">
+                            <label for="imgdibuat" v-if="!prevdibuat">
+                                <div class="row items-center justify-center box-uploadimage " style=" margin-top:20px;margin-left:20px;"
+                                :class="role == 'GA' ? 'can-upload' : ''"
+                                >
+                                    <div class="row items-center justify-center border">
                                         <q-img
                                             src="~assets/icon/image-polaroid.svg"
                                             spinner-color="primary"
@@ -52,132 +56,143 @@
                                         />
                                     </div>
                                 </div>
-                            </div>
-                            <p class="q-mb-none fs-14">Dibuat oleh</p>
-                            <q-btn color="grey" outline label="Joko Darwono" no-caps class="btn-one" unelevated/>
+                                </label>
+                                <label for="imgdibuat" v-else :class="role == 'GA' ? 'cursor-pointer' :''">
+                                <img :src="prevdibuat"  style="width:180px;height:180px; margin-top:20px;margin-left:20px;">
+                                </label>
+                            <q-file borderless :model-value="imgdibuat" @update:model-value="updateDibuat" label="Borderless" @rejected="onRejected" for="imgdibuat" style="display:none;" accept="image/*" v-if="role == 'GA'"/>
+                            <p class="q-mb-none fs-14 q-mt-md">Dibuat oleh</p>
+                            <q-input v-model="created_by" type="text" outlined placeholder="ex : Joko" style="width:180px;" class="q-mx-auto" :disable="role == 'GA' ? false : true" lazy-rules  :rules="[val => !!val || 'Dibuat oleh tidak boleh kosong']"/>
+                           
                         </div>
                         <div class="col-6 text-center">
-                            <div class="wrapper-img">
-                                <div class="row items-center justify-center body-img">
-                                    <div class="row items-center justify-center content-img">
-                                        <q-img
-                                            src="~assets/icon/image-polaroid.svg"
-                                            spinner-color="primary"
-                                            spinner-size="5px"
-                                            width="24px"
-                                            height="24px"
-                                        />
-                                    </div>
+                            <label for="inputfile" v-if="!prevsetuju">
+                            <div class="row items-center justify-center box-uploadimage " style=" margin-top:20px;margin-left:20px;"
+                            :class="role == 'GA' ? 'can-upload' : ''"
+                            >
+                                <div class="row items-center justify-center border">
+                                    <q-img
+                                        src="~assets/icon/image-polaroid.svg"
+                                        spinner-color="primary"
+                                        spinner-size="5px"
+                                        width="24px"
+                                        height="24px"
+                                    />
                                 </div>
                             </div>
-                            <p class="q-mb-none fs-14">Disetujui oleh</p>
-                            <q-btn color="grey" outline label="Joko Darwono" no-caps class="btn-one" unelevated/>
+                            </label>
+                            <label for="inputfile" v-else :class="role == 'GA' ? 'cursor-pointer' :''">
+                            <img :src="prevsetuju"  style="width:180px;height:180px; margin-top:20px;margin-left:20px;">
+                            </label>
+                            <q-file borderless :model-value="imgsetuju" @update:model-value="updateSetuju" label="Borderless" @rejected="onRejected" for="inputfile" style="display:none;" accept="image/*" v-if="role == 'GA'"/>
+                           
+                            <p class="q-mb-none q-mt-md fs-14">Disetujui oleh</p>
+                            <q-input v-model="approved_by" type="text" outlined placeholder="ex : Joko" style="width:180px;" class="q-mx-auto" :disable="role == 'GA' ? false : true" lazy-rules  :rules="[val => !!val || 'Disetujui oleh tidak boleh kosong']"/>
                         </div>
                         <div class="col-12 text-center q-my-lg">
-                            <q-btn color="secondary" label="Submit" no-caps class="btn-one" unelevated/>
+                            <q-btn :color="role == 'GA' ? 'secondary' : 'grey' " :disable="role == 'GA' ? false : true" label="Submit" no-caps class="btn-one" unelevated type="submit"/>
                         </div>
                     </div>
+                    </q-form>
                 </q-card-section>
             </q-card>
         </div>
     </div>
 </template>
-<style>
-.q-dialog__inner--minimized > div {
-    max-width: 1000px;
-}
-.wrapper-primary {
-    border: 1px solid #2684FF;
-    border-radius: 8px;
-    padding: 10px;
-    background: #F3F8FF;
-}
-.wrapper-child {
-    background: #F3F8FF;
-    border-radius: 8px;
-    padding: 5px 10px;
-}
-.input-textarea {
-    display: block;
-    border: 1px solid #B7C4D6;
-    width: 100%;
-    border-radius: 4px;
-}
-.wrapper-img {
-    margin: 20px 0px 15px 0px;
-    max-width:1500px;
-    max-height:180px;
-    overflow-x:auto;
-}
-.body-img {
-    width:180px;
-    height:180px;
-    background: #F7FAFE;
-    border: 1px solid #D4DEEC;
-    margin: auto;
-}
-.content-img {
-    width:80px;
-    height:80px;
-    border: 1px dashed #B7C4D6;
-    border-radius: 5px;
-}
-</style>
+
 <script>
-import { defineAsyncComponent,ref,watch } from 'vue'
+import { defineAsyncComponent,ref,computed } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 import { useCustom } from 'src/composeables/useCustom'
-import {  useRouter } from 'vue-router'
 import { useService } from 'src/composeables/useService'
 
 export default {
-    data() {
-        return {
-            dialogDetail: false,
-            isInvoice: false,
-            filter: {
-                area_id: ""
-            }
-        }
-    },
     setup(){
-        const { formatRibuan, modalUpload, reloadTable, openUpload } = usePratesis()
-        const klaim = [
-            { name: 'kode', label: 'Coding ULI', align: 'left', field: 'kode_brand' },
-            { name: 'nama_brand',  align: 'left',label: 'Ket', field: 'nama_brand'},
-            { name: 'produk_aktif',  align: 'left',label: 'Tanggal Kirim', field: 'produk_aktif'},
-            { name: 'kode', label: 'Tanggal Terima', align: 'left', field: 'kode_brand' },
-            { name: 'budget',  align: 'left',label: 'Rp Klaim', field: row => `${formatRibuan(row.budget_brand)}`},
-            { name: 'kode',  align: 'left',label: 'PPN', field: 'kode'},
-            { name: 'budget',  align: 'left',label: 'PPH', field: row => `${formatRibuan(row.budget_brand)}`},
-            { name: 'budget',  align: 'left',label: 'Rp Dibayar', field: row => `${formatRibuan(row.budget_brand)}`},
-            { name: 'actions',align:'left',label:'Status',field:'kode_brand'}
-        ]
-        const isInvoice = ref(false)
-        return {
-            openUpload,
-            modalUpload,
-            reloadTable,
-            formatRibuan,
-            klaim
+        const { role } = usePratesis()
+        const { putData,getData,postData } = useService()
+        const { showLoading,hideLoading,successNotif,errorNotif } = useCustom()
+        const notes = ref([ {msg: ''},{msg: ''},{ msg: ''}])
+
+        function onSetupNote(){
+            let sendtoApi = {}
+            showLoading()
+            notes.value.forEach((val,index)=>{
+                sendtoApi[`message_${index+1}`] = val.msg
+            })
+            putData('setting/note',sendtoApi)
+            .then(()=>{
+                hideLoading()
+                successNotif('Note Invoice Berhasil Disimpan')
+            })
         }
-    },
-    methods: {
-        openSidebarModal() {
-            this.dialogDetail = true;
+        getData('setting/note')
+        .then(res=>{
+            let result = Object.values(res.data.data)
+            notes.value.forEach((val,index)=>{
+                val.msg = result[index]
+            })
+        })
+
+        const imgsetuju = ref(null)
+        const prevsetuju = ref(null)
+        function updateSetuju(value){
+            imgsetuju.value = value
+            prevsetuju.value = URL.createObjectURL(value)
+        }
+
+        const imgdibuat = ref(null)
+        const prevdibuat = ref(null)
+        function updateDibuat(value){
+            imgdibuat.value = value
+            prevdibuat.value = URL.createObjectURL(value)
+        }
+
+        function onRejected(reject){
+            if(reject[0].failedPropValidation === 'accept') {
+                errorNotif('File harus berupa file berekstensi .png, .jpg')
+            }
+            // else if (reject[0].failedPropValidation === 'max-file-size'){
+            //     errorNotif('File maksimal berukuran 3MB')
+            // }
+        }
+        const created_by = ref('')
+        const approved_by = ref('')
+        function onSetupSign(){
+            let sendtoApi = new FormData()
+            sendtoApi.append('_method','PUT')
+            if (imgsetuju.value) {
+                sendtoApi.append('approved_by_sign',imgsetuju.value)
+            }
+            if (imgdibuat.value) {
+                sendtoApi.append('created_by_sign',imgdibuat.value)
+            }
+            sendtoApi.append('created_by_name',created_by.value)
+            sendtoApi.append('approved_by_name',approved_by.value)
+            showLoading()
+            postData('setting/sign',sendtoApi)
+            .then(()=>{
+                hideLoading()
+                successNotif('Setup Tanda Tangan Berhasil Disimpan')
+            })
+        }
+       
+        getData('setting/sign')
+        .then(res=>{
+            let result = res.data.data
+            prevsetuju.value = result.approved_by.sign
+            prevdibuat.value = result.created_by.sign
+            approved_by.value = result.approved_by.name
+            created_by.value = result.created_by.name
+        })
+        return {
+            notes,role,onSetupNote,
+            imgdibuat,updateDibuat,prevdibuat,created_by,
+            imgsetuju,updateSetuju,prevsetuju,approved_by,
+            onRejected,onSetupSign,
         }
     },
     components:{
-        // 'select-dropdown' : defineAsyncComponent(()=> import('components/SelectDropdown')),
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
-        // 'upload-file': defineAsyncComponent(() => import('components/Modal/UploadFile')),
-        // 'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
-    },
-    computed:{
-        userRole(){
-            let role = this.$store.state.auth.user.kode_group.substr(0,2)
-            return ['SA','DI'].indexOf(role) >= 0 ? '' : role
-        },
     },
 }
 </script>
