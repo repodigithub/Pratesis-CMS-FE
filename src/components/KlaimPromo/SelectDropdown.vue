@@ -43,7 +43,7 @@ export default {
             type: String,
         },
         selected: {
-            type: String,
+            type: [String,Number],
         },
         islogin: {
             type: Boolean,
@@ -72,8 +72,9 @@ export default {
         const isValid = ref(false)
         getData(props.url,props.islogin)
         .then(res=>{
-            dataOptions.value = res.data.data.data
-            res.data.data.data.forEach((item)=>{
+            let result = res.data.data.data.filter(item => item.status_promo.includes('claim') && !item.is_claimed )
+            dataOptions.value = result
+            result.forEach((item)=>{
                 response = Object.values(item)
                 optalt.push({
                     label:response[6],
@@ -103,7 +104,8 @@ export default {
                 getData(props.url+searchUrl.value,props.islogin)
                 .then(res=>{
                     update(()=>{
-                        res.data.data.data.forEach((item)=>{
+                        let result = res.data.data.data.filter(item => item.status_promo.includes('claim') && !item.is_claimed )
+                        result.forEach((item)=>{
                             response = Object.values(item)
                             options.value.push({
                                 label:response[6],
@@ -131,7 +133,8 @@ export default {
                 getData(localurl,props.islogin)
                 .then(res=>{
                     nextTick( () => {
-                        res.data.data.data.forEach((item)=>{
+                        let result = res.data.data.data.filter(item => item.status_promo.includes('claim') && !item.is_claimed )
+                        result.data.data.data.forEach((item)=>{
                             response = Object.values(item)
                             options.value.push({
                                 label:response[6],

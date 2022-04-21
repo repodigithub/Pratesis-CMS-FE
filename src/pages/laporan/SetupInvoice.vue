@@ -63,7 +63,6 @@
                             <q-file borderless :model-value="imgdibuat" @update:model-value="updateDibuat" label="Borderless" @rejected="onRejected" for="imgdibuat" style="display:none;" accept="image/*" v-if="role == 'GA'"/>
                             <p class="q-mb-none fs-14 q-mt-md">Dibuat oleh</p>
                             <q-input v-model="created_by" type="text" outlined placeholder="ex : Joko" style="width:180px;" class="q-mx-auto" :disable="role == 'GA' ? false : true" lazy-rules  :rules="[val => !!val || 'Dibuat oleh tidak boleh kosong']"/>
-                           
                         </div>
                         <div class="col-6 text-center">
                             <label for="inputfile" v-if="!prevsetuju">
@@ -85,7 +84,6 @@
                             <img :src="prevsetuju"  style="width:180px;height:180px; margin-top:20px;margin-left:20px;">
                             </label>
                             <q-file borderless :model-value="imgsetuju" @update:model-value="updateSetuju" label="Borderless" @rejected="onRejected" for="inputfile" style="display:none;" accept="image/*" v-if="role == 'GA'"/>
-                           
                             <p class="q-mb-none q-mt-md fs-14">Disetujui oleh</p>
                             <q-input v-model="approved_by" type="text" outlined placeholder="ex : Joko" style="width:180px;" class="q-mx-auto" :disable="role == 'GA' ? false : true" lazy-rules  :rules="[val => !!val || 'Disetujui oleh tidak boleh kosong']"/>
                         </div>
