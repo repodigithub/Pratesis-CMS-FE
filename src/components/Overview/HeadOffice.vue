@@ -26,7 +26,6 @@
                 <template v-slot:body-cell-nama="props">
                     <q-td key="nama" :props="props">
                       <div class="row">
-                        <img src="~assets/icon/icon-overview-budget.svg" style="margin-right:10px;" v-if="section.icon">
                         <div class="col">
                           <div class="fs-14">
                             {{props.row.kode_area}}
@@ -126,12 +125,10 @@ export default {
       {
         label:'Divisi',
         columns:[{ name: 'nama', align: 'left', label: 'Nama Divisi', field: 'nama_area'}, ...baseColumns ],
-        icon:true
       },
       {
         label:'Brand',
         columns: [{ name: 'nama', align: 'left', label: 'Nama brand', field: 'nama_area'},...baseColumns],
-        icon:false
       }
     ]
     const sectionSecond = [

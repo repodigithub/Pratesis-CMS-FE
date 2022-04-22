@@ -14,7 +14,6 @@ export const usePratesis = () => {
         loading:false,
         url:null,
         option:null,
-        detailLinked: null
     })
 
     const pagination = ref({})
@@ -42,8 +41,7 @@ export const usePratesis = () => {
 
     const { getData } = useService()
 
-    const init =  (url,option,islogin = true, detailLinked) => {
-        state.detailLinked = detailLinked
+    const init =  (url,option,islogin = true) => {
         state.loading = true
         state.url = url
         userLogin.value = islogin
@@ -181,14 +179,7 @@ export const usePratesis = () => {
     const dataDetail = ref({})
     
     const openDetail = (evt,row) => {
-        if(state.detailLinked) {
-            router.push({name: 'Detail Produk',params: {
-                id: route.params.id,
-                produk: row.id
-            }})
-        } else {
-            modalDetail.value = true
-        }
+        modalDetail.value = true
         dataDetail.value = row
     }
 

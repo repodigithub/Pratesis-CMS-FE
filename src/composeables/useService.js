@@ -11,51 +11,19 @@ export const useService = () => {
         return islogin ? header(token,islogin) : header(url,islogin)
     }
 
-    const getData = async (url,islogin = true) => {
-        return new Promise((resolve,reject)=>{
-            api.get(url,localheader(url.split("?")[0],islogin))
-            .then(res=>{
-                resolve(res)
-            })
-            .catch(err=>{
-                reject(err)
-            })
-        })
+    const getData = (url,islogin = true) => {
+        return api.get(url,localheader(url.split("?")[0],islogin))
     }
 
-    const postData = async (url,data,islogin = true) =>{
-        return new Promise((resolve,reject)=>{
-            api.post(url,data,localheader(url.split("?")[0],islogin))
-            .then(res=>{
-                resolve(res)
-            })
-            .catch(err=>{
-                reject(err)
-            })
-        })
+    const postData = (url,data,islogin = true) =>{
+        return api.post(url,data,localheader(url.split("?")[0],islogin))
     }
 
-    const putData = async (url,data,islogin = true) =>{
-        return new Promise((resolve,reject)=>{
-            api.put(url,data,localheader(url.split("?")[0],islogin))
-            .then(res=>{
-                resolve(res)
-            })
-            .catch(err=>{
-                reject(err)
-            })
-        })
+    const putData = (url,data,islogin = true) =>{
+        return api.put(url,data,localheader(url.split("?")[0],islogin))
     }
-    const deleteData = async (url,islogin = true) =>{
-        return new Promise((resolve,reject)=>{
-            api.delete(url,localheader(url.split("?")[0],islogin))
-            .then(res=>{
-                resolve(res)
-            })
-            .catch(err=>{
-                reject(err)
-            })
-        })
+    const deleteData = (url,islogin = true) =>{
+        return api.delete(url,localheader(url.split("?")[0],islogin))
     }
 
     return {

@@ -15,7 +15,7 @@
                 @request="onRequest"
                 hide-pagination
                 binary-state-sort
-                @row-click="openDetail"
+                @row-click="onDetail"
                 :selection="canSelect ? 'multiple' : 'none'"
                 :selected-rows-label="getSelectedString"
                 v-model:selected="selected"
@@ -45,7 +45,7 @@
             </div>
         </q-card-section>
     </q-card>
-    <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail && canOpenDetail && !detailLinked" :dataDetail="dataDetail" @reloadTable="onRequest" :canEdit="canEdit" :options="optionsDetail" >
+    <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail && canOpenDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :canEdit="canEdit" :options="optionsDetail" >
         <template v-for="(_, slot) in $slots" v-slot:[slot]="props">
             <slot :name="slot" v-bind="props" />
         </template>
@@ -95,10 +95,6 @@ export default {
         resultSelect:{
             type:Array
         },
-        detailLinked: {
-            type: Boolean,
-            default: false
-        },
         classStyle: {
             type: String,
             default: "own-card"
@@ -107,11 +103,15 @@ export default {
             type:Boolean,
             default: true
         },
+        customDetail:{
+            type:Boolean,
+            default:false
+        }
     },
     setup(props, { emit }){
         const { pagination,rows,loading,init,onRequest,pagesNumber,modalDetail,openDetail,dataDetail } = usePratesis()
 
-        init(props.url,props.option,props.islogin,props.detailLinked)
+        init(props.url,props.option,props.islogin)
 
         function gotoPage(page){
             let request = {}
@@ -141,6 +141,14 @@ export default {
         watch(()=>props.resultSelect,val=>{
             selected.value = val
         })
+
+        function onDetail(evt,row){
+            if (props.customDetail) {
+                emit('openCustomDetail',row)
+            }else{
+                openDetail(evt,row)
+            }
+        }
         
         return {
             rows,
@@ -154,6 +162,7 @@ export default {
             openDetail,
             dataDetail,
             selected,getSelectedString,
+            onDetail
         }
     },
     components:{
