@@ -28,10 +28,10 @@ export const usePratesis = () => {
     })
 
     const success = res => {
-        pagination.value.page = res.data.data.current_page
-        pagination.value.rowsPerPage = res.data.data.per_page
-        pagination.value.rowsNumber = res.data.data.total
-        rows.value = res.data.data.data
+        pagination.value.page = res.data.data.data ? res.data.data.current_page : 1
+        pagination.value.rowsPerPage = res.data.data.data ? res.data.data.per_page : 5
+        pagination.value.rowsNumber =  res.data.data.data ? res.data.data.total : 0
+        rows.value = res.data.data.data || res.data.data
         state.loading = false
     }
     const error = err => {
