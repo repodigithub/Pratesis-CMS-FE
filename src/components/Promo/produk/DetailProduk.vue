@@ -32,16 +32,16 @@
                 </div>
 
                 <q-table
-                class="my-sticky-virtscroll-table q-mt-md btn-radius q-mb-xl"
-                virtual-scroll
-                v-model:pagination="pagination"
-                :rows-per-page-options="[0]"
-                :virtual-scroll-sticky-size-start="48"
-                :rows="rowProduk"
-                :columns="produk"
-                flat
-                bordered
-                hide-pagination
+                    class="my-sticky-virtscroll-table q-mt-md btn-radius q-mb-xl"
+                    virtual-scroll
+                    v-model:pagination="pagination"
+                    :rows-per-page-options="[0]"
+                    :virtual-scroll-sticky-size-start="48"
+                    :rows="rowProduk"
+                    :columns="produk"
+                    flat
+                    bordered
+                    hide-pagination
                 />
             </q-card-section>
             

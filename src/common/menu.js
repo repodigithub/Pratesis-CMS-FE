@@ -210,6 +210,13 @@ const menu = [
                     HO:true
                 }
             },
+            {
+                title:'User Group',
+                access:{
+                    AD:true,
+                    HO:true
+                }
+            },
             // {
             //     title:'Group User',
             //     access:{

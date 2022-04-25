@@ -15,7 +15,6 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-
 export default {
     components:{
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),

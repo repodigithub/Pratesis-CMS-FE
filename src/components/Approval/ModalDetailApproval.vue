@@ -64,15 +64,15 @@
                             </q-btn>
                         </div>
                         <q-table
-                        class="my-sticky-header-table q-mt-md btn-radius col-12"
-                        :rows="products"
-                        :columns="produk"
-                        row-key="id"
-                        flat
-                        bordered
-                        :pagination="{rowsPerPage:0}"
-                        hide-pagination
-                        binary-state-sort
+                            class="my-sticky-header-table q-mt-md btn-radius col-12"
+                            :rows="products"
+                            :columns="produk"
+                            row-key="id"
+                            flat
+                            bordered
+                            :pagination="{rowsPerPage:0}"
+                            hide-pagination
+                            binary-state-sort
                         />
                     </q-card-section>
                 </q-scroll-area>

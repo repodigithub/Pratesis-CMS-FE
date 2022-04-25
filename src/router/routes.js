@@ -159,6 +159,11 @@ const routes = [
             utility:true
           }
       },
+      { path: 'user-group',name:'User Group', component: () => import('pages/utility/UserGroup.vue'),
+        meta:{
+            utility:true
+          }
+      },
       { path: 'master-data',name:'masterdata', component: () => import('pages/utility/MasterData.vue'),
         redirect:{name : 'Master Data'},
         children:[
