@@ -82,7 +82,7 @@
                                     </template>
                                 </q-input>
                             </div>
-                            <div class="col-12">
+                            <!-- <div class="col-12">
                                 <label for="password" class="font-normal">Password</label>
                                 <q-input v-model="dataSend.password" dense outlined id="password" class="q-mb-md" type="password"
                                 lazy-rules
@@ -98,9 +98,9 @@
                                     />
                                     </template>
                                 </q-input>
-                            </div>
+                            </div> -->
                             <select-dropdown url="user-group" v-model:selected="dataSend.kode_group" :islogin="false" :master="false" class="q-mb-md col-12" nameLabel="User Level"/>
-                            <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI') || dataSend.kode_group.includes('SA')">
+                            <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI') || dataSend.kode_group.includes('GA')">
                             <div class="col-6">
                                 <select-dropdown url="area" v-model:selected="dataSend.kode_area" :islogin="false" :master="false" class="q-mb-md" nameLabel="Kode Depo"/>
                             </div>
@@ -228,7 +228,7 @@ export default {
         })
 
         watch(()=>dataSend.value.kode_group,val=>{
-            if(val.includes('SA')){
+            if(val.includes('GA')){
                 dataSend.value.kode_distributor = null
             }else if (!val.includes('DI')){
                 dataSend.value.kode_distributor = null

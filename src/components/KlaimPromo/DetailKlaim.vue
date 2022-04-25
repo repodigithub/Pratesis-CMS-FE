@@ -1,6 +1,6 @@
 <template>
 <q-dialog :modelValue="modalDetail" @hide="$emit('update:modalDetail',false)" position="right" full-height class="dialog-detail">
-    <q-card :style="{height:'100%',width: isInvoice ? '800px' : '400px'}">
+    <q-card :style="{height:'100%',width: isInvoice ? '1000px' : '500px'}">
         <q-card-section class="row justify-center q-mt-xl" v-if="!load" style="height:100%;">
                 <q-spinner-grid class="col-4 text-primary"/>
                 <span class="col-12 text-primary font-medium text-center">Memuat Data</span>
@@ -297,6 +297,9 @@ export default {
     display: grid;
     grid-template-rows:auto; 
     height: calc(100vh - 70px);
+}
+.q-dialog__inner--minimized > div {
+    max-width: 1000px;
 }
 
 </style>
