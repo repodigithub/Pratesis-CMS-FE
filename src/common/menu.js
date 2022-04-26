@@ -45,7 +45,7 @@ const menu = [
             //     },
             // },
             {
-                title:'Sales Hierarchy',
+                title:'Customer Hierarchy',
                 submenu:[
                     {title : 'Region'},
                     {title : 'Area'},
@@ -100,14 +100,14 @@ const menu = [
                 }
             },
             {
-                title:'Type Promo',
+                title:'Promo Type',
                 access:{
                     AD:true,
                     HO:true
                 }
             },
             {
-                title:'Investment',
+                title:'Investment Type',
                 access:{
                     AD:true,
                     HO:true

@@ -31,6 +31,18 @@
                 <q-input v-model="send.username" type="text" id="username"  outlined dense placeholder="Username"/>
             </q-card-section>
             <q-card-section class=" q-pb-none">
+                <label for="password" class="font-normal">Password</label>
+                <q-input v-model="send.password" :type="visibility ? 'password' : 'text'" id="password"  outlined dense placeholder="Password">
+                        <template v-slot:append>
+                        <q-icon
+                            :name="visibility ? 'visibility' : 'visibility_off'"
+                            @click="visibility = !visibility"
+                            class="cursor-pointer"
+                        />
+                        </template>
+                    </q-input>
+            </q-card-section>
+            <q-card-section class=" q-pb-none">
                 <div class="row">
                     <select-dropdown url="user-group" v-model:selected="send.kode_group" :islogin="false" :master="false" class="q-mb-md col-12" nameLabel="User Level"/>
                     <div class="row col-12 justify-between" v-show="send.kode_group.includes('DI') || send.kode_group.includes('GA')">
@@ -94,6 +106,7 @@ export default {
         const send = ref({})
         const kodedepo = ref('')
         const nama_area = ref('')
+        const visibility = ref(true)
 
         const kodedistributor = ref('')
         const nama_distributor = ref('')
@@ -107,6 +120,7 @@ export default {
                 full_name:'',
                 username:'',
                 email:'',
+                password:'',
                 kode_distributor:null,
                 kode_area:null,
                 kode_group:''
@@ -146,7 +160,8 @@ export default {
             nama_distributor,
             form,
             onSave,
-            successNotif
+            successNotif,
+            visibility
         }
     },
 }
