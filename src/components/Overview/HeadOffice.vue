@@ -77,22 +77,17 @@
                               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             ></l-tile-layer>
                             <l-control-layers />
-                            <l-marker :lat-lng="[-6.92787372772287, 107.60671180897711]" draggable>
+
+                            <template v-if="areaMap.length">
+
+                            <l-marker :lat-lng="map.titik_koordinat" v-for="map in areaMap" :key="map.id">
                               <l-tooltip>
-                                ITC Kebon Kelapa
+                                {{map.nama_area}}
                               </l-tooltip>
                             </l-marker>
 
-                            <l-marker :lat-lng="[-1.6218355080706264, 103.587257824901]" draggable >
-                              <l-tooltip>
-                                Jamtos Jambi
-                              </l-tooltip>
-                            </l-marker>
-                            <l-marker :lat-lng="[-7.75900731493278, 110.39957941050827]" draggable >
-                              <l-tooltip>
-                                hartono mall
-                              </l-tooltip>
-                            </l-marker>
+                            </template>
+
                         </l-map>
                 </div>
               </div>
@@ -118,7 +113,7 @@ export default {
   setup(){
     const { formatRibuan } = usePratesis()
     const { getData  } = useService()
-    const areaMap = ref([])
+    
     const baseColumns = [{ name: 'budget', align: 'right', label: 'Budget', field: 'budget'}]
     const sectionFirst = [
       {
@@ -144,11 +139,15 @@ export default {
         columns:[{ name: 'nama_area', align: 'left', label: 'Nama area', field: 'nama_area'},...baseColumns]
       }
     ]
+    const areaMap = ref([])
     onMounted(()=>{
         getData(`dashboard/area`).then(res=> {
-          if(res.status == 200) {
-            areaMap.value = res.data.data.filter(e => e.titik_koordinat -= null)
-          }
+          res.data.data.filter(data=>data.titik_koordinat).forEach((item)=>{
+            areaMap.value.push({
+              nama_area: Object.values(item)[2],
+              titik_koordinat:Object.values(item)[4].split(',')
+            })
+          }) 
         })
     })
     return {

@@ -51,7 +51,7 @@ export default {
             }else{
                 return ''
             }
-    }
+        }
         const active = ref(true)
         const columns = [
             { name: 'kode_distributor', label: 'Kode Distributor', align: 'left', field: 'kode_distributor' },
