@@ -5,10 +5,11 @@
                 <div class="col-6">
                         <div class="font-medium">Klaim</div>
                 </div>
-                <div class="col-6 text-right" v-if="role == 'DI'">
-                    <q-btn color="primary"  class="btn-one q-mr-md txt-capitalize"  unelevated @click="modalAdd = true">
+                <div class="col-6 text-right">
+                    <q-btn color="primary"  class="btn-one q-mr-md txt-capitalize"  unelevated @click="modalAdd = true" v-if="role == 'DI'">
                         <img  src="~assets/icon/plus.svg" alt="" class="q-mr-sm"> New
                     </q-btn>
+                    <q-btn color="primary"  class="btn-one q-mr-md" no-caps label="Refresh"  unelevated @click="onRefresh" />
                 </div>
             </div>
         </template>
@@ -93,9 +94,17 @@ export default {
             dataDetail.value = value
             modalDetail.value = true
         }
+        function onRefresh(){
+            request.value = {
+                pagination:{
+                    page:1
+                }
+            }
+        }
         return {
             columns,url,role,active,colorStatusPromo,statusPromo,modalAdd,request,onReload,
-            openDetail,modalDetail,dataDetail,option,modalAddKlaim
+            openDetail,modalDetail,dataDetail,option,modalAddKlaim,
+            onRefresh
         }
     }
 }
