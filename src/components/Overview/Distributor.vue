@@ -51,16 +51,20 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
+import { usePratesis } from 'src/composeables/usePratesis'
+import { useCustom } from 'src/composeables/useCustom'
 
 export default {
     setup(){
+        const { formatRibuan } = usePratesis()
+        const { formatTglPromo } = useCustom()
         const baseColumn = [
-            { name: 'coding_uli', align: 'left',label: 'Coding ULI ', field: 'alamat_depo'},
-            { name: 'tanggal', align: 'left',label: 'Tanggal', field: 'alamat_depo'},
-            { name: 'jenis_kegiatan', align: 'left',label: 'Jenis Kegiatan', field: 'alamat_depo'},
-            { name: 'rp_klaim', align: 'left',label: 'Rp Klaim', field: 'alamat_depo'},
-            { name: 'rp_dibayar', align: 'left',label: 'Rp Dibayar', field: 'alamat_depo'},
-            { name: 'status',  align: 'left',label: 'Status', field: 'kode_area'},
+            { name: 'kode_uli', align: 'left',label: 'Coding ULI ', field: 'kode_uli'},
+            { name: 'created_at', align: 'left',label: 'Tanggal', field: row => `${formatTglPromo(row.created_at)}`},
+            { name: 'jenis_kegiatan', align: 'left',label: 'Jenis Kegiatan', field: 'jenis_kegiatan'},
+            { name: 'claim', align: 'left',label: 'Rp Klaim', field: row => `${formatRibuan(row.claim)}`},
+            { name: 'amount', align: 'left',label: 'Rp Dibayar', field: row => `${formatRibuan(row.amount)}`},
+            { name: 'status_claim',  align: 'left',label: 'Status', field: 'status_claim'},
         ]
         const columnFirst = [
             ...baseColumn,
@@ -68,11 +72,13 @@ export default {
         ]
         const columnSecond = [
             ...baseColumn,
-            { name: 'pending',  align: 'left',label: 'Pending Paid Reason', field: 'kode_area'},
-            { name: 'aging',  align: 'left',label: 'Aging', field: 'kode_area'},
+            { name: 'alasan',  align: 'left',label: 'Pending Paid Reason', field: 'alasan'},
         ]
         return{
-            columnFirst,columnSecond
+            columnFirst,
+            columnSecond,
+            formatRibuan,
+            formatTglPromo
         }
     },
     components:{
