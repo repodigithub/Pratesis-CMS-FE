@@ -10,13 +10,13 @@
               <div style="width:36px;height:36px;margin-right:10px; border-radius: 10px;" class="bg-white row justify-center items-center">
                 <img :src="require(`assets/icon/${content.icon}`)">
               </div>
-              <div class="fs-20">{{content.label}}</div>
+              <div class="fs-20" style="text-transform:capitalize;">{{content.label}}</div>
           </div>
           <div class="row q-mt-sm items-center" :class="content.active ? 'justify-between' : ''">
             <div class="text-grey1 q-mr-md">{{content.active ? 'Active' : 'Total'}}</div>
             <div class="row text-primary">
               <div class="fs-16" style="margin-right:5px;opacity:0.4;" v-if="!content.active">Rp</div>
-              <div class="fs-24">{{content.total}}</div>
+              <div class="fs-24">{{formatRibuan(contentObj[content.label])}}</div>
             </div>
           </div>
         </div>
@@ -32,13 +32,14 @@
 </template>
 
 <script>
-import { defineAsyncComponent,computed } from 'vue'
+import { defineAsyncComponent,computed,ref, onMounted } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
-// import { useService } from 'src/composeables/useService'
+import { useService } from 'src/composeables/useService'
 export default{
   
   setup(){
-    const { role } = usePratesis()
+    const contentObj = ref([])
+    const { role,formatRibuan } = usePratesis()
     const sectionShow = computed(()=>{
       if (['HO','AD'].indexOf(role.value) >= 0) {
         return 'head-office'
@@ -50,39 +51,53 @@ export default{
         return ''
       }
     })
-    // const { getData } = useService()
-    // getData('dashboard/mini-data')
-    // .then(res=>{
-    //   console.log('mini data',res);
-    // })
+    
+    const { getData } = useService()
+    function getDataContent () {
+      let valGroup = 'depot'
+      if(sectionShow.value == 'head-office') valGroup = 'ho'
+      if(sectionShow.value == 'distributor') valGroup = 'distributor'
+   
+      getData(`dashboard/mini-data?level=${valGroup}`).then(res=>{
+        if(res.status == 200) {
+          contentObj.value = res.data.data
+        }
+      })
+    }
+    onMounted(()=>{
+        getDataContent()
+    })
 
     return {
-      role,sectionShow
+      formatRibuan,
+      contentObj,
+      role,
+      sectionShow
     }
   },
   data(){
     return{
         contentCard:[
           {
-            label : 'Budget',
+            label : 'budget',
             icon : 'money-bill-alt-overview.svg',
             total : '1.000.000',
             active:false
           },
           {
-            label : 'Outstanding',
+            label : 'outstanding',
             icon : 'money-check-edit-alt.svg',
             total : '1.000.000',
             active:false
           },
           {
-            label : 'Claim',
+            label : 'claim',
             icon : 'money-check-edit-alt.svg',
             total : '1.000.000',
             active:false
           },
           {
-            label : 'Sisa',
+            label : 'sisa',
             icon : 'ticket-alt.svg',
             total : '4352',
             active: true

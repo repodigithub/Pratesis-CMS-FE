@@ -2,7 +2,7 @@
     <div class="row q-px-lg q-pb-lg" style="margin-top:-30px;">
         <div class="col-12">
             <core-table
-                url="area"
+                url="dashboard/tidak-layak-bayar?page=1&limit=5&level=distributor"
                 classStyle="br-20 own-card"
                 :canOpenDetail="false"
                 :columns="columnFirst">
@@ -25,7 +25,7 @@
         </div>
         <div class="col-12" style="margin-top:30px;">
                 <core-table
-                url="area"
+                url="dashboard/menunggu-pembayaran?page=1&limit=5&level=distributor"
                 classStyle="br-20 own-card"
                 :canOpenDetail="false"
                 :columns="columnSecond">

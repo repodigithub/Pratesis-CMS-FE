@@ -15,7 +15,7 @@
     <div class="row q-col-gutter-lg q-px-lg justify-center">
         <div class="col" style="margin-top:20px;" v-for="section in sectionFirst" :key="section.label">
             <core-table
-                url="area?limit=5"
+                :url="section.apiSuffix"
                 :showPaginate="false"
                 classStyle="br-20 own-card"
                 :canOpenDetail="false"
@@ -23,16 +23,11 @@
                 <template v-slot:toptable>
                   <div class="fs-18">Budget Berdasarkan {{section.label}}</div>
                 </template>
-                <template v-slot:body-cell-nama="props">
-                    <q-td key="nama" :props="props">
+                <template v-slot:body-cell-budget="props">
+                    <q-td key="budget" :props="props">
                       <div class="row">
                         <div class="col">
-                          <div class="fs-14">
-                            {{props.row.kode_area}}
-                          </div> 
-                          <div class="text-caption">
-                            {{props.row.nama_area}}
-                          </div>
+                          Rp. {{formatRibuan(props.row.budget)}}
                         </div>
                       </div>
                     </q-td>
@@ -44,7 +39,7 @@
       <div class="row q-col-gutter-lg q-px-lg justify-center">
         <div class="col" v-for="section in sectionSecond" :key="section.label" style="margin-top:20px;">
               <core-table
-                url="area?limit=5"
+                :url="section.apiSuffix"
                 :showPaginate="false"
                 classStyle="br-20 own-card"
                 :canOpenDetail="false"
@@ -52,14 +47,13 @@
                 <template v-slot:toptable>
                   <div class="fs-18">Budget Berdasarkan {{section.label}}</div>
                 </template>
-                <template v-slot:body-cell-nama="props">
-                    <q-td key="nama" :props="props">
-                        <div class="fs-14">
-                          {{props.row.kode_area}}
-                        </div> 
-                        <div class="text-caption">
-                          {{props.row.nama_area}}
+                <template v-slot:body-cell-budget="props">
+                    <q-td key="budget" :props="props">
+                      <div class="row">
+                        <div class="col">
+                          Rp. {{formatRibuan(props.row.budget)}}
                         </div>
+                      </div>
                     </q-td>
                 </template>
             </core-table>
@@ -109,7 +103,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import {
   LMap,
   LTileLayer,
@@ -117,50 +111,69 @@ import {
   LControlLayers,
   LTooltip,
 } from "@vue-leaflet/vue-leaflet";
+import { usePratesis } from 'src/composeables/usePratesis'
+import { useService } from 'src/composeables/useService'
 import "leaflet/dist/leaflet.css";
 export default {
   setup(){
-    const baseColumns = [{ name: 'budget', align: 'right', label: 'Budget', field: 'nama_area'}]
+    const { formatRibuan } = usePratesis()
+    const { getData  } = useService()
+    const areaMap = ref([])
+    const baseColumns = [{ name: 'budget', align: 'right', label: 'Budget', field: 'budget'}]
     const sectionFirst = [
       {
         label:'Divisi',
-        columns:[{ name: 'nama', align: 'left', label: 'Nama Divisi', field: 'nama_area'}, ...baseColumns ],
+        apiSuffix: 'dashboard/by-divisi',
+        columns:[{ name: 'nama_divisi', align: 'left', label: 'Nama Divisi', field: 'nama_divisi'}, ...baseColumns ],
       },
       {
         label:'Brand',
-        columns: [{ name: 'nama', align: 'left', label: 'Nama brand', field: 'nama_area'},...baseColumns],
+        apiSuffix: 'dashboard/by-brand',
+        columns: [{ name: 'nama_brand', align: 'left', label: 'Nama brand', field: 'nama_brand'},...baseColumns],
       }
     ]
     const sectionSecond = [
       {
         label:'Region',
-        columns : [{ name: 'nama', align: 'left', label: 'Nama region', field: 'nama_area'},...baseColumns]
+        apiSuffix: 'dashboard/by-region',
+        columns : [{ name: 'nama_region', align: 'left', label: 'Nama region', field: 'nama_region'},...baseColumns]
       },
       {
         label:'Area',
-        columns:[{ name: 'nama', align: 'left', label: 'Nama area', field: 'nama_area'},...baseColumns]
+        apiSuffix: 'dashboard/by-area',
+        columns:[{ name: 'nama_area', align: 'left', label: 'Nama area', field: 'nama_area'},...baseColumns]
       }
     ]
+    onMounted(()=>{
+        getData(`dashboard/area`).then(res=> {
+          if(res.status == 200) {
+            areaMap.value = res.data.data.filter(e => e.titik_koordinat -= null)
+          }
+        })
+    })
     return {
-      sectionSecond,sectionFirst
+      areaMap,
+      formatRibuan,
+      sectionSecond,
+      sectionFirst
     }
   },
-data(){
-    return{
-        category:'SH',
-        zoom: 3,
-        iconWidth: 25,
-        iconHeight: 40,
+  data(){
+      return{
+          category:'SH',
+          zoom: 3,
+          iconWidth: 25,
+          iconHeight: 40,
     }
   },
   components:{
-        'core-table': defineAsyncComponent(() => import('components/CoreTable')),
-        LMap,
-        LTileLayer,
-        LMarker,
-        LControlLayers,
-        LTooltip,
-    },
+      'core-table': defineAsyncComponent(() => import('components/CoreTable')),
+      LMap,
+      LTileLayer,
+      LMarker,
+      LControlLayers,
+      LTooltip,
+  },
 }
 </script>
 
