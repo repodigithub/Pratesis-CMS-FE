@@ -101,7 +101,7 @@ const routes = [
             master:true
         }
       },
-      { path: 'tipe-promo',name:'Type Promo', component: () => import('pages/master/TypePromo.vue'),
+      { path: 'tipe-promo',name:'Promo Type', component: () => import('pages/master/TypePromo.vue'),
         meta:{
             master:true
         }
