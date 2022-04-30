@@ -89,12 +89,12 @@
             <div class="row" style="margin-top:62px;">
                 <div class="col-6 text-center">
                     <p class="q-mb-none">Dibuat oleh</p>
-                    <img :src="created_by.sign" alt="" width="100" height="100">
+                    <img :src="created_by.sign" alt="created_by_sign" width="100" height="100">
                     <p>{{created_by.name}}</p>
                 </div>
                 <div class="col-6 text-center">
                     <p class="q-mb-none">Menyetujui</p>
-                    <img :src="approved_by.sign" alt="" width="100" height="100">
+                    <img :src="approved_by.sign" alt="approved_by_sign" width="100" height="100">
                     <p>{{approved_by.name}}</p>
                 </div>
             </div> 
@@ -125,7 +125,6 @@ export default {
         const approved_by = ref({})
         getData('setting/invoice-note')
         .then(res=>{
-            console.log('invoice',res)
             let result = res.data.data
             notes.value = result.note
             created_by.value = result.sign.created_by

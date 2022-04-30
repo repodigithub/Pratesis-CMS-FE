@@ -305,5 +305,8 @@ export default {
     grid-template-rows:auto; 
     height: calc(100vh - 70px);
 }
+.q-dialog__inner--minimized > div {
+    max-width: 1000px;
+}
 
 </style>
