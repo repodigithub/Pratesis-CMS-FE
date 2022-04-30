@@ -1,10 +1,10 @@
 <template>
-<q-dialog :modelValue="modalDetail" @hide="$emit('update:modalDetail',false)" position="right" full-height class="dialog-detail">
-    <q-card :style="{height:'100%',width: isInvoice ? '800px' : '400px'}">
-        <q-card-section class="row justify-center q-mt-xl" v-if="!load" style="height:100%;">
-                <q-spinner-grid class="col-4 text-primary"/>
-                <span class="col-12 text-primary font-medium text-center">Memuat Data</span>
-        </q-card-section>
+<q-dialog :modelValue="modalDetail" @hide="$emit('update:modalDetail',false)" position="right" full-height :class="isInvoice ? 'dialog-detail' : 'dialog-detail-min'">
+    <q-card :style="{height:'100%'}">
+            <q-card-section class="row justify-center q-mt-xl" v-if="!load" style="height:100%;">
+                    <q-spinner-grid class="col-4 text-primary"/>
+                    <span class="col-12 text-primary font-medium text-center">Memuat Data</span>
+            </q-card-section>
             <div class="row" v-else>
                 <div class="col-6" style="border-right: 3px solid #ebebeb;" v-if="isInvoice">
                     <invoice v-model:isInvoice="isInvoice" v-model:details="detail"/>
@@ -163,7 +163,14 @@
 </q-dialog>
 <upload-file v-model:upload="modalUpload" v-if="modalUpload" menu="claim" typeFileUpload=".pdf" @onUploadSuccess="callBackFuncFile" />
 </template>
-
+<style>
+.dialog-detail > .q-dialog__inner--minimized > div {
+    min-width: 900px !important;
+}
+.dialog-detail-min > .q-dialog__inner--minimized > div {
+    min-width: 450px !important;
+}
+</style>
 <script>
 import { ref,computed,defineAsyncComponent } from 'vue'
 import { useCustom } from 'src/composeables/useCustom'
