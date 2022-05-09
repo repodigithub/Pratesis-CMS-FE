@@ -3,7 +3,7 @@
         <div style="float:left;" class="q-mr-md">
             <div class="font-normal q-mb-sm">Spend Type :</div>
             <q-btn-group outline>
-                <q-btn :outline="spend_type === 'All' ? false : true " no-caps color="primary" label="All" unelevated @click="filterSpend('All')" :class="spend_type === 'All' ? '' : 'bg-primary4'"/>
+                <!-- <q-btn :outline="spend_type === 'All' ? false : true " no-caps color="primary" label="All" unelevated @click="filterSpend('All')" :class="spend_type === 'All' ? '' : 'bg-primary4'"/> -->
                 <q-btn :outline="spend_type === 'RA' ? false : true " color="primary" label="RA" unelevated @click="filterSpend('RA')" :class="spend_type === 'RA' ? '' : 'bg-primary4'"/>
                 <q-btn :outline="spend_type === 'FO' ? false : true " color="primary" label="FO" unelevated @click="filterSpend('FO')" :class="spend_type === 'FO' ? '' : 'bg-primary4'"/>
                 <q-btn :outline="spend_type === 'OA' ? false : true " color="primary" label="OA" unelevated @click="filterSpend('OA')" :class="spend_type === 'OA' ? '' : 'bg-primary4'"/>
@@ -35,8 +35,14 @@ export default {
             default:false
         }
     },
+    computed:{
+        userRole(){
+            let role = this.$store.state.auth.user.kode_group.substr(0,2)
+            return ['SA','DI'].indexOf(role) >= 0 ? '' : role
+        },
+    },
     setup(props,{emit}){
-        const spend_type = ref('All')
+        const spend_type = ref('RA')
         const status = ref('All')
 
         const filterStatus = statusPromo => {
