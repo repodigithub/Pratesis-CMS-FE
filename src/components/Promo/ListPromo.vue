@@ -149,6 +149,7 @@ export default {
                 pagination.value.rowsNumber = result.total
             })
             .catch(err=>{
+                loading.value = false
                 console.log('error,',err)
             })
         }
