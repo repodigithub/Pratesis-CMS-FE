@@ -83,9 +83,9 @@ export default {
         const produk = [
             { name: 'kode', label: 'Kode Brand', align: 'left', field: 'kode_brand' },
             { name: 'nama_brand',  align: 'left',label: 'Nama Brand', field: 'nama_brand'},
-            { name: 'produk_aktif',  align: 'left',label: 'Jumlah Produk Aktif', field: 'produk_aktif'},
-            { name: 'persentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
-            { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget_brand)}`},
+            // { name: 'produk_aktif',  align: 'left',label: 'Jumlah Produk Aktif', field: 'produk_aktif'},
+            // { name: 'persentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
+            // { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget_brand)}`},
             
         ]
         const url = ref('undefined')
@@ -95,11 +95,23 @@ export default {
 
         onMounted(()=>{
             if (props.isDraft  && ['AD','HO'].indexOf(props.role) >= 0) {
-                produk.push({ name:'actions',align:'left',label:'',field:'kode_brand'})
+                produk.push(
+                    { name:'actions',align:'left',label:'',field:'kode_brand'}
+                )
             }
             if (['AD','HO'].indexOf(props.role) >= 0) {
                 url.value = `promo`
+                produk.push(
+                    { name: 'kode_brand',  align: 'left',label: 'Kode Brand', field: 'kode_brand'},
+                    { name: 'nama_produk',  align: 'left',label: 'Nama Produk', field: 'nama_produk'},
+                    { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget_brand)}`},
+                )
             }else if(props.role === 'GA'){
+                produk.push(
+                    { name: 'produk_aktif',  align: 'left',label: 'Jumlah Produk Aktif', field: 'produk_aktif'},
+                    { name: 'persentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
+                    { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget_brand)}`}
+                )
                 url.value = `promo-depot`
             }else{
                 url.value = `promo-distributor`

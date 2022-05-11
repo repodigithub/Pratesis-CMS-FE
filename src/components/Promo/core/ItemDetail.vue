@@ -154,8 +154,9 @@
                                     <div class="text-primary font-16" v-if="['AD','HO'].indexOf(role) >=0">
                                         <span v-if="loadbudgetarea">Loading...</span>
                                         <span v-else>
-                                            <span style="opacity:0.4;">Rp</span> {{formatRibuan(budget_area)}}
-                                            ({{persentaseBudgetarea}} %)
+                                            <span>{{persentaseBudgetarea}} %</span>
+                                            <!-- <span style="opacity:0.4;">Rp</span> {{formatRibuan(budget_area)}}
+                                            ({{persentaseBudgetarea}} %) -->
                                         </span>
                                     </div>
                                     <div class="text-primary font-16" v-if="['GA'].indexOf(role) >=0">

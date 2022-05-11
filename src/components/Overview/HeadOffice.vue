@@ -3,7 +3,7 @@
         <div class="col-12">
             <q-card class="own-card" flat style="border-radius:20px !important;">
               <q-card-section class="text-center q-pt-sm">
-                <div class="fs-12">Lihat Berdasarkan :</div>
+              <div class="fs-12">Lihat Berdasarkan :</div>
                 <q-btn-group outline>
                     <q-btn :outline="category === 'SH' ? false : true " no-caps color="primary" label="Sales Hierarchy" unelevated @click="category = 'SH'" :class="category === 'SH' ? '' : 'bg-primary4'"/>
                     <q-btn :outline="category === 'P' ? false : true " color="primary" label="Product" unelevated @click="category = 'P'" :class="category === 'P' ? '' : 'bg-primary4'" no-caps/>

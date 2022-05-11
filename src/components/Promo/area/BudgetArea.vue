@@ -102,7 +102,6 @@ export default {
                     { name: 'nama_area',  align: 'left',label: 'Nama', field: 'nama_area'},
                     { name: 'region',  align: 'left',label: 'Region', field: 'region'},
                     { name: 'alamat',  align: 'left',label: 'Alamat', field: 'alamat'},
-                    { name: 'persentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
                     { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget)}`},
                 )
                 if (props.isDraft) {

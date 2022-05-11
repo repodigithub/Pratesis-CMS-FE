@@ -110,9 +110,9 @@
                     <q-file borderless v-model="filesupload" label="Borderless" ref="inputfile" style="display:none;"/>
                 </div>
                 <div class="row col-12 q-mt-lg">
-                    <q-btn color="secondary" label="Batal"  no-caps unelevated outline v-close-popup class="btn-one"/>
+                    <q-btn color="secondary" label="Cancel"  no-caps unelevated outline v-close-popup class="btn-one"/>
                     <q-space />
-                    <q-btn color="secondary" label="Submit" no-caps unelevated class="btn-one" type="submit"/>
+                    <q-btn color="secondary" label="Add" no-caps unelevated class="btn-one" type="submit"/>
                 </div>
                 </q-form>
             </q-card-section>
