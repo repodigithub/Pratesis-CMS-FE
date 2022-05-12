@@ -66,125 +66,7 @@
     </div>
     <!-- <RequestDetail v-model:drequest="drequest" v-if="drequest" v-model:dataDetail="dataDetail" @reloadTable="onRequest"/> -->
     <RequestAction v-model:daction="daction" v-if="daction" v-model:dload="dload" v-model:ddisabled="ddisabled" :action="action" v-model:actionpersistent="actionpersistent"/>
-     <user-detail v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :options="{ include : 'usergroup;area;distributor'}" v-model:dataForm="dataForm" isRequest>
-      <template v-slot:detail-content="props">
-            <div v-if="!props.edit">
-                <div class="row items-center">
-                    <div>Request Date</div>
-                    <q-space />
-                    <div >{{formatTgl(props.tampil.created_at)}}</div>
-                </div>
-                <div class="row items-center q-mt-md">
-                    <div>User ID</div>
-                    <q-space />
-                    <div >{{props.tampil.user_id}}</div>
-                </div>
-                <div class="row items-center q-mt-md">
-                    <div>Full Name</div>
-                    <q-space />
-                    <div >{{props.tampil.full_name}}</div>
-                </div>
-                <div class="row items-center q-mt-md">
-                    <div>Email</div>
-                    <q-space />
-                    <div >{{props.tampil.email}}</div>
-                </div>
-                <div class="row items-center q-mt-md">
-                    <div>Username</div>
-                    <q-space />
-                    <div >{{props.tampil.username}}</div>
-                </div>
-                <div class="row items-center q-mt-md">
-                    <div>User Level</div>
-                    <q-space />
-                    <div>{{props.tampil.usergroup.nama_group}}</div>
-                </div>
-                <div class="row items-center q-mt-md" v-if="props.tampil.kode_area">
-                    <div>Kode Depo</div>
-                    <q-space />
-                    <div >{{props.tampil.kode_area}}</div>
-                </div>
-                <div class="row items-center q-mt-md" v-if="props.tampil.kode_area">
-                    <div>Nama Depo</div>
-                    <q-space />
-                    <div >{{props.tampil.area.nama_area}}</div>
-                </div>
-                <div class="row items-center q-mt-md" v-if="props.tampil.kode_distributor">
-                    <div>Kode Distributor</div>
-                    <q-space />
-                    <div >{{props.tampil.kode_distributor}}</div>
-                </div>
-                <div class="row items-center q-mt-md" v-if="props.tampil.kode_distributor">
-                    <div>Nama Distributor</div>
-                    <q-space />
-                    <div >{{props.tampil.distributor.nama_distributor}}</div>
-                </div>
-                <div class="row items-center q-mt-md">
-                    <div>Status</div>
-                    <q-space />
-                    <q-badge outline  label="Waiting for Approval" class="alert3 alert1 q-px-md q-py-sm btn-two" />
-                </div>
-            </div>
-            <div v-else>
-              <!-- <edit-user v-model:dataForm="dataForm"/> -->
-              <div class="row items-center">
-                    <div>Request Date</div>
-                    <q-space />
-                    <div >{{formatTgl(props.send.created_at)}}</div>
-                </div>
-                <label for="User ID">User ID</label>
-                <q-input v-model="props.send.user_id" type="text" id="User ID" outlined dense lazy-rules
-                :rules="[
-                    val => val !== null && val !== '' || 'User ID tidak boleh kosong',
-                ]"/>
-                <label for="Full Name">Full Name</label>
-                <q-input v-model="props.send.full_name" type="text" id="Full Name" outlined dense lazy-rules
-                :rules="[
-                    val => val !== null && val !== '' || 'Full Name tidak boleh kosong',
-                ]"/>
-                <label for="Email">Email</label>
-                <q-input v-model="props.send.email" type="text" id="Email" outlined dense lazy-rules
-                :rules="[
-                    val => val !== null && val !== '' || 'Email tidak boleh kosong',
-                ]"/>
-                <label for="Username">Username</label>
-                <q-input v-model="props.send.username" type="text" id="Username" outlined dense lazy-rules
-                :rules="[
-                    val => val !== null && val !== '' || 'Username tidak boleh kosong',
-                ]"/>
-                <select-dropdown url="user-group" v-model:selected="props.send.kode_group" :islogin="false" :master="false" class="q-mb-md" nameLabel="User Level"/>
-
-                <div v-if="props.send.kode_group.includes('DI') || props.send.kode_group.includes('SA')">
-                    <select-dropdown url="area" v-model:selected="props.send.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo"/>
-                    <label for="nama_depo" class="font-normal">Nama Depo</label>
-                    <q-input v-model="props.namaarea"  dense outlined id="nama_depo" class="q-mb-md"
-                    hide-bottom-space
-                    disable
-                    >
-                    <template v-slot:append>
-                        <q-icon
-                            name="person"
-                        />
-                        </template>
-                    </q-input>
-                </div>
-                <div  v-if="props.send.kode_group.includes('DI')">
-                    <select-dropdown url="distributor" v-model:selected="props.send.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor"/> 
-                    <label for="nama_distributor" class="font-normal">Nama Distributor</label>
-                      <q-input v-model="dataForm.distributor.nama_distributor"  dense outlined id="nama_distributor" class="q-mb-md"
-                      hide-bottom-space
-                      disable
-                      >
-                          <template v-slot:append>
-                          <q-icon
-                              name="person"
-                          />
-                          </template>
-                      </q-input>
-                </div>
-            </div>
-        </template>
-    </user-detail>
+     <user-detail v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" @reloadTable="onRequest" :options="{ include : 'usergroup;area;distributor'}" v-model:dataForm="dataForm" isRequest />
 </template>
 
 <script>
@@ -199,7 +81,6 @@ import UserDetail from './UserDetail.vue'
 export default {
     components:{
       RequestAction,
-      'select-dropdown': defineAsyncComponent(() => import('components/SelectDropdown')),
       UserDetail
     },
     setup(){

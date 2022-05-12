@@ -72,6 +72,8 @@ export const useCustom = () => {
                 return 'need'
             }else if(['approve','claim','sudah_bayar'].indexOf(value) >= 0){
                 return 'approve'
+            }else if('waiting_approval'){
+                return 'waiting'
             }else{
                 return ''
             }

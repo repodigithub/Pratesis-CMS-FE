@@ -85,7 +85,7 @@ export default {
             { name: 'nama_brand',  align: 'left',label: 'Nama Brand', field: 'nama_brand'},
             { name: 'produk_aktif',  align: 'left',label: 'Jumlah Produk Aktif', field: 'produk_aktif'},
             { name: 'persentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
-            { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget_brand)}`},
+            { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${row.budget_brand}`},
             
         ]
         const url = ref('undefined')
@@ -112,11 +112,11 @@ export default {
         const success = res =>{
             let result = res.data.data
             rows.value = result.data
-            if (['DI','GA'].indexOf(props.role) >= 0) {
-                rows.value.map(item=>{
-                    item.budget_brand = (item.persentase/100)*props.budget
-                })
-            }
+            // if (['DI','GA'].indexOf(props.role) >= 0) {
+            //     rows.value.map(item=>{
+            //         item.budget_brand = (item.persentase/100)*props.budget
+            //     })
+            // }
             pagination.value.page = result.current_page
             pagination.value.rowsPerPage = result.per_page
             pagination.value.rowsNumber = result.total

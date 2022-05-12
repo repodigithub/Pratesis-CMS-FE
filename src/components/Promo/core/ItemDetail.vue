@@ -5,8 +5,10 @@
         <q-card class="own-card">
             <q-card-section>
                 <div class="row justify-center q-mt-lg" v-if="loadjudul">
-                    <q-spinner-grid class="col-4 text-primary"/>
-                    <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    <div class="col-4">
+                        <q-spinner-grid class="text-primary q-mr-sm"/>
+                        <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    </div>
                 </div>
                 <div class="row justify-between" v-else>
                     <div class="col-12 row ">

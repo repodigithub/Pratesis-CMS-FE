@@ -39,7 +39,7 @@
         </template>
         <template v-slot:body-cell-actions="props">
             <q-td key="actions" :props="props">
-                <q-btn round color="secondary" flat unelevated @click.stop="oneDelete(props.row.id)">
+                <!-- <q-btn round color="secondary" flat unelevated @click.stop="oneDelete(props.row.id)">
                     <q-img
                         src="~assets/icon/trash-alt.svg"
                         spinner-color="primary"
@@ -47,7 +47,7 @@
                         width="20px"
                         height="20px"
                     />
-                </q-btn>
+                </q-btn> -->
                 <q-btn round color="secondary" icon="download_for_offline" flat unelevated @click.stop="oneDownload(props.row.id)" />
             </q-td>
         </template>

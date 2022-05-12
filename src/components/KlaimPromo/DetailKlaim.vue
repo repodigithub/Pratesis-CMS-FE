@@ -163,14 +163,8 @@
 </q-dialog>
 <upload-file v-model:upload="modalUpload" v-if="modalUpload" menu="claim" typeFileUpload=".pdf" @onUploadSuccess="callBackFuncFile" />
 </template>
-<style>
-.dialog-detail > .q-dialog__inner--minimized > div {
-    min-width: 900px !important;
-}
-.dialog-detail-min > .q-dialog__inner--minimized > div {
-    min-width: 450px !important;
-}
-</style>
+
+
 <script>
 import { ref,computed,defineAsyncComponent } from 'vue'
 import { useCustom } from 'src/composeables/useCustom'
@@ -307,6 +301,15 @@ export default {
 }
 .q-dialog__inner--minimized > div {
     max-width: 1000px;
+}
+
+</style>
+<style scoped>
+.dialog-detail > .q-dialog__inner--minimized > div {
+    min-width: 900px !important;
+}
+.dialog-detail-min > .q-dialog__inner--minimized > div {
+    min-width: 450px !important;
 }
 
 </style>

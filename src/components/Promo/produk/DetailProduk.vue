@@ -24,7 +24,7 @@
                 </div>
                 <div class="text-grey1 font-15 q-mt-lg">Budget Brand</div>
                 <div class="row items-end">
-                    <div class="font-28">Rp {{formatRibuan(budget_brand)}}</div>
+                    <div class="font-28">Rp {{budget_brand}}</div>
                     <q-space />
                     <div class="d">
                         <q-badge :label="method" class="q-pa-sm" style="background-color:#F6FFED;color:#52C41A;"/>
@@ -69,7 +69,7 @@ export default {
             { name: 'kode', label: 'Kode Produk', align: 'left', field: 'kode_produk' },
             { name: 'nama_produk',  align: 'left',label: 'Nama Produk', field: 'nama_produk'},
             { name: 'presentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
-            { name: 'budget_produk',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget_produk)}`},
+            { name: 'budget_produk',  align: 'left',label: 'Budget', field: row => `Rp ${row.budget_produk}`},
         ]
         const route = useRoute()
 
@@ -102,11 +102,11 @@ export default {
                 budget_brand.value = ['AD','HO'].indexOf(role.value) >= 0 ? result.budget_brand : result.budget
                 method.value =capitalize(result.method)
                 rowProduk.value = result.products.filter(item=>item.persentase > 0)
-                if (['DI','GA'].indexOf(role.value) >= 0) {
-                    rowProduk.value.map(item=>{
-                        item.budget_produk = (item.persentase/100)*budget_brand.value
-                    })
-                }
+                // if (['DI','GA'].indexOf(role.value) >= 0) {
+                //     rowProduk.value.map(item=>{
+                //         item.budget_produk = (item.persentase/100)*budget_brand.value
+                //     })
+                // }
                 loading.value = false
             })
             .catch(err=>{

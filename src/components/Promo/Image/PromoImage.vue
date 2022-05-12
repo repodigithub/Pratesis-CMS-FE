@@ -6,8 +6,10 @@
             </q-card-section>
             <q-card-section v-if="loading">
                 <div class="row justify-center q-mt-lg">
-                    <q-spinner-grid class="col-3 text-primary"/>
-                    <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    <div class="col-4">
+                        <q-spinner-grid class="text-primary q-mr-sm"/>
+                        <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    </div>
                 </div>
             </q-card-section>
             <q-card-section v-else>
