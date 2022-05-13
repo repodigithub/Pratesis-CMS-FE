@@ -19,7 +19,10 @@ export const useCustom = () => {
             icon:'check',
             type: 'positive',
             position: 'top-right',
-            progress: true
+            progress: true,
+            actions: [
+                { label: 'close', color: 'white', handler: () => { /* ... */ } }
+            ]
         })
     }
     const errorNotif = msg => {
@@ -28,7 +31,10 @@ export const useCustom = () => {
             icon:'close',
             type: 'negative',
             position: 'top-right',
-            progress: true
+            progress: true,
+            actions: [
+                { label: 'close', color: 'white', handler: () => { /* ... */ } }
+            ]
         })
     }
 

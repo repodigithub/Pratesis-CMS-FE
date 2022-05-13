@@ -11,8 +11,10 @@
         <q-card class="own-card" flat v-if="loading">
             <q-card-section>
                 <div class="row justify-center q-mt-lg" >
-                    <q-spinner-grid class="col-4 text-primary"/>
-                    <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    <div class="col-4">
+                        <q-spinner-grid class="text-primary q-mr-sm"/>
+                        <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    </div>
                 </div>
             </q-card-section>
         </q-card>
@@ -24,7 +26,7 @@
                 </div>
                 <div class="text-grey1 font-15 q-mt-lg">Budget Brand</div>
                 <div class="row items-end">
-                    <div class="font-28">Rp {{budget_brand}}</div>
+                    <div class="font-28">Rp {{formatRibuan(budget_brand)}}</div>
                     <q-space />
                     <div class="d">
                         <q-badge :label="method" class="q-pa-sm" style="background-color:#F6FFED;color:#52C41A;"/>
@@ -69,7 +71,7 @@ export default {
             { name: 'kode', label: 'Kode Produk', align: 'left', field: 'kode_produk' },
             { name: 'nama_produk',  align: 'left',label: 'Nama Produk', field: 'nama_produk'},
             { name: 'presentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
-            { name: 'budget_produk',  align: 'left',label: 'Budget', field: row => `Rp ${row.budget_produk}`},
+            { name: 'budget_produk',  align: 'left',label: 'Budget', field: row => `Rp ${['AD','HO'].indexOf(role.value) >= 0 ? formatRibuan(row.budget_produk): row.budget}`},
         ]
         const route = useRoute()
 

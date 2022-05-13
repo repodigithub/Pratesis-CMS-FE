@@ -85,7 +85,7 @@ export default {
             { name: 'nama_brand',  align: 'left',label: 'Nama Brand', field: 'nama_brand'},
             { name: 'produk_aktif',  align: 'left',label: 'Jumlah Produk Aktif', field: 'produk_aktif'},
             { name: 'persentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
-            { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${row.budget_brand}`},
+            { name: 'budget',  align: 'left',label: 'Budget', field: row => `Rp ${['AD','HO'].indexOf(props.role) >= 0 ? formatRibuan(row.budget_brand): row.budget}`},
             
         ]
         const url = ref('undefined')
