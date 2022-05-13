@@ -35,15 +35,13 @@
                         @submit="onSetupSign"
                         class="row"
                     >
-                        
-                        
                     <div class="row">
                         <div class="col-12 text-center">
-                            <p class="q-mb-none fs-20">Upload Your File</p>
+                            <p class="q-mb-md fs-20">Upload Your File</p>
                         </div>
                         <div class="col-6 text-center">
                             <label for="imgdibuat" v-if="!prevdibuat">
-                                <div class="row items-center justify-center box-uploadimage " style=" margin-top:20px;margin-left:20px;"
+                                <div class="row items-center justify-center box-uploadimage" style="margin:auto"
                                 :class="role == 'GA' ? 'can-upload' : ''"
                                 >
                                     <div class="row items-center justify-center border">
@@ -66,7 +64,7 @@
                         </div>
                         <div class="col-6 text-center">
                             <label for="inputfile" v-if="!prevsetuju">
-                            <div class="row items-center justify-center box-uploadimage " style=" margin-top:20px;margin-left:20px;"
+                            <div class="row items-center justify-center box-uploadimage" style="margin:auto"
                             :class="role == 'GA' ? 'can-upload' : ''"
                             >
                                 <div class="row items-center justify-center border">
