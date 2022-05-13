@@ -6,25 +6,27 @@
                 <q-card class="own-card q-mb-lg" flat>
                 <q-card-section>
                     <div class="row items-end">
-                        <div class="col-3">
+                        <div class="col-3" v-if="role !== 'DI'">
                             <div class="q-pr-md">
-                                <select-dropdown url="distributor" v-model:selected="sort.distributor_id" nameLabel="Distributor :"/>
+                                <select-dropdown url="distributor" v-model:selected="kode_distributor" nameLabel="Distributor :"/>
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="q-pl-md">
                                 <label for="statusDrop">Status Klaim :</label>
                                 <q-select
-                                    v-model="sort.status"
+                                    v-model="status_claim"
                                     :options="options"
                                     outlined
                                     dense
                                     class="option-three"
                                     id="statusDrop"
+                                    emit-value
+                                    map-options
                                     dropdown-icon="expand_more" />
                             </div>
                         </div>
-                        <div class="col-6 text-right">
+                        <div class="text-right" :class="role !== 'DI' ? 'col-6' : 'col-9'">
                             <q-btn color="primary"  no-caps class="btn-one q-mr-md" unelevated @click="onFilter" >
                                 Search
                             </q-btn>
@@ -41,6 +43,7 @@
                     :canEdit="false"
                     ref="Coretable"
                     :requesting="requesting"
+                    v-model:filter="filter"
                     >
                     <template v-slot:body-cell-status="props">
                         <q-td key="status" :props="props">
@@ -160,11 +163,6 @@ export default {
         const { formatRibuan,role,modalUpload,openUpload } = usePratesis()
         const { GeneralFormatDate,colorStatusPromo,statusPromo,showLoading,hideLoading,successNotif,errorNotif } = useCustom()
 
-        const sort = ref({
-            distributor_id:'',
-            status:''
-        })
-        const options = ref(['Semua','Sudah Bayar','Layak Bayar'])
 
         const columns = [
             { name: 'kode', label: 'Coding ULI', align: 'left', field: 'kode_uli' },
@@ -226,13 +224,38 @@ export default {
                 errorNotif('Upload Bukti Bayar terlebih dahulu')
             }
         }
+        const kode_distributor = ref('')
+        const status_claim = ref(null)
+        const options = ref([ 
+        {
+            label: 'Semua',
+            value: null
+        },
+        {
+            label: 'Sudah Bayar',
+            value: 'sudah_bayar'
+        },
+        {
+            label: 'Layak Bayar',
+            value: 'layak_bayar'
+        }
+        ])
+        const filter = ref({})
+
+        function onFilter() {
+            filter.value.kode_distributor = kode_distributor.value ?? null
+            filter.value.status_claim = status_claim.value ?? null
+        }
+
         return {
-            sort,options,columns,role,optionTable,active,
+            options,columns,role,optionTable,active,
             colorStatusPromo,statusPromo,formatRibuan,GeneralFormatDate,
             modalUpload,openUpload,reloadBukti,buktibayar,
             submitLaporan,Coretable,
             showLoading,hideLoading,successNotif,errorNotif,
-            requesting
+            requesting,
+            kode_distributor,status_claim,filter,onFilter
+
         }
     }
 }

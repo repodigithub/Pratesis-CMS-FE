@@ -12,8 +12,10 @@
 
         <q-card-section class="q-pt-none">
         <div class="row justify-center q-mt-lg" v-if="loading">
-            <q-spinner-grid class="col-4 text-primary"/>
-            <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+            <div class="col-4">
+                    <q-spinner-grid class="text-primary q-mr-sm"/>
+                    <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                </div>
         </div>
         <div v-else>
             <div v-if="itemPromo.length > 0">

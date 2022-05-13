@@ -16,8 +16,10 @@
                     </q-card-section>
                 </q-scroll-area>
                 <q-card-section class="row justify-center" v-else>
-                    <q-spinner-grid class="col-4 text-primary"/>
-                    <span class="col-12 text-primary font-medium text-center">Memuat Data</span>
+                    <div class="col-8">
+                            <q-spinner-grid class="text-primary q-mr-sm"/>
+                            <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                        </div>
                 </q-card-section>
                 <q-card-section class="row items-center " v-if="canEdit">
                     <q-btn color="primary" icon="edit" label="Edit" no-caps unelevated class="q-px-sm btn-one" outline v-if="!edit" @click="onEdit" />

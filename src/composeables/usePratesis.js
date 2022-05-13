@@ -74,9 +74,9 @@ export const usePratesis = () => {
         const {page, rowsPerPage}  = request.pagination
         let filter  = ''
         let filterKey = ''
+        console.log("filter",request)
         if(request.filter){
             filter = request.filter
-            // console.log("filter",filter)
             if(filter.value){
                 if(filter.value.kode_group){
                     filterKey += `&kode_group=${filter.value.kode_group}`
@@ -119,7 +119,12 @@ export const usePratesis = () => {
             if(filter.kode_spend_type){
                 filterKey += `&kode_spend_type=${filter.kode_spend_type}`
             }
-       
+            if(filter.kode_distributor){
+                filterKey += `&kode_distributor=${filter.kode_distributor}`
+            }
+            if(filter.status_claim){
+                filterKey += `&status=${filter.status_claim}`
+            }
         }
  
         let paginate = ''

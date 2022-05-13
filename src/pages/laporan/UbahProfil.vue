@@ -82,23 +82,20 @@
                                     </template>
                                 </q-input>
                             </div>
-                            <!-- <div class="col-12">
+                            <div class="col-12">
                                 <label for="password" class="font-normal">Password</label>
-                                <q-input v-model="dataSend.password" dense outlined id="password" class="q-mb-md" type="password"
-                                lazy-rules
+                                <q-input v-model="dataSend.password"  dense outlined id="password" :type="visibility ? 'password' : 'text'" class="q-mb-md"
                                 hide-bottom-space
-                                placeholder="********"
-                                :rules="[
-                                (val) => (val && val.length > 0) || 'Password tidak boleh kosong'
-                                ]"
                                 >
                                     <template v-slot:append>
                                     <q-icon
-                                        name="eye"
+                                        :name="visibility ? 'visibility' : 'visibility_off'"
+                                        @click="visibility = !visibility"
+                                        class="cursor-pointer"
                                     />
                                     </template>
                                 </q-input>
-                            </div> -->
+                            </div>
                             <select-dropdown url="user-group" v-model:selected="dataSend.kode_group" :islogin="false" :master="false" class="q-mb-md col-12" nameLabel="User Level"/>
                             <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI') || dataSend.kode_group.includes('GA')">
                             <div class="col-6">
@@ -143,8 +140,10 @@
                     </q-card-actions>
                 </div>
                 <q-card-section class="row justify-center items-center" v-else>
-                    <q-spinner-grid class="col-4 text-primary"/>
-                    <span class="col-12 text-primary font-medium text-center">Memuat Data</span>
+                    <div class="col-8">
+                            <q-spinner-grid class="text-primary q-mr-sm"/>
+                            <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                        </div>
                 </q-card-section>
             </q-card>
     </div>

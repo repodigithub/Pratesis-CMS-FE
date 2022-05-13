@@ -19,7 +19,10 @@ export const useCustom = () => {
             icon:'check',
             type: 'positive',
             position: 'top-right',
-            progress: true
+            progress: true,
+            actions: [
+                { label: 'close', color: 'white', handler: () => { /* ... */ } }
+            ]
         })
     }
     const errorNotif = msg => {
@@ -28,7 +31,10 @@ export const useCustom = () => {
             icon:'close',
             type: 'negative',
             position: 'top-right',
-            progress: true
+            progress: true,
+            actions: [
+                { label: 'close', color: 'white', handler: () => { /* ... */ } }
+            ]
         })
     }
 
@@ -72,6 +78,8 @@ export const useCustom = () => {
                 return 'need'
             }else if(['approve','claim','sudah_bayar'].indexOf(value) >= 0){
                 return 'approve'
+            }else if('waiting_approval'){
+                return 'waiting'
             }else{
                 return ''
             }

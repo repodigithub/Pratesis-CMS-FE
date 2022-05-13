@@ -11,8 +11,10 @@
         <q-card class="own-card" flat v-if="loading">
             <q-card-section>
                 <div class="row justify-center q-mt-lg" >
-                    <q-spinner-grid class="col-4 text-primary"/>
-                    <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    <div class="col-4">
+                        <q-spinner-grid class="text-primary q-mr-sm"/>
+                        <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    </div>
                 </div>
             </q-card-section>
         </q-card>
@@ -69,7 +71,7 @@ export default {
             { name: 'kode', label: 'Kode Produk', align: 'left', field: 'kode_produk' },
             { name: 'nama_produk',  align: 'left',label: 'Nama Produk', field: 'nama_produk'},
             { name: 'presentase',  align: 'left',label: 'Persentase', field: row => `${row.persentase} %`},
-            { name: 'budget_produk',  align: 'left',label: 'Budget', field: row => `Rp ${formatRibuan(row.budget_produk)}`},
+            { name: 'budget_produk',  align: 'left',label: 'Budget', field: row => `Rp ${['AD','HO'].indexOf(role.value) >= 0 ? formatRibuan(row.budget_produk): row.budget}`},
         ]
         const route = useRoute()
 
@@ -102,11 +104,11 @@ export default {
                 budget_brand.value = ['AD','HO'].indexOf(role.value) >= 0 ? result.budget_brand : result.budget
                 method.value =capitalize(result.method)
                 rowProduk.value = result.products.filter(item=>item.persentase > 0)
-                if (['DI','GA'].indexOf(role.value) >= 0) {
-                    rowProduk.value.map(item=>{
-                        item.budget_produk = (item.persentase/100)*budget_brand.value
-                    })
-                }
+                // if (['DI','GA'].indexOf(role.value) >= 0) {
+                //     rowProduk.value.map(item=>{
+                //         item.budget_produk = (item.persentase/100)*budget_brand.value
+                //     })
+                // }
                 loading.value = false
             })
             .catch(err=>{

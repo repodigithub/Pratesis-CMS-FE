@@ -24,8 +24,10 @@
                 </div>
                 <div class="row q-mt-md q-mb-lg">
                     <div class="col-12 row justify-center q-mt-lg" v-if="!valid">
-                        <q-spinner-grid class="col-4 text-primary"/>
-                        <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                        <div class="col-4">
+                            <q-spinner-grid class="text-primary q-mr-sm"/>
+                            <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                        </div>
                     </div>
                     <div class="col-12 row" v-else>
                         <div class="col-12" v-if="search">
@@ -47,8 +49,10 @@
                                 <master-table v-model:url="url" v-model:datagroup="datagroup" />
                             </div>
                             <div class="row justify-center q-mt-lg" v-else>
-                                <q-spinner-grid class="col-4 text-primary"/>
-                                <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                                <div class="col-4">
+                            <q-spinner-grid class="text-primary q-mr-sm"/>
+                            <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                        </div>
                             </div>
                             
                         </div>
