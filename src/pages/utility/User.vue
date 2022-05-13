@@ -9,7 +9,7 @@
                         <div class="font-normal">Pencarian :</div>
                         <div class="row">
                             <q-select v-model="kode_pengguna" emit-value  map-options :options="optkode_pengguna" dense outlined bg-color="primary" dropdown-icon="expand_more" class="option-one" />
-                            <q-input v-model="searchKey" placeholder="Ex: ASM Medan" dense outlined class="option-two">
+                            <q-input v-model="searchKey" placeholder="" dense outlined class="option-two">
                                 <template v-slot:append>
                                     <q-icon
                                         name="search"
@@ -87,7 +87,7 @@ export default {
 
         function onSearching(){
             dataFilter.value[kode_pengguna.value] = searchKey.value
-            // console.log('dataFilter',dataFilter.value)
+            //console.log('dataFilter',dataFilter.value)
             onFilter(dataFilter.value)
             reset.value = true
         }

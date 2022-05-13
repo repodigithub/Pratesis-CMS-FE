@@ -3,7 +3,7 @@
         <breadcrumb  url="MSTAREA.xlsx" @openModal="openUpload" />
         <div class="row q-pa-lg">
             <div class="col-12">
-                <filter-table :option="option" placeholder="Ex: ASM Medan" @onFiltering="onFilter" @onReseting="onResetFilter"/>
+                <filter-table :option="option" placeholder="" @onFiltering="onFilter" @onReseting="onResetFilter"/>
                 <core-table :url="$route.path.substr(1)" :option="{include:'region'}" v-model:filter="filter" :columns="columns" v-model:requesting="reload" :islogin="false" >
                     <template v-slot:detail-content="props">
                         <div v-if="!props.edit">
