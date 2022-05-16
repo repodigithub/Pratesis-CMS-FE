@@ -9,7 +9,7 @@
 <div class="row justify-center" style="margin-top:65px;padding-bottom:40px;">
         <q-card class="col" style="max-width:818px;border-radius:10px !important;" flat>
             <q-card-section>
-                <div class="font-big">{{ $route.query.edit ? 'Edit Produk' : 'Add New Product' }}</div>
+                <div class="font-big">{{ $route.query.edit ? 'Edit Product' : 'Add New Product' }}</div>
             </q-card-section>
             <q-card-section v-if="loaditem">
                 <div class="row justify-center q-mt-lg" >
@@ -166,7 +166,7 @@ export default {
                                 if (alt.kode_produk === product.kode_produk) {
                                     product.kode_produk = alt.kode_produk
                                     product.nama_produk = alt.nama_produk
-                                    product.budget = formatRibuan(alt.budget_produk)
+                                    product.budget = formatRibuan(parseInt(alt.budget_produk))
                                     product.status  = alt.status
                                 }
                             })
@@ -205,7 +205,7 @@ export default {
                 }
                 products.value.map(item=>{
                     if(item.status){
-                        item.budget = formatRibuan(budgetRata)
+                        item.budget = formatRibuan(parseInt(budgetRata))
                     }else{
                         item.budget = 0
                     }
@@ -231,12 +231,12 @@ export default {
             let statustrue = products.value.filter(item=>item.status).length
             let budgetRata = ''
             if (statustrue > 0) {
-                budgetRata = parseInt(val) / statustrue
+                budgetRata = parseInt(val.replaceAll(".",""),10) / statustrue
             }
             if (!isManual.value) {
                 products.value.map(item=>{
                     if(item.status){
-                        item.budget = budgetRata
+                        item.budget = formatRibuan(parseInt(budgetRata))
                     }
                 })
             }
