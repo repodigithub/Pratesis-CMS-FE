@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-px-lg" style="margin-top:-18px;" >
+  <!-- <div class="row q-px-lg" style="margin-top:-18px;" >
         <div class="col-12">
             <q-card class="own-card" flat style="border-radius:20px !important;">
               <q-card-section class="text-center q-pt-sm">
@@ -11,7 +11,7 @@
               </q-card-section>
             </q-card>
         </div>
-    </div>
+    </div> -->
     <div class="row q-col-gutter-lg q-px-lg justify-center">
         <div class="col" style="margin-top:20px;" v-for="section in sectionFirst" :key="section.label">
             <core-table
