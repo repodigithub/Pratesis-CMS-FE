@@ -55,21 +55,21 @@
                         <div class="laporan-klaim">
                             <q-scroll-area class="fit">
                                 <div class="row q-my-sm">
-                            <div class="col-12 wrapper-primary">
-                                <p class="fs-10 q-mb-none">Keterangan :</p>
-                                <span class="fs-12">{{props.tampil.description}}</span>
-                            </div>
-                        </div>
-                        <div class="row items-center q-mt-md">
-                                <div>Code ULI</div>
-                                <q-space />
-                                <div >{{props.tampil.kode_uli}}</div>
-                        </div>
-                        <div class="row items-center q-mt-md">
-                                <div>Tanggal Kirim</div>
-                                <q-space />
-                                <div >{{GeneralFormatDate(props.tampil.created_at,'DD/MM/YYYY')}}</div>
-                        </div>
+                                    <div class="col-12 wrapper-primary">
+                                        <p class="fs-10 q-mb-none">Keterangan :</p>
+                                        <span class="fs-12">{{props.tampil.description}}</span>
+                                    </div>
+                                </div>
+                                <div class="row items-center q-mt-md">
+                                        <div>Code ULI</div>
+                                        <q-space />
+                                        <div >{{props.tampil.kode_uli}}</div>
+                                </div>
+                                <div class="row items-center q-mt-md">
+                                        <div>Tanggal Kirim</div>
+                                        <q-space />
+                                        <div >{{GeneralFormatDate(props.tampil.created_at,'DD/MM/YYYY')}}</div>
+                                </div>
                         <div class="row items-center q-mt-md">
                                 <div>Tanggal Terima</div>
                                 <q-space />
@@ -98,44 +98,41 @@
                         <div class="row items-center q-mt-md">
                                 <div>Status</div>
                                 <q-space />
-                                <q-badge outline :label="statusPromo(props.tampil.status_claim)" :class="active ? colorStatusPromo(props.tampil.status_claim) : ''"
-                style="padding-top:5px;padding-bottom:5px;" />
+                                <q-badge outline :label="statusPromo(props.tampil.status_claim)" :class="active ? colorStatusPromo(props.tampil.status_claim) : ''"style="padding-top:5px;padding-bottom:5px;" />
                         </div>
-                        <div class="row items-center q-mt-md bg-primary4" style="border-radius: 8px;
-    padding: 5px 10px;">
-                                <div>Bukti Bayar</div>
-                                <q-space />
-                                <q-btn color="primary" flat no-caps class="q-pr-none" v-if="buktibayar" type="a" :href="buktibayar" target="_blank" download>
-                                    <div class="row fs-12">
-                                        <span class="q-mr-sm">
-                                            Lihat
-                                        </span>
-                                        <img src="~assets/icon/file-search.svg" alt="" class="align-middle">
-                                    </div>
-                                </q-btn>
-                                <q-btn color="primary" flat no-caps class="q-pr-none" v-if="props.tampil.bukti_bayar" type="a" :href="props.tampil.bukti_bayar" target="_blank" download>
-                                    <div class="row fs-12">
-                                        <span class="q-mr-sm">
-                                            Lihat
-                                        </span>
-                                        <img src="~assets/icon/file-search.svg" alt="" class="align-middle">
-                                    </div>
-                                </q-btn>
-                                <q-btn color="secondary" flat no-caps class="q-pr-none" @click="openUpload" v-if="role == 'GA' && !buktibayar && !props.tampil.bukti_bayar">
-                                    <div class="row fs-12">
-                                        <span class="q-mr-sm">
-                                            Upload
-                                        </span>
-                                        <img src="~assets/icon/upload_docs.svg" alt="" class="align-middle">
-                                    </div>
-                                </q-btn>
-                                
+                        <div class="row items-center q-mt-md bg-primary4" style="border-radius: 8px;padding: 5px 10px;">
+                            <div>Bukti Bayar</div>
+                            <q-space />
+                            <q-btn color="primary" flat no-caps class="q-pr-none" v-if="buktibayar" type="a" :href="buktibayar" target="_blank">
+                                <div class="row fs-12">
+                                    <span class="q-mr-sm">
+                                        Lihat
+                                    </span>
+                                    <img src="~assets/icon/file-search.svg" alt="" class="align-middle">
+                                </div>
+                            </q-btn>
+                            <q-btn color="primary" flat no-caps class="q-pr-none" v-if="props.tampil.bukti_bayar" type="a" :href="props.tampil.bukti_bayar" target="_blank">
+                                <div class="row fs-12">
+                                    <span class="q-mr-sm">
+                                        Lihat
+                                    </span>
+                                    <img src="~assets/icon/file-search.svg" alt="" class="align-middle">
+                                </div>
+                            </q-btn>
+                            <q-btn color="secondary" flat no-caps class="q-pr-none" @click="openUpload" v-if="role == 'GA' && !buktibayar && !props.tampil.bukti_bayar">
+                                <div class="row fs-12">
+                                    <span class="q-mr-sm">
+                                        Upload
+                                    </span>
+                                    <img src="~assets/icon/upload_docs.svg" alt="" class="align-middle">
+                                </div>
+                            </q-btn>
                         </div>
-                            </q-scroll-area>
-                            <div class="row justify-between q-pt-sm" v-if="role == 'GA' && !props.tampil.bukti_bayar">
-                                <q-btn color="secondary" label="Cancel" outline no-caps unelevated class="q-px-sm btn-one" v-close-popup />
-                                <q-btn color="secondary" label="Submit" no-caps unelevated class="q-px-sm btn-one" @click="submitLaporan(props.tampil.id)"/>
-                            </div>
+                        </q-scroll-area>
+                        <div class="row justify-between q-pt-sm" v-if="role == 'GA' && !props.tampil.bukti_bayar">
+                            <q-btn color="secondary" label="Cancel" outline no-caps unelevated class="q-px-sm btn-one" v-close-popup />
+                            <q-btn color="secondary" label="Submit" no-caps unelevated class="q-px-sm btn-one" @click="submitLaporan(props.tampil.id)"/>
+                        </div>
                         </div>
                     </template>
                 </core-table>
