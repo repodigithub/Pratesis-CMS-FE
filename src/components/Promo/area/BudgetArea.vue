@@ -44,7 +44,7 @@
             <div class="text-grey1">Budget Limit</div>
             <div class="text-h6">Rp {{formatRibuan(budgetlimits)}}</div>
             <div class="row q-col-gutter-sm q-mt-sm" v-if="role == 'GA'">
-                <select-dropdown url="distributor" :isNormal="false" :islogin="false" v-model:selected="kode_distributor" class="q-mb-md col" nameLabel="Kode Distributor" />
+                <select-dropdown :url="`distributor?kode_area=${this.$store.state.auth.user.kode_area}&status_distributor=aktif`" :isNormal="false" :islogin="false" v-model:selected="kode_distributor" class="q-mb-md col" nameLabel="Kode Distributor" />
                 <div class="col">
                     <label for="Nama Area">Nama Distributor</label>
                     <q-input v-model="nama_distributor" type="text" disable id="Nama Area" dense bg-color="grey4" filled style="border:1px solid #B7C4D6;border-radius:4px;"/>
