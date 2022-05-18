@@ -98,7 +98,7 @@
                         <div class="row items-center q-mt-md">
                                 <div>Status</div>
                                 <q-space />
-                                <q-badge outline :label="statusPromo(props.tampil.status_claim)" :class="active ? colorStatusPromo(props.tampil.status_claim) : ''"style="padding-top:5px;padding-bottom:5px;" />
+                                <q-badge outline :label="statusPromo(props.tampil.status_claim)" :class="active ? colorStatusPromo(props.tampil.status_claim) : ''" style="padding-top:5px;padding-bottom:5px;" />
                         </div>
                         <div class="row items-center q-mt-md bg-primary4" style="border-radius: 8px;padding: 5px 10px;">
                             <div>Bukti Bayar</div>
