@@ -8,7 +8,7 @@
                     <div class="row items-end">
                         <div class="col-3" v-if="role !== 'DI'">
                             <div class="q-pr-md">
-                                <select-dropdown url="distributor" v-model:selected="kode_distributor" nameLabel="Distributor :"/>
+                                <select-dropdown :url="`distributor?kode_area=${this.$store.state.auth.user.kode_area}`"  v-model:selected="kode_distributor" nameLabel="Distributor :"/>
                             </div>
                         </div>
                         <div class="col-3">
@@ -39,7 +39,7 @@
                 <core-table
                     :columns="columns"
                     :option="optionTable"
-                    url="laporan-claim"
+                    :url="`laporan-claim`"
                     :canEdit="false"
                     ref="Coretable"
                     :requesting="requesting"
