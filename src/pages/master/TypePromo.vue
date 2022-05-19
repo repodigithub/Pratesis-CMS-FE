@@ -1,5 +1,5 @@
 <template>
-    <core-simple-page :columns="columns" placeholder="Ex: Nama Kegiatan" :filteroption="option" filetemplate="MSTTIPE_PROMO_HEADER.xlsx" :canEdit="false" :optionsDetail="{ include : 'spendTypes.investment;documents'}">
+    <core-simple-page :columns="columns" placeholder="" :filteroption="option" filetemplate="MSTTIPE_PROMO_HEADER.xlsx" :canEdit="false" :optionsDetail="{ include : 'spendTypes.investment;documents'}">
         <template v-slot:body-cell-spend_type="props" style="width:200px!important;">
             <q-td key="kode" :props="props" style="max-width:200px!important;">
                 <div class="row" style="max-width:250px;">

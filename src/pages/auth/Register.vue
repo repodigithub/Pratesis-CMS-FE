@@ -96,7 +96,7 @@
                 <div class="col-12">
                     <select-dropdown url="user-group" v-model:selected="dataSend.kode_group" :islogin="false" :master="false" class="q-mb-md" nameLabel="User Level"/>
                 </div>
-                <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI') || dataSend.kode_group.includes('SA')">
+                <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI') || dataSend.kode_group.includes('GA')">
                     <div class="col-6">
                         <select-dropdown url="area" v-model:selected="dataSend.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo"/>
                     </div>

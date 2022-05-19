@@ -1,5 +1,5 @@
 <template>
-    <core-simple-page :columns="columns" placeholder="Ex: Nama Brand" :filteroption="option" filetemplate="MSTBRAND.xlsx" ref="coresimple">
+    <core-simple-page :columns="columns" placeholder="" :filteroption="option" filetemplate="MSTBRAND.xlsx" ref="coresimple">
         <template v-slot:toptable>
             <div class="row justify-end">
                 <q-btn color="secondary"  no-caps class="btn-one" unelevated @click="openAdd">

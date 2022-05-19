@@ -1,5 +1,5 @@
 <template>
-    <core-simple-page :columns="columns" placeholder="Ex: Nama Document Claim" :filteroption="option" filetemplate="MSTDOCUMENT_CLAIM.xlsx">
+    <core-simple-page :columns="columns" placeholder="" :filteroption="option" filetemplate="MSTDOCUMENT_CLAIM.xlsx">
         <!-- <template v-slot:toptable>
             <div class="row justify-end">
                 <q-btn color="secondary" label="Eksport to PDF" no-caps class="btn-one" unelevated/>

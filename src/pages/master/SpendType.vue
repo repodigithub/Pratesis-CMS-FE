@@ -2,7 +2,7 @@
     <breadcrumb  url="MSTSPENDTYPE" @openModal="openUpload" />
         <div class="row q-pa-lg">
             <div class="col-12">
-                <filter-table :option="option" placeholder="ex: Investment Type" @onFiltering="onFilter" @onReseting="onResetFilter"/>
+                <filter-table :option="option" placeholder="" @onFiltering="onFilter" @onReseting="onResetFilter"/>
                 <core-table :url="$route.path.substr(1)" v-model:filter="filter" :columns="columns" v-model:requesting="reload" :optionsDetail="{ include : 'investment'}">
                     <template v-slot:toptable>
                         <div class="font-normal q-mb-sm">Spend Type :</div>
