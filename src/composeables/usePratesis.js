@@ -74,24 +74,20 @@ export const usePratesis = () => {
         const {page, rowsPerPage}  = request.pagination
         let filter  = ''
         let filterKey = ''
-        console.log("filter",request)
         if(request.filter){
             filter = request.filter
-            if(filter.value){
-                if(filter.value.kode_group){
-                    filterKey += `&kode_group=${filter.value.kode_group}`
-                }
-                if(filter.value.kode_pengguna){
-                    filterKey += `&kode_pengguna=${filter.value.kode_pengguna}`
-                }
-                if(filter.value.nama){
-                    filterKey += `&nama=${filter.value.nama}`
-                }
-                if(filter.value.email){
-                    filterKey += `&email=${filter.value.email}`
-                }
+            if(filter.kode_group){
+                filterKey += `&kode_group=${filter.kode_group}`
             }
-
+            if(filter.kode_pengguna){
+                filterKey += `&kode_pengguna=${filter.kode_pengguna}`
+            }
+            if(filter.nama){
+                filterKey += `&nama=${filter.nama}`
+            }
+            if(filter.email){
+                filterKey += `&email=${filter.email}`
+            }
             if(filter.searchKey){
                 filterKey += `&search=${filter.searchKey}`
             }

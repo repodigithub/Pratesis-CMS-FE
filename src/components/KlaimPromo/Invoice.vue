@@ -1,7 +1,9 @@
 <template>
 <q-card-section class="row justify-center q-mt-xl" v-show="!load" style="height:100%;">
-                <q-spinner-grid class="col-4 text-primary"/>
-                <span class="col-12 text-primary font-medium text-center">Memuat Data</span>
+                <div class="col-4">
+                        <q-spinner-grid class="text-primary q-mr-sm"/>
+                        <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    </div>
 </q-card-section>
 <q-card-section class="q-px-lg" v-show="load">
     <div class="row items-start q-pb-none q-px-none" >
@@ -139,11 +141,8 @@ export default {
             for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
             stylesHtml += node.outerHTML;
             }
-            // console.log('prtHtml',prtHtml)
-            // console.log('stylesHtml',stylesHtml)
             // Open the print window
             const WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
-
             WinPrint.document.write(`<!DOCTYPE html>
             <html>
             <head>
@@ -155,8 +154,10 @@ export default {
             </html>`);
 
             WinPrint.document.close();
-            WinPrint.focus();
-            WinPrint.print();
+            setTimeout(() => {
+                WinPrint.focus();
+                WinPrint.print();
+            }, 500);
         }
         return {
             GeneralFormatDate,formatRibuan,load,notes,created_by,approved_by,printInvoice

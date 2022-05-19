@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class=" q-ml-md">
-                        <select-dropdown url="user-group" v-model:selected="dataFilter.kode_group" :islogin="false" :master="false" nameLabel="Group Pengguna :"/>
+                        <select-dropdown url="user-group" v-model:selected="kode_group" :islogin="false" :master="false" nameLabel="Group Pengguna :"/>
                     </div>
                     
                     <div class=" q-ml-md">
@@ -67,7 +67,7 @@ export default {
 
         const dataFilter = ref({})
         const kode_pengguna = ref('kode_pengguna')
-        dataFilter.value.kode_group = null
+        const kode_group = ref(null)
         const optkode_pengguna = ref([
             { 
                 label : 'Kode Pengguna',
@@ -86,8 +86,9 @@ export default {
         const reset = ref(false)
 
         function onSearching(){
+            dataFilter.value = {}
             dataFilter.value[kode_pengguna.value] = searchKey.value
-            //console.log('dataFilter',dataFilter.value)
+            dataFilter.value['kode_group'] = kode_group.value
             onFilter(dataFilter.value)
             reset.value = true
         }
@@ -114,7 +115,7 @@ export default {
             onSearching,
             reset,
 
-            kode_pengguna,
+            kode_pengguna,kode_group,
             searchKey
         }
     },

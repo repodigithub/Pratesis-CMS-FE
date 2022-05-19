@@ -2,8 +2,10 @@
 <q-dialog :modelValue="modalDetail" @hide="$emit('update:modalDetail',false)" position="right" full-height :class="isInvoice ? 'dialog-detail' : 'dialog-detail-min'">
     <q-card :style="{height:'100%'}">
             <q-card-section class="row justify-center q-mt-xl" v-if="!load" style="height:100%;">
-                    <q-spinner-grid class="col-4 text-primary"/>
-                    <span class="col-12 text-primary font-medium text-center">Memuat Data</span>
+                    <div class="col-4">
+                        <q-spinner-grid class="text-primary q-mr-sm"/>
+                        <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    </div>
             </q-card-section>
             <div class="row" v-else>
                 <div class="col-6" style="border-right: 3px solid #ebebeb;" v-if="isInvoice">
