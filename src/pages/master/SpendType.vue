@@ -7,6 +7,7 @@
                     <template v-slot:toptable>
                         <div class="font-normal q-mb-sm">Spend Type :</div>
                         <q-btn-group outline>
+                            <q-btn :outline="status === 'All' ? false : true " color="primary" label="All" unelevated @click="filterStatus('All')" :class="status === 'All' ? '' : 'bg-primary4'"/>
                             <q-btn :outline="status === 'RA' ? false : true " color="primary" label="RA" unelevated @click="filterStatus('RA')" :class="status === 'RA' ? '' : 'bg-primary4'"/>
                             <q-btn :outline="status === 'FO' ? false : true " color="primary" label="FO" unelevated @click="filterStatus('FO')" :class="status === 'FO' ? '' : 'bg-primary4'"/>
                             <q-btn :outline="status === 'OA' ? false : true " color="primary" label="OA" unelevated @click="filterStatus('OA')" :class="status === 'OA' ? '' : 'bg-primary4'"/>
@@ -92,12 +93,13 @@ export default {
         //MSTSPENDTYPE
         const option = ref(['Kode','Investment Type','Fund Type','Reference','Condition Type'])
         const { onFilter,filter,onResetFilter,modalUpload,openUpload,reload,reloadTable,randomColor} = usePratesis()
-        const status = ref('RA')
+        const status = ref('All')
         function filterStatus(key){
             status.value = key
             filter.value = {
                 "kode_spend_type" : key
             }
+            // emit('onSpend',status.value)
         }
 
         const active = ref(true)
