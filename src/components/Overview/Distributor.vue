@@ -6,7 +6,8 @@
                 :option="{level : '?level=distributor&limit=5'}"
                 v-model:requesting="request"
                 classStyle="br-20 own-card"
-                :canOpenDetail="false"
+                @openCustomDetail="openDetail"
+                customDetail
                 :columns="columnFirst">
                 <template v-slot:toptable>
                     <div class="row justify-between">
@@ -26,7 +27,8 @@
                 <core-table
                 url="dashboard/menunggu-pembayaran"
                 classStyle="br-20 own-card"
-                :canOpenDetail="false"
+                @openCustomDetail="openDetailLaporan"
+                customDetail
                 v-model:requesting="request2"
                 :columns="columnSecond">
                 <template v-slot:toptable>
@@ -89,10 +91,18 @@ export default {
                 }
             }
         }
+
+        function openDetail(value){
+            router.push({name:'Klaim Promo',query:value})
+        }
+        function openDetailLaporan(value){
+            router.push({name:'Laporan Klaim',query:value})
+        }
         return{
             columnFirst,columnSecond,statusPromo,colorStatusPromo,active,
             request,onRefresh,
             request2,onRefresh2,
+            openDetail,openDetailLaporan
         }
     },
     components:{

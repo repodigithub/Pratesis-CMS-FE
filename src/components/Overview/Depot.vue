@@ -4,9 +4,10 @@
             <core-table
                 url="dashboard/tidak-layak-bayar"
                 classStyle="br-20 own-card"
-                :canOpenDetail="false"
                 :option="{level : '?level=depot&limit=5'}"
                 v-model:requesting="request"
+                @openCustomDetail="openDetail"
+                customDetail
                 :columns="columns">
                 <template v-slot:toptable>
                     <div class="row justify-between">
@@ -31,7 +32,8 @@
                 :option="{level : '?level=depot&limit=5'}"
                 v-model:requesting="request2"
                 classStyle="br-20 own-card"
-                :canOpenDetail="false"
+                @openCustomDetail="openDetailLaporan"
+                customDetail
                 :columns="columns">
                 <template v-slot:toptable>
                     <div class="row justify-between">
@@ -56,6 +58,7 @@
 import { defineAsyncComponent,ref } from 'vue'
 import { useCustom } from 'src/composeables/useCustom'
 import { usePratesis } from 'src/composeables/usePratesis'
+import { useRouter } from 'vue-router'
 
 export default {
     setup(){
@@ -88,12 +91,21 @@ export default {
             }
         }
         const active = ref(true)
+        const router = useRouter()
+
+        function openDetail(value){
+            router.push({name:'Verifikasi',query:value})
+        }
+        function openDetailLaporan(value){
+            router.push({name:'Laporan Klaim',query:value})
+        }
+
         return{
             columns,
             request,onRefresh,
             request2,onRefresh2,
-            active,colorStatusPromo,statusPromo
-
+            active,colorStatusPromo,statusPromo,
+            openDetail,openDetailLaporan
         }
     },
     components:{

@@ -99,7 +99,7 @@
                   />
                 </div>
               </div>
-              <div v-else>
+              <div v-show="edit">
                 <div div class="row items-center">
                   <div>Request Date</div>
                   <q-space />
@@ -173,7 +173,7 @@
                 />
 
                 <div
-                  v-if="
+                  v-show="
                     dataModal.kode_group.includes('DI') ||
                     dataModal.kode_group.includes('GA')
                   "
@@ -199,9 +199,9 @@
                         </template>
                     </q-input>
                 </div>
-                <div v-if="dataModal.kode_group.includes('DI')">
+                <div v-if="showdistributor">
                   <select-dropdown
-                    url="distributor"
+                    :url="urldistributor"
                     v-model:selected="dataModal.kode_distributor"
                     :islogin="false"
                     :master="false"
@@ -370,12 +370,20 @@ export default {
       }
       valid.value = true;
     });
-
-    
+    const urldistributor = ref('')
+    const showdistributor = ref(false)
     watch(
       () => dataModal.value.kode_area,
       (val) => {
         if (val !== null) {
+          showdistributor.value = false
+          setTimeout(() => {
+              urldistributor.value = `distributor?kode_area=${val}&status_distributor=aktif`
+              showdistributor.value = true
+          }, 100);
+          if(edit.value) {
+            dataModal.value.kode_distributor =  null
+          }
           getData(`area?search=${val}`).then((res) => {
             nama_area.value = res.data.data.data.filter(area=> area.kode_area === val)[0].nama_area
           });
@@ -451,7 +459,8 @@ export default {
       statusPromo,
       colorStatusPromo,
       active : true,
-      visibility,
+      visibility,urldistributor,
+      showdistributor
     };
   },
   methods: {

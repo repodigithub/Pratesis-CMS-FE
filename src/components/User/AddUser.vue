@@ -65,7 +65,7 @@
                     </div>
                     <div class="row col-12 justify-between" v-show="send.kode_group.includes('DI')">
                         <div class="col-6">
-                            <select-dropdown url="distributor" v-model:selected="send.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor"/> 
+                            <select-dropdown :url="`distributor?kode_area${send.kode_area}&status_distributor=aktif`" v-model:selected="send.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor"/> 
                         </div>
                         <div class="col-5">
                             <label for="nama_distributor" class="font-normal">Nama Distributor</label>

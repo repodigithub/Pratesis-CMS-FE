@@ -250,7 +250,7 @@ export default {
         const { getData,putData } = useService()
         const loadjudul = ref(false)
         const judul = ref({})
-        const { showLoading,hideLoading,successNotif,formatTglPromo,colorStatusPromo,statusPromo,colorStatusSpend,errorNotif  } = useCustom()
+        const { showLoading,hideLoading,successNotif,formatTglPromo,colorStatusPromo,statusPromo,colorStatusSpend,errorNotif,GeneralFormatDate  } = useCustom()
         
         const { formatRibuan,role } = usePratesis()
         
@@ -346,14 +346,20 @@ export default {
                 budget_distributor.value = result.statistics.budget_distributor
 
                 documentClaim.value = result.document
-                status.value = role.value == 'DI' ? result.status_promo : result.status
                 loadjudul.value = false
                 produkShow.value = true
                 areaShow.value = true
+                if (role.value == 'DI') {
+                    status.value = result.status_promo
+                    emit('update:isClaimed',result.is_claimed)
+                } else {
+                    status.value = result.status
+                }
                 emit('update:roles',role.value)
                 emit('update:isDrafter',isDraft.value)
                 emit('update:statusDetail',status.value)
                 emit('update:promoId',result.id)
+                emit('update:opsoId',result.opso_id)
             })
             .catch(err=>{
                 console.log('error,',err)
@@ -484,10 +490,16 @@ export default {
             }
         }
         function onPromoSubmit(){
-            if (['HO','AD'].indexOf(role.value) >= 0) {
-                onSubmitHO()
+            let tglawal = judul.value.start_date
+            let today = GeneralFormatDate(Date.now(),'YYYY-MM-DD')
+            if(tglawal < today){
+                errorNotif(`tanggal awal : harus lebih dari atau sama dengan tanggal hari ini `)
             }else{
-                onSubmitDepot()
+                if (['HO','AD'].indexOf(role.value) >= 0) {
+                    onSubmitHO()
+                }else{
+                    onSubmitDepot()
+                }
             }
         }
         const active = ref(true)

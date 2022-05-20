@@ -77,8 +77,10 @@
                     </q-card-section>
                 </q-scroll-area>
                 <q-card-section class="row justify-center" v-else>
-                    <q-spinner-grid class="col-4 text-primary"/>
-                    <span class="col-12 text-primary font-medium text-center">Memuat Data</span>
+                    <div class="col-4">
+                        <q-spinner-grid class="text-primary q-mr-sm"/>
+                        <span class="col-12 text-primary font-medium text-center q-mt-lg q-mb-md">Memuat Data</span>
+                    </div>
                 </q-card-section>
                 <q-card-section class="row items-center justify-between" v-if="detailPromo.status === 'need_approval'">
                     <q-btn color="secondary" label="Reject" no-caps unelevated class="q-px-sm btn-one q-mr-sm" outline @click="onApproval('Reject')"/>

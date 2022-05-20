@@ -76,6 +76,8 @@ export default {
         
         const route = useRoute()
         const modalAddKlaim = ref('')
+        const modalDetail = ref(false)
+        const dataDetail = ref({})
         onMounted(()=>{
             if(route.query.opsoId){
                 getData(`promo-distributor?opso_id=${route.query.opsoId}`)
@@ -86,10 +88,14 @@ export default {
                     modalAdd.value = true
                 })
             }
+            if(route.query.id){
+                dataDetail.value = {
+                    id : route.query.id
+                }
+                modalDetail.value = true
+            }
         })
 
-        const modalDetail = ref(false)
-        const dataDetail = ref({})
         function openDetail(value){
             dataDetail.value = value
             modalDetail.value = true

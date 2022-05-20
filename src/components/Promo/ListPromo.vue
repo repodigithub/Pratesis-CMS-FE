@@ -129,7 +129,7 @@ export default {
                 key += `&end_date=${filter.value.end_date}`
             }
             if(['All',''].indexOf(spend_type.value) < 0){
-                key += `&spend_type=${spend_type.value.toLowerCase()}`
+                key += `&kode_spend_type=${spend_type.value.toLowerCase()}`
             }
             if(['All',''].indexOf(status.value) < 0){
                 key += `&status=${status.value.replace(/ /g,"_").toLowerCase()}`

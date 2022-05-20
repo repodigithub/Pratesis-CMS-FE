@@ -114,9 +114,9 @@
                         </q-input>
                     </div>
                 </div>
-                <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI')">
+                <div class="row col-12 justify-between" v-if="showdistributor">
                     <div class="col-6">
-                        <select-dropdown url="distributor" v-model:selected="dataSend.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor"/> 
+                        <select-dropdown :url="urldistributor" v-model:selected="dataSend.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor"/> 
                     </div>
                     <div class="col-5">
                         <label for="nama_distributor" class="font-normal">Nama Distributor</label>
@@ -184,7 +184,7 @@ export default {
         const error = ref({
             recaptcha: ''
         })
-        const { showLoading,hideLoading } = useCustom()
+        const { showLoading,hideLoading,errorNotif } = useCustom()
 
         dataSend.value = {
                 user_id:'',
@@ -202,6 +202,8 @@ export default {
 
         const kodedistributor = ref('')
         const nama_distributor = ref('')
+        const urldistributor = ref('')
+        const showdistributor = ref(false)
         
         function onSave(){
             form.value.validate()
@@ -222,9 +224,13 @@ export default {
                             registerSuccess.value = true
                             hideLoading()
                         })
-                        .catch(()=>{
+                        .catch((err)=>{
                             hideLoading()
                             grecaptcha.reset()
+                            let result = err.response.data
+                            if(result.code === 500){
+                                errorNotif(`${result.message}`)
+                            }
                         })
                     }
                 }
@@ -234,6 +240,11 @@ export default {
         watch(()=>dataSend.value.kode_area,val=>{
             let a = kodedepo.value.options.filter(f=>f.value === val)
             nama_area.value = a[0].label
+            showdistributor.value = false
+            setTimeout(() => {
+                urldistributor.value = `distributor?kode_area=${val}&status_distributor=aktif`
+                showdistributor.value = true
+            }, 100);
         })
 
         watch(()=>dataSend.value.kode_distributor,val=>{
@@ -249,7 +260,8 @@ export default {
             kodedepo,
             nama_area,
             kodedistributor,
-            nama_distributor
+            nama_distributor,
+            errorNotif,urldistributor,showdistributor
         }
     },
     data(){

@@ -96,7 +96,7 @@
                                     </template>
                                 </q-input>
                             </div>
-                            <select-dropdown url="user-group" v-model:selected="dataSend.kode_group" :islogin="false" :master="false" class="q-mb-md col-12" nameLabel="User Level"/>
+                            <!-- <select-dropdown url="user-group" v-model:selected="dataSend.kode_group" :islogin="false" :master="false" class="q-mb-md col-12" nameLabel="User Level"/>
                             <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI') || dataSend.kode_group.includes('GA')">
                                 <div class="col-6">
                                     <select-dropdown url="area" v-model:selected="dataSend.kode_area" :islogin="false" :master="false" class="q-mb-md" nameLabel="Kode Depo"/>
@@ -115,24 +115,24 @@
                                     </q-input>
                                 </div>
                             </div>
-                    <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI')">
-                        <div class="col-6">
-                            <select-dropdown url="distributor" v-model:selected="dataSend.kode_distributor" :islogin="false" :master="false" class="q-mb-md" nameLabel="Kode Distributor"/> 
-                        </div>
-                        <div class="col-5">
-                            <label for="nama_distributor" class="font-normal">Nama Distributor</label>
-                            <q-input v-model="nama_distributor"  dense outlined id="nama_distributor" class="q-mb-md"
-                            hide-bottom-space
-                            disable
-                            >
-                                <template v-slot:append>
-                                <q-icon
-                                    name="person"
-                                />
-                                </template>
-                            </q-input>
-                        </div>
-                    </div>
+                            <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI')">
+                                <div class="col-6">
+                                    <select-dropdown url="distributor" v-model:selected="dataSend.kode_distributor" :islogin="false" :master="false" class="q-mb-md" nameLabel="Kode Distributor"/> 
+                                </div>
+                                <div class="col-5">
+                                    <label for="nama_distributor" class="font-normal">Nama Distributor</label>
+                                    <q-input v-model="nama_distributor"  dense outlined id="nama_distributor" class="q-mb-md"
+                                    hide-bottom-space
+                                    disable
+                                    >
+                                        <template v-slot:append>
+                                        <q-icon
+                                            name="person"
+                                        />
+                                        </template>
+                                    </q-input>
+                                </div>
+                            </div> -->
                         </div>
                     </q-card-section>
                     <q-card-actions align="right" class="q-px-lg q-pb-lg">
@@ -247,7 +247,7 @@ export default {
     },
     components:{
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
-        'select-dropdown': defineAsyncComponent(()=>import('components/SelectDropdown'))
+        // 'select-dropdown': defineAsyncComponent(()=>import('components/SelectDropdown'))
     },
     data(){
         return{

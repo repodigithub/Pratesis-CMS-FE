@@ -16,7 +16,7 @@
             />
             Submit
         </q-btn>
-        <q-btn color="secondary" no-caps unelevated class="btn-one" v-if="role == 'DI' && status == 'claim'" @click="$router.push({name : 'Klaim Promo'})">
+        <q-btn color="secondary" no-caps unelevated class="btn-one" v-if="role == 'DI' && is_claimed" @click="$router.push({name : 'Klaim Promo',query:{opsoId : opso_id}})">
             <div class="row items-end">
             <q-img
                 src="~assets/icon/file-check.svg"
@@ -32,7 +32,7 @@
         </q-btn>
     </template>
 </breadcrumb>
-<item-detail ref="itemsDetail" v-model:roles="role" v-model:isDrafter="isDraft" v-model:statusDetail="status"/>
+<item-detail ref="itemsDetail" v-model:roles="role" v-model:isDrafter="isDraft" v-model:statusDetail="status_promo" v-model:isClaimed="is_claimed" v-model:opsoId="opso_id"/>
 </template>
 
 <script>
@@ -42,12 +42,14 @@ export default {
         const role = ref('undefined')
         const isDraft = ref(false)
         const itemsDetail = ref('')
-        const status = ref('undefined')
+        const status_promo = ref('undefined')
+        const is_claimed = ref('undefined')
+        const opso_id = ref('undefined')
         function onSubmit(){
             itemsDetail.value.onPromoSubmit()
         }
         return {
-            role,isDraft,status,
+            role,isDraft,status_promo,is_claimed,opso_id,
             itemsDetail,onSubmit
         }
     },

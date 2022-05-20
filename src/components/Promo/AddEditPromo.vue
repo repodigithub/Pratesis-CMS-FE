@@ -153,7 +153,7 @@ export default {
             filesupload.value = null
         }
         const { postData,getData } = useService()
-        const { showLoading,hideLoading,successNotif,editTglPromo } = useCustom()
+        const { showLoading,hideLoading,successNotif,editTglPromo,errorNotif,GeneralFormatDate } = useCustom()
         const route = useRoute()
         const { formatRibuan } = usePratesis()
 
@@ -197,7 +197,12 @@ export default {
                         emit('update:modalPromo',false)
                     })
                     .catch(err=>{
-                        console.log('error add edit promo,',err)
+                        hideLoading()
+                        let error = err.response.data.data
+                        Object.keys(error).forEach(function(key) {
+                            errorNotif(`${key} : ${error[key]}`)
+                        });
+                        console.log('error add edit promo,',err.response.data)
                     })
                 }
             })
@@ -217,7 +222,11 @@ export default {
                         emit('initData','promo')
                     })
                     .catch(err=>{
-                        console.log('error add edit promo,',err)
+                        hideLoading()
+                        let error = err.response.data.data
+                        Object.keys(error).forEach(function(key) {
+                            errorNotif(`${key} : ${error[key]}`)
+                        });
                     })
                 }
             })
@@ -238,11 +247,16 @@ export default {
             if (filesupload.value) {
                 sendForm.append('file',filesupload.value)
             }
-
-            if (props.edit) { //ketika edit
-                onEdit(sendForm)
+            let tglawal = dataPromo.value.start_date
+            let today = GeneralFormatDate(Date.now(),'YYYY-MM-DD')
+            if(tglawal < today){
+                errorNotif(`tanggal awal : harus lebih dari atau sama dengan tanggal hari ini `)
             }else{
-                onAdd(sendForm)
+                if (props.edit) { //ketika edit
+                    onEdit(sendForm)
+                }else{
+                    onAdd(sendForm)
+                }
             }
         }
         
@@ -253,7 +267,7 @@ export default {
             showLoading,hideLoading,successNotif,
             postData,
             filesupload,removeFile,
-            onAdd,onEdit,
+            onAdd,onEdit,errorNotif
         }
     }
 }
