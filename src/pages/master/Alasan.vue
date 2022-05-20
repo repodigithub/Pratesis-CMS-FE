@@ -1,5 +1,5 @@
 <template>
-    <core-simple-page :columns="columns" placeholder="Ex: Deskripsi Alasan" :filteroption="option" filetemplate="MSTALASAN.xlsx" ref="coresimple">
+    <core-simple-page :columns="columns" placeholder="" :filteroption="option" filetemplate="MSTALASAN.xlsx" ref="coresimple">
         <template v-slot:toptable>
             <div class="row justify-end">
                 <q-btn color="secondary"  no-caps class="btn-one" unelevated @click="openAdd">
@@ -41,12 +41,12 @@
                 <q-input v-model="props.send.kode_alasan" type="text" id="Kode Alasan" outlined dense lazy-rules
                 :rules="[
                     val => val && val.length > 0 || 'Kode Alasan tidak boleh kosong',
-                ]" placeholder="Kode Alasan"/>
+                ]" placeholder=""/>
                 <label for="deskripsi Alasan">deskripsi Alasan</label>
                 <q-input v-model="props.send.deskripsi_alasan" type="textarea" id="deskripsi Alasan" outlined dense lazy-rules
                 :rules="[
                     val => val && val.length > 0 || 'Deskripsi Alasan tidak boleh kosong',
-                ]" placeholder="Deskripsi Alasan"/>
+                ]" placeholder=""/>
         </template>
     </add-data>
 </template>

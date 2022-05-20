@@ -1,5 +1,5 @@
 <template>
-    <core-simple-page :columns="columns" placeholder="Ex: Nama Investment" :filteroption="option" filetemplate="MSTINVESTMENT.xlsx">
+    <core-simple-page :columns="columns" placeholder="" :filteroption="option" filetemplate="MSTINVESTMENT.xlsx">
         <template v-slot:detail-content="props">
             <div v-if="!props.edit">
                 <div class="row items-center">

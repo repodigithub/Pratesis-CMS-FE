@@ -1,5 +1,5 @@
 <template>
-    <core-simple-page :columns="columns" placeholder="Ex: Nama pajak" :filteroption="option" filetemplate="MSTPAJAK.xlsx" ref="coresimple">
+    <core-simple-page :columns="columns" placeholder="" :filteroption="option" filetemplate="MSTPAJAK.xlsx" ref="coresimple">
         <template v-slot:toptable>
             <div class="row justify-end">
                 <q-btn color="secondary"  no-caps class="btn-one" unelevated @click="openAdd">
@@ -51,19 +51,19 @@
                 <q-select v-model="props.send.tipe_pajak" id="Tipe Pajak" outlined dense lazy-rules
                 :rules="[
                     val => val !== null && val !== '' || 'Tipe Pajak tidak boleh kosong',
-                ]" placeholder="Tipe Pajak"
+                ]" placeholder=""
                 :options="opttipe"
                 />
                 <label for="Presentase Pajak">Presentase Pajak</label>
                 <q-input v-model="props.send.presentase_pajak"  id="Presentase Pajak" outlined dense lazy-rules
                 :rules="[
                     val => val !== null && val !== '' || 'Presentase Pajak tidak boleh kosong',
-                ]" placeholder="Presentase Pajak" type="number"/>
+                ]" placeholder="" type="number"/>
                 <label for="Reference">Reference</label>
                 <q-input v-model="props.send.reference_tax" id="Reference" outlined dense lazy-rules
                 :rules="[
                     val => val !== null && val !== '' || 'Reference tidak boleh kosong',
-                ]" placeholder="No Reference"/>
+                ]" placeholder=""/>
             </div>
         </template>
     </core-simple-page>
@@ -75,21 +75,21 @@
                     <q-input v-model="props.send.kode_pajak"  id="Kode Pajak" outlined dense lazy-rules
                     :rules="[
                         val => val !== null && val !== '' || 'Kode Pajak tidak boleh kosong',
-                    ]" placeholder="Kode Pajak"/>
+                    ]" placeholder="k"/>
                 </div>
                 <div class="col-8">
                     <label class="font-normal" for="Nama Pajak">Nama Pajak</label>
                     <q-input v-model="props.send.nama_pajak" id="Nama Pajak" outlined dense lazy-rules
                     :rules="[
                         val => val !== null && val !== '' || 'Nama Pajak tidak boleh kosong',
-                    ]" placeholder="Nama Pajak"/>
+                    ]" placeholder=""/>
                 </div>
                 <div class="col-12">
                     <label class="font-normal" for="Tipe Pajak">Tipe Pajak</label>
                     <q-select v-model="props.send.tipe_pajak" id="Tipe Pajak" outlined dense lazy-rules
                     :rules="[
                         val => val !== null && val !== '' || 'Tipe Pajak tidak boleh kosong',
-                    ]" placeholder="Tipe Pajak"
+                    ]" placeholder=""
                     :options="opttipe"
                     />
                 </div>
@@ -98,14 +98,14 @@
                     <q-input v-model="props.send.presentase_pajak"  id="Presentase Pajak" outlined dense lazy-rules
                     :rules="[
                         val => val !== null && val !== '' || 'Presentase Pajak tidak boleh kosong',
-                    ]" placeholder="Presentase Pajak" type="number"/>
+                    ]" placeholder="" type="number"/>
                 </div>
                 <div class="col-8">
                     <label class="font-normal" for="Reference">Reference</label>
                     <q-input v-model="props.send.reference_tax" id="Reference" outlined dense lazy-rules
                     :rules="[
                         val => val !== null && val !== '' || 'Reference tidak boleh kosong',
-                    ]" placeholder="No Reference"/>
+                    ]" placeholder=""/>
                 </div>
             </div>
                
