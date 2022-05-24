@@ -174,11 +174,9 @@ export default {
                     uploading.value = false
                     result.value = true
                     filesupload.value = null
-                    console.log("error",err.response)
-                    console.log("error",err.response.data.message)
                     error.value = {
-                        message :err.response.data.message,
-                        data: err.response.data.data
+                        message :err?.response?.data?.message ?? 'tidak ada pesan',
+                        data: err?.response?.data?.data ?? 'tidak ada data error'
                     }
                 })
             }

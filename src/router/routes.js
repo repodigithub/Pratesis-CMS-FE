@@ -76,7 +76,7 @@ const routes = [
             master:true
         }
       },
-      { path: 'investment-type',name:'Investment Type', component: () => import('pages/master/InvestmentType.vue'),
+      { path: 'investment',name:'Investment Type', component: () => import('pages/master/InvestmentType.vue'),
         meta:{
             master:true
         }
