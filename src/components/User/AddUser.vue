@@ -63,9 +63,9 @@
                         </q-input>
                     </div>
                     </div>
-                    <div class="row col-12 justify-between" v-show="send.kode_group.includes('DI')">
+                    <div class="row col-12 justify-between" v-if="showdistributor">
                         <div class="col-6">
-                            <select-dropdown :url="`distributor?kode_area${send.kode_area}&status_distributor=aktif`" v-model:selected="send.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor"/> 
+                            <select-dropdown :url="urldistributor" v-model:selected="send.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor"/> 
                         </div>
                         <div class="col-5">
                             <label for="nama_distributor" class="font-normal">Nama Distributor</label>
@@ -125,10 +125,16 @@ export default {
                 kode_area:null,
                 kode_group:''
         }
-
+        const urldistributor = ref('')
+        const showdistributor = ref(false)
         watch(()=>send.value.kode_area,val=>{
             let a = kodedepo.value.options.filter(f=>f.value === val)
             nama_area.value = a[0].label
+            showdistributor.value = false
+            setTimeout(() => {
+                urldistributor.value = `distributor?kode_area=${val}&status_distributor=aktif`
+                showdistributor.value = true
+            }, 100);
         })
 
         watch(()=>send.value.kode_distributor,val=>{
@@ -161,7 +167,7 @@ export default {
             form,
             onSave,
             successNotif,
-            visibility
+            visibility,urldistributor,showdistributor
         }
     },
 }
