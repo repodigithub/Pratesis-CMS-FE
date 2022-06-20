@@ -16,7 +16,7 @@
             />
             Submit
         </q-btn>
-        <q-btn color="secondary" no-caps unelevated class="btn-one" v-if="role == 'DI' && is_claimed" @click="$router.push({name : 'Klaim Promo',query:{opsoId : opso_id}})">
+        <q-btn color="secondary" no-caps unelevated class="btn-one" v-if="role == 'DI' && status_promo == 'claim'  && !is_claimed" @click="$router.push({name : 'Klaim Promo',query:{opsoId : opso_id}})">
             <div class="row items-end">
             <q-img
                 src="~assets/icon/file-check.svg"

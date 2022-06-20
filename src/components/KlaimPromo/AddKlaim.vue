@@ -12,7 +12,7 @@
                     <div class="col-4">
                     <p class="fs-12 q-mb-sm">Opso ID :</p>
                     <select-dropdown
-                        url="promo-distributor?status=approve"
+                        url="promo-distributor?status=claim"
                         v-model:selected="opsoId"
                         placeHold="OPSO ID"
                         @update="onSelected" />

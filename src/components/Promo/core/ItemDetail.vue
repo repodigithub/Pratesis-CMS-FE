@@ -245,7 +245,7 @@ import { useCustom  } from 'src/composeables/useCustom'
 import { usePratesis } from 'src/composeables/usePratesis'
 
 export default {
-    props:['roles','isDrafter','statusDetail','promoId'],
+    props:['roles','isDrafter','statusDetail','promoId','isClaimed','opsoId'],
     setup(props,{ emit }){
         const { getData,putData } = useService()
         const loadjudul = ref(false)
@@ -270,16 +270,10 @@ export default {
 
         const chartInner = computed(()=>{
             let result = []
-            result.push(persentaseBudgetclaim.value,persentaseBudgetoutstandingclaim.value)
-            if (['AD','HO'].indexOf(role.value) >= 0) {
-                result.push(persentaseBudgetLeft.value)
-            }
-            let sumPersen = result.reduce((prev,curr)=>prev+curr)
-            if (sumPersen > 0) {
-                let hasil = 300-sumPersen
-                result.push(hasil)
-            }else{
-                result.push(0)
+            if(['DI','GA'].indexOf(role.value) >= 0) {
+                result.push(persentaseBudgetclaim.value,persentaseBudgetoutstandingclaim.value,0)
+            }else {
+                result.push(persentaseBudgetclaim.value,persentaseBudgetoutstandingclaim.value,persentaseBudgetLeft.value)
             }
             return result
         })
@@ -300,8 +294,10 @@ export default {
                 result.push('Budget Area','Null')
             }else if(role.value === 'GA'){
                 result.push('Budget Distributor','Null')
+            }else {
+                result.push('Null','Null')
             }
-            result.push('Claim', 'Outstanding Claim', 'Sisa Budget','Null')
+            result.push('Claim', 'Outstanding Claim', 'Sisa Budget')
             return result
         })
 
@@ -314,7 +310,7 @@ export default {
                             data: chartOutside.value
                         },
                         {
-                            backgroundColor: ['#FFC977', '#A484FF','#FF7070','white'],
+                            backgroundColor: ['#FFC977', '#A484FF','#FF7070'],
                             data:chartInner.value
                         },
                     ]

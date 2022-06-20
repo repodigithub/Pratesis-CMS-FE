@@ -51,7 +51,7 @@
                 <q-separator spaced style="margin-top:30px;" />
                 <div class="row q-mt-md q-col-gutter-sm" style="width:460px;">
                     <div class="col">
-                        <select-dropdown url="brand" v-model:selected="kode_brand" :isNormal="false" :master="true" nameLabel="Kode Brand : "/>
+                        <select-dropdown url="brand" v-model:selected="kode_brand"  :master="true" nameLabel="Kode Brand : "/>
                     </div>
                     <div class="col">
                         <label for="Budget" class="font-normal">Nama Brand :</label>

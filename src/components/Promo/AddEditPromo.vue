@@ -72,10 +72,10 @@
                 </div>
 
                 <div class="col-12">
-                    <select-dropdown url="spend" v-model:selected="dataPromo.kode_spend_type" :isNormal="false" class="q-mb-md" nameLabel="Spend Type"/>
+                    <select-dropdown url="spend" v-model:selected="dataPromo.kode_spend_type"  class="q-mb-md" nameLabel="Spend Type"/>
                 </div>
                 <div class="col-12">
-                    <select-dropdown url="budget-holder" v-model:selected="dataPromo.kode_budget_holder" :isNormal="false" class="q-mb-md" nameLabel="Budget Holder"/>
+                    <select-dropdown url="budget-holder" v-model:selected="dataPromo.kode_budget_holder"  class="q-mb-md" nameLabel="Budget Holder"/>
                 </div>
 
                 <div class="row justify-between items-center col-12">

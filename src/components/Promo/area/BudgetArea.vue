@@ -44,14 +44,14 @@
             <div class="text-grey1">Budget Limit</div>
             <div class="text-h6">Rp {{formatRibuan(budgetlimits)}}</div>
             <div class="row q-col-gutter-sm q-mt-sm" v-if="role == 'GA'">
-                <select-dropdown :url="`distributor?kode_area=${userKode_area}&status_distributor=aktif`" :isNormal="false" :islogin="false" v-model:selected="kode_distributor" class="q-mb-md col" nameLabel="Kode Distributor" />
+                <select-dropdown :url="`distributor?kode_area=${userKode_area}&status_distributor=aktif`" :islogin="false" v-model:selected="kode_distributor" class="q-mb-md col" nameLabel="Kode Distributor" />
                 <div class="col">
                     <label for="Nama Area">Nama Distributor</label>
                     <q-input v-model="nama_distributor" type="text" disable id="Nama Area" dense bg-color="grey4" filled style="border:1px solid #B7C4D6;border-radius:4px;"/>
                 </div>
             </div>
             <div class="row q-col-gutter-sm q-mt-sm" v-else>
-                <select-dropdown url="area" :isNormal="false" :islogin="false" v-model:selected="kode_area" class="q-mb-md col" nameLabel="Kode Area" />
+                <select-dropdown url="area" :islogin="false" v-model:selected="kode_area" class="q-mb-md col" nameLabel="Kode Area" />
                 <div class="col">
                     <label for="Nama Area">Nama Area</label>
                     <q-input v-model="nama_area" type="text" disable id="Nama Area" dense bg-color="grey4" filled style="border:1px solid #B7C4D6;border-radius:4px;"/>
