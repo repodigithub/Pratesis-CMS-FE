@@ -234,16 +234,16 @@ const menu = [
         title:'Laporan',
         icon:'laporan',
         submenu:[
-            {
-                title:'Ubah Profil',
-                access:{
-                    AD:true,
-                    GA:true,
-                    HO:true,
-                    DI:true,
-                    SA:true,
-                }
-            },
+            // {
+            //     title:'Ubah Profil',
+            //     access:{
+            //         AD:true,
+            //         GA:true,
+            //         HO:true,
+            //         DI:true,
+            //         SA:true,
+            //     }
+            // },
             {
                 title:'Setup Invoice',
                 access:{

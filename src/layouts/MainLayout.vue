@@ -26,12 +26,12 @@
               <q-item>
                 <q-item-section class="text-bold">{{name}} </q-item-section>
               </q-item>
-              <!-- <q-item clickable @click="$router.push( {name: 'Ubah Profil'} )">
+              <q-item clickable @click="$router.push( {name: 'Ubah Profil'} )">
                 <q-item-section>Profile </q-item-section>
                 <q-item-section side center>
                   <q-item-label class="text-primary">Edit</q-item-label>
                 </q-item-section>
-              </q-item> -->
+              </q-item>
               <q-item clickable @click="$store.dispatch('auth/logout')">
                 <q-item-section class="text-warning">Logout</q-item-section>
                 <q-item-section side center>
