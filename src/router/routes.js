@@ -18,6 +18,36 @@ const routes = [
           laporan:true
         }
       },
+      { path: 'export-laporan-claim', name:'Export Laporan Klaim', component: () => import('pages/laporan/ExportLaporanKlaim.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'export-promo-area', name:'Export Promo Area', component: () => import('pages/laporan/ExportPromoAreaDepot.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'export-opsoid', name:'Export Opso Id', component: () => import('pages/laporan/ExportOpsoId.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'export-promo', name:'Export Promo', component: () => import('pages/laporan/ExportPromo.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'export-promo-perarea', name:'Export Promo Per Area', component: () => import('pages/laporan/ExportPromoPerarea.vue'),
+        meta:{
+          laporan:true
+        }
+      },
+      { path: 'export-promo-perbrand', name:'Export Promo Per Brand', component: () => import('pages/laporan/ExportPromoPerbrand.vue'),
+        meta:{
+          laporan:true
+        }
+      },
       /////END FITUR LAPORAN ////////////////////////////////////////////////////
 
       //////FITUR MASTER//////////////////////////////////////////////////

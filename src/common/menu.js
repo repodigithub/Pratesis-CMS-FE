@@ -259,12 +259,6 @@ const menu = [
             //     }
             // },
             // {
-            //     title:'Laporan Promo',
-            //     access:{
-            //         GA:true,
-            //     }
-            // },
-            // {
             //     title:'Alokasi',
             //     access:{
             //         GA:true,
@@ -275,6 +269,46 @@ const menu = [
                 access:{
                     GA:true,
                     DI:true
+                },
+            },
+            {
+                title:'Export Laporan Klaim',
+                access:{
+                    GA:true,
+                    DI:true
+                },
+            },
+            {
+                title:'Export Promo Area',
+                access:{
+                    GA:true,
+                },
+            },
+            {
+                title:'Export Opso Id',
+                access:{
+                    GA:true,
+                },
+            },
+            {
+                title:'Export Promo',
+                access:{
+                    AD:true,
+                    HO:true
+                },
+            },
+            {
+                title:'Export Promo Per Area',
+                access:{
+                    AD:true,
+                    HO:true
+                },
+            },
+            {
+                title:'Export Promo Per Brand',
+                access:{
+                    AD:true,
+                    HO:true
                 },
             },
             // {
