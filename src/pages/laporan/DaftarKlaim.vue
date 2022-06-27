@@ -96,7 +96,8 @@
                     :columns="columns"
                     :option="optionTable"
                     :url="`laporan-claim`"
-                    customDetail @openCustomDetail="openDetail"
+                    customDetail 
+                    @openCustomDetail="openDetail"
                     ref="Coretable"
                     :requesting="requesting"
                     v-model:filter="filter"
@@ -116,16 +117,15 @@
                 </core-table>
             </div>
         </div>
-        <upload-file v-model:upload="modalUpload" v-if="modalUpload" :menu="$route.path.substr(1)" titleModal="Invoice (Tanpa Materai)" @onUploadSuccess="reloadBukti" typeFileUpload=".pdf"/>
-        <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" :canEdit="false">
+
+        <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" :canEdit="false" :customUrl="`laporan-claim/${dataDetail.id}`">
         <template v-slot:detail-content="props">
             <div class="laporan-klaim">
             <q-scroll-area class="fit">
-                    <div class="row q-my-sm">
-                        <div class="col-12 wrapper-primary">
-                            <p class="fs-10 q-mb-none">Keterangan :</p>
-                            <span class="fs-12">{{props.tampil.description}}</span>
-                        </div>
+                    <div class="row items-center q-mt-md">
+                            <div>OPSO ID</div>
+                            <q-space />
+                            <div >{{props.tampil.opso_id}}</div>
                     </div>
                     <div class="row items-center q-mt-md">
                             <div>Code ULI</div>
@@ -133,32 +133,42 @@
                             <div >{{props.tampil.kode_uli}}</div>
                     </div>
                     <div class="row items-center q-mt-md">
-                            <div>Tanggal Kirim</div>
+                            <div>Jenis Kegiatan</div>
                             <q-space />
-                            <div >{{GeneralFormatDate(props.tampil.created_at,'DD/MM/YYYY')}}</div>
+                            <div >{{props.tampil.jenis_kegiatan}}</div>
+                    </div>
+                    <div class="row items-center q-mt-md">
+                            <div>Spend Type</div>
+                            <q-space />
+                            <div >undefined</div>
+                    </div>
+                    <div class="row items-center q-mt-md">
+                            <div>Paid Aging</div>
+                            <q-space />
+                            <div >undefined</div>
                     </div>
             <div class="row items-center q-mt-md">
-                    <div>Tanggal Terima</div>
+                    <div>Tanggal Klaim</div>
                     <q-space />
                     <div >{{GeneralFormatDate(props.tampil.approved_date,'DD/MM/YYYY')}}</div>
             </div>
             <div class="row items-center q-mt-md">
-                    <div>Klaim</div>
+                    <div>Nilai Klaim</div>
                     <q-space />
                     <div>{{formatRibuan(props.tampil.amount)}}</div>
             </div>
             <div class="row items-center q-mt-md">
-                    <div>Total PPN</div>
+                    <div>Nilai PPN</div>
                     <q-space />
                     <div>{{formatRibuan(props.tampil.ppn_amount)}}</div>
             </div>
             <div class="row items-center q-mt-md">
-                    <div>Total PPh</div>
+                    <div>Nilai PPh</div>
                     <q-space />
                     <div >{{formatRibuan(props.tampil.pph_amount)}}</div>
             </div>
             <div class="row items-center q-mt-md">
-                    <div>Dibayar</div>
+                    <div>Nilai Klaim Nett</div>
                     <q-space />
                     <div>{{formatRibuan(props.tampil.total_amount)}}</div>
             </div>
@@ -170,14 +180,6 @@
             <div class="row items-center q-mt-md bg-primary4" style="border-radius: 8px;padding: 5px 10px;">
                 <div>Bukti Bayar</div>
                 <q-space />
-                <q-btn color="primary" flat no-caps class="q-pr-none" v-if="buktibayar" type="a" @click.prevent="openFile(buktibayar)">
-                    <div class="row fs-12">
-                        <span class="q-mr-sm">
-                            Lihat
-                        </span>
-                        <img src="~assets/icon/file-search.svg" alt="" class="align-middle">
-                    </div>
-                </q-btn>
                 <q-btn color="primary" flat no-caps class="q-pr-none" v-if="props.tampil.bukti_bayar" type="a" @click.prevent="openFile(props.tampil.bukti_bayar)">
                     <div class="row fs-12">
                         <span class="q-mr-sm">
@@ -186,20 +188,8 @@
                         <img src="~assets/icon/file-search.svg" alt="" class="align-middle">
                     </div>
                 </q-btn>
-                <q-btn color="secondary" flat no-caps class="q-pr-none" @click="openUpload" v-if="role == 'GA' && !buktibayar && !props.tampil.bukti_bayar">
-                    <div class="row fs-12">
-                        <span class="q-mr-sm">
-                            Upload
-                        </span>
-                        <img src="~assets/icon/upload_docs.svg" alt="" class="align-middle">
-                    </div>
-                </q-btn>
             </div>
             </q-scroll-area>
-            <div class="row justify-between q-pt-sm" v-if="role == 'GA' && !props.tampil.bukti_bayar">
-                <q-btn color="secondary" label="Cancel" outline no-caps unelevated class="q-px-sm btn-one" v-close-popup />
-                <q-btn color="secondary" label="Submit" no-caps unelevated class="q-px-sm btn-one" @click="submitLaporan(props.tampil.id)"/>
-            </div>
             </div>
         </template>
     </detail-table>
@@ -207,18 +197,14 @@
 </template>
 
 <script>
-import { defineAsyncComponent,ref,computed,onMounted } from 'vue'
-import { useService } from 'src/composeables/useService'
+import { defineAsyncComponent,ref,computed } from 'vue'
 import { usePratesis } from 'src/composeables/usePratesis'
 import { useCustom } from 'src/composeables/useCustom'
-import {  useRoute } from 'vue-router'
 
 export default {
     components:{
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
-        // 'select-dropdown' : defineAsyncComponent(()=> import('components/SelectDropdown')),
         'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
-        'upload-file': defineAsyncComponent(() => import('components/Modal/UploadFile')),
         'detail-table': defineAsyncComponent(() => import('components/Modal/DetailTable')),
     },
     setup(){
@@ -228,17 +214,21 @@ export default {
         const modalDetail = ref(false)
         const dataDetail = ref({})
 
-        const columns = [
+        const columns = []
+        if(role.value == 'GA'){
+            columns.push(
+                { name: 'kode', label: 'Distributor', align: 'left', field: 'kode_uli' }
+            )
+        }
+        columns.push(
             { name: 'kode', label: 'Coding ULI', align: 'left', field: 'kode_uli' },
-            { name: 'tgl_kirim',  align: 'left',label: 'Tanggal Klaim', field: row => `${GeneralFormatDate(row.created_at,'DD/MM/YYYY')}`},
-            { name: 'tgl_terima', label: 'Status Klaim ', align: 'left', field:row => `${GeneralFormatDate(row.approved_date,'DD/MM/YYYY')}` },
-        ]
+            { name: 'tgl_kirim',  align: 'left',label: 'Tanggal Klaim', field: row => `${GeneralFormatDate(row.approved_date,'DD/MM/YYYY')}`},
+            { name: 'status',align:'left',label:'Status Klaim',field:'status_claim'}
+        )
+
         const optionTable = computed(()=>{
             let level = '?level='
-            if (['AD','HO'].indexOf(role.value) >= 0) {
-                level += 'ho'
-                return { level: level }
-            }else if(role.value == 'GA'){
+            if(role.value == 'GA'){
                 level += 'depot'
                 return { level: level }
             }else if(role.value == 'DI'){
@@ -248,40 +238,14 @@ export default {
                 return null
             }
         })
+        
         const active = ref(true)
-        const { putData } = useService()
 
         const buktibayar = ref(null)
-        const reloadBukti = result =>{
-            buktibayar.value = result.data.data.data
-        }
+
         const Coretable = ref(null)
         const requesting = ref(null)
-        const submitLaporan = idKlaim => {
-            if (buktibayar.value) {
-                showLoading()
-                putData(`laporan-claim/${idKlaim}`,{
-                    bukti_bayar : buktibayar.value
-                })
-                .then(()=>{
-                    hideLoading()
-                    successNotif(`Klaim Berhasil di update`)
-                    modalDetail.value = false
-                    requesting.value = {
-                        pagination : {
-                            page : 1
-                        }
-                    } 
-                    buktibayar.value = null
-                })
-                .catch(err=>{
-                    console.log('error submit',err);
-                    hideLoading()
-                })
-            }else{
-                errorNotif('Upload Bukti Bayar terlebih dahulu')
-            }
-        }
+
         const kode_distributor = ref('')
         const status_claim = ref(null)
         const options = ref([ 
@@ -314,21 +278,12 @@ export default {
             dataDetail.value = value
             modalDetail.value = true
         }
-        const route = useRoute()
-        onMounted(()=>{
-            if(route.query.id){
-                dataDetail.value = {
-                    id : route.query.id
-                }
-                modalDetail.value = true
-            }
-        })
 
         return {
             options,columns,role,optionTable,active,
             colorStatusPromo,statusPromo,formatRibuan,GeneralFormatDate,
-            modalUpload,openUpload,reloadBukti,buktibayar,
-            submitLaporan,Coretable,
+            modalUpload,openUpload,buktibayar,
+            Coretable,
             showLoading,hideLoading,successNotif,errorNotif,
             requesting,
             kode_distributor,status_claim,filter,onFilter,

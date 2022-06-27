@@ -94,8 +94,7 @@
             <div class="col-12">
                 <core-table
                     :columns="columns"
-                    :option="optionTable"
-                    :url="`laporan-claim`"
+                    :url="url"
                     customDetail @openCustomDetail="openDetail"
                     ref="Coretable"
                     :requesting="requesting"
@@ -108,7 +107,7 @@
                     </template>
                     <template v-slot:body-cell-status="props">
                         <q-td key="status" :props="props">
-                            <q-badge outline :label="statusPromo(props.row.status_claim)"  :class="active ? colorStatusPromo(props.row.status_claim) : ''"
+                            <q-badge outline :label="statusPromo(props.row.status)"  :class="active ? colorStatusPromo(props.row.status) : ''"
                 style="padding-top:5px;padding-bottom:5px;" />
                         </q-td>
                     </template>
@@ -116,90 +115,56 @@
                 </core-table>
             </div>
         </div>
-        <upload-file v-model:upload="modalUpload" v-if="modalUpload" :menu="$route.path.substr(1)" titleModal="Invoice (Tanpa Materai)" @onUploadSuccess="reloadBukti" typeFileUpload=".pdf"/>
-        <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" :canEdit="false">
+        <detail-table v-model:modalDetail="modalDetail" v-if="modalDetail" :dataDetail="dataDetail" :canEdit="false" :customUrl="`promo/${dataDetail.id}`">
         <template v-slot:detail-content="props">
             <div class="laporan-klaim">
             <q-scroll-area class="fit">
-                    <div class="row q-my-sm">
-                        <div class="col-12 wrapper-primary">
-                            <p class="fs-10 q-mb-none">Keterangan :</p>
-                            <span class="fs-12">{{props.tampil.description}}</span>
-                        </div>
-                    </div>
-                    <div class="row items-center q-mt-md">
-                            <div>Code ULI</div>
-                            <q-space />
-                            <div >{{props.tampil.kode_uli}}</div>
-                    </div>
-                    <div class="row items-center q-mt-md">
-                            <div>Tanggal Kirim</div>
-                            <q-space />
-                            <div >{{GeneralFormatDate(props.tampil.created_at,'DD/MM/YYYY')}}</div>
-                    </div>
-            <div class="row items-center q-mt-md">
-                    <div>Tanggal Terima</div>
-                    <q-space />
-                    <div >{{GeneralFormatDate(props.tampil.approved_date,'DD/MM/YYYY')}}</div>
-            </div>
-            <div class="row items-center q-mt-md">
-                    <div>Klaim</div>
-                    <q-space />
-                    <div>{{formatRibuan(props.tampil.amount)}}</div>
-            </div>
-            <div class="row items-center q-mt-md">
-                    <div>Total PPN</div>
-                    <q-space />
-                    <div>{{formatRibuan(props.tampil.ppn_amount)}}</div>
-            </div>
-            <div class="row items-center q-mt-md">
-                    <div>Total PPh</div>
-                    <q-space />
-                    <div >{{formatRibuan(props.tampil.pph_amount)}}</div>
-            </div>
-            <div class="row items-center q-mt-md">
-                    <div>Dibayar</div>
-                    <q-space />
-                    <div>{{formatRibuan(props.tampil.total_amount)}}</div>
-            </div>
-            <div class="row items-center q-mt-md">
-                    <div>Status</div>
-                    <q-space />
-                    <q-badge outline :label="statusPromo(props.tampil.status_claim)" :class="active ? colorStatusPromo(props.tampil.status_claim) : ''" style="padding-top:5px;padding-bottom:5px;" />
-            </div>
-            <div class="row items-center q-mt-md bg-primary4" style="border-radius: 8px;padding: 5px 10px;">
-                <div>Bukti Bayar</div>
-                <q-space />
-                <q-btn color="primary" flat no-caps class="q-pr-none" v-if="buktibayar" type="a" @click.prevent="openFile(buktibayar)">
-                    <div class="row fs-12">
-                        <span class="q-mr-sm">
-                            Lihat
-                        </span>
-                        <img src="~assets/icon/file-search.svg" alt="" class="align-middle">
-                    </div>
-                </q-btn>
-                <q-btn color="primary" flat no-caps class="q-pr-none" v-if="props.tampil.bukti_bayar" type="a" @click.prevent="openFile(props.tampil.bukti_bayar)">
-                    <div class="row fs-12">
-                        <span class="q-mr-sm">
-                            Lihat
-                        </span>
-                        <img src="~assets/icon/file-search.svg" alt="" class="align-middle">
-                    </div>
-                </q-btn>
-                <q-btn color="secondary" flat no-caps class="q-pr-none" @click="openUpload" v-if="role == 'GA' && !buktibayar && !props.tampil.bukti_bayar">
-                    <div class="row fs-12">
-                        <span class="q-mr-sm">
-                            Upload
-                        </span>
-                        <img src="~assets/icon/upload_docs.svg" alt="" class="align-middle">
-                    </div>
-                </q-btn>
-            </div>
+                <div class="row items-center q-mt-md">
+                        <div>Opso ID</div>
+                        <q-space />
+                        <div>{{props.tampil.opso_id}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                        <div>Nama Promo</div>
+                        <q-space />
+                        <div >{{props.tampil.nama_promo}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                        <div>Budget</div>
+                        <q-space />
+                        <div >{{formatRibuan(props.tampil.budget)}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                        <div>Tanggal Awal</div>
+                        <q-space />
+                        <div >{{GeneralFormatDate(props.tampil.start_date,'DD/MM/YYYY')}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                        <div>Tanggal Akhir</div>
+                        <q-space />
+                        <div >{{GeneralFormatDate(props.tampil.end_date,'DD/MM/YYYY')}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                        <div>Batas Waktu Claim</div>
+                        <q-space />
+                        <div>{{props.tampil.claim}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                        <div>Budget holder</div>
+                        <q-space />
+                        <div>{{props.tampil.kode_budget_holder}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                        <div>Spend Type</div>
+                        <q-space />
+                        <div>{{props.tampil.kode_spend_type}}</div>
+                </div>
+                <div class="row items-center q-mt-md">
+                        <div>Status</div>
+                        <q-space />
+                        <q-badge outline :label="statusPromo(props.tampil.status)" :class="active ? colorStatusPromo(props.tampil.status) : ''" style="padding-top:5px;padding-bottom:5px;" />
+                </div>
             </q-scroll-area>
-            <div class="row justify-between q-pt-sm" v-if="role == 'GA' && !props.tampil.bukti_bayar">
-                <q-btn color="secondary" label="Cancel" outline no-caps unelevated class="q-px-sm btn-one" v-close-popup />
-                <q-btn color="secondary" label="Submit" no-caps unelevated class="q-px-sm btn-one" @click="submitLaporan(props.tampil.id)"/>
-            </div>
             </div>
         </template>
     </detail-table>
@@ -211,14 +176,12 @@ import { defineAsyncComponent,ref,computed,onMounted } from 'vue'
 import { useService } from 'src/composeables/useService'
 import { usePratesis } from 'src/composeables/usePratesis'
 import { useCustom } from 'src/composeables/useCustom'
-import {  useRoute } from 'vue-router'
+import {  useRoute,useRouter } from 'vue-router'
 
 export default {
     components:{
         'breadcrumb': defineAsyncComponent(() => import('components/Breadcrumb')),
-        // 'select-dropdown' : defineAsyncComponent(()=> import('components/SelectDropdown')),
         'core-table': defineAsyncComponent(()=> import('components/CoreTable')),
-        'upload-file': defineAsyncComponent(() => import('components/Modal/UploadFile')),
         'detail-table': defineAsyncComponent(() => import('components/Modal/DetailTable')),
     },
     setup(){
@@ -229,25 +192,20 @@ export default {
         const dataDetail = ref({})
 
         const columns = [
-            { name: 'kode', label: 'Promotion ID', align: 'left', field: 'kode_uli' },
-            { name: 'tgl_kirim',  align: 'left',label: 'Nama Promo', field: row => `${GeneralFormatDate(row.created_at,'DD/MM/YYYY')}`},
-            { name: 'tgl_terima', label: 'Status ', align: 'left', field:row => `${GeneralFormatDate(row.approved_date,'DD/MM/YYYY')}` },
+            { name: 'kode', label: 'Promotion ID', align: 'left', field: 'opso_id' },
+            { name: 'nama_promo',  align: 'left',label: 'Nama Promo', field: 'nama_promo'},
+            { name: 'status', label: 'Status ', align: 'left', field:'status' },
         ]
-        const optionTable = computed(()=>{
-            let level = '?level='
-            if (['AD','HO'].indexOf(role.value) >= 0) {
-                level += 'ho'
-                return { level: level }
-            }else if(role.value == 'GA'){
-                level += 'depot'
-                return { level: level }
-            }else if(role.value == 'DI'){
-                level += 'distributor'
-                return { level : level }
-            }else {
-                return null
-            }
-        })
+
+        const url = ref('')
+        if (['AD','HO'].indexOf(role.value) >= 0) {
+            url.value = 'promo'
+        }
+
+        if(role.value === 'GA'){
+            url.value = 'promo-depot'
+        }
+
         const active = ref(true)
         const { putData } = useService()
 
@@ -308,11 +266,14 @@ export default {
         function openFile(value){
             window.open(value, "_blank");
         }
-
-        
+        const router = useRouter()
         function openDetail(value){
-            dataDetail.value = value
-            modalDetail.value = true
+            if(role.value === 'GA') {
+                router.push({name:'Detail Daftar Promo',params:{id:value.id}})
+            }else {
+                dataDetail.value = value
+                modalDetail.value = true
+            }
         }
         const route = useRoute()
         onMounted(()=>{
@@ -325,7 +286,7 @@ export default {
         })
 
         return {
-            options,columns,role,optionTable,active,
+            options,columns,role,active,
             colorStatusPromo,statusPromo,formatRibuan,GeneralFormatDate,
             modalUpload,openUpload,reloadBukti,buktibayar,
             submitLaporan,Coretable,
@@ -333,7 +294,7 @@ export default {
             requesting,
             kode_distributor,status_claim,filter,onFilter,
             openFile,
-            openDetail,modalDetail,dataDetail,
+            openDetail,modalDetail,dataDetail,url
         }
     }
 }

@@ -18,32 +18,44 @@ const routes = [
           laporan:true
         }
       },
-      { path: 'export-laporan-claim', name:'Export Laporan Klaim', component: () => import('pages/laporan/ExportLaporanKlaim.vue'),
+      { path: 'daftar-claim', name:'Daftar Klaim', component: () => import('pages/laporan/DaftarKlaim.vue'),
         meta:{
           laporan:true
         }
       },
-      { path: 'export-promo-area', name:'Export Promo Area', component: () => import('pages/laporan/ExportPromoAreaDepot.vue'),
+      { path: 'daftar-opso', name:'Daftar Opso', component: () => import('pages/laporan/DaftarOpso.vue'),
         meta:{
           laporan:true
         }
       },
-      { path: 'export-opsoid', name:'Export Opso Id', component: () => import('pages/laporan/ExportOpsoId.vue'),
+      { path: 'daftar-promo', component: () => import('pages/laporan/daftarpromo/Index.vue'),
+        redirect:{name: 'Daftar Promo'},
+        children:[
+          { path:'',name:'Daftar Promo',component:()=> import('pages/laporan/daftarpromo/List.vue')},
+          { path:'detail/:id',name:'Detail Daftar Promo',component:()=> import('pages/laporan/daftarpromo/Detail.vue')},
+        ],
         meta:{
           laporan:true
         }
       },
-      { path: 'export-promo', name:'Export Promo', component: () => import('pages/laporan/ExportPromo.vue'),
+      { path: 'promo-perbrand', component: () => import('pages/laporan/promoperbrand/Index.vue'),
+        redirect:{name: 'Promo Per Brand'},
+        children:[
+          { path:'',name:'Promo Per Brand',component:()=> import('pages/laporan/promoperbrand/List.vue')},
+          { path:'detail/:id',name:'Detail Promo Per Brand',component:()=> import('pages/laporan/promoperbrand/Detail.vue')},
+          { path:'detail/:id/produk/:produk',name:'Detail Produk Promo Per Brand',component:()=> import('pages/laporan/promoperbrand/DetailProduk.vue')},
+        ],
         meta:{
           laporan:true
         }
       },
-      { path: 'export-promo-perarea', name:'Export Promo Per Area', component: () => import('pages/laporan/ExportPromoPerarea.vue'),
-        meta:{
-          laporan:true
-        }
-      },
-      { path: 'export-promo-perbrand', name:'Export Promo Per Brand', component: () => import('pages/laporan/ExportPromoPerbrand.vue'),
+      { path: 'promo-perarea', component: () => import('pages/laporan/promoperarea/Index.vue'),
+        redirect:{name: 'Promo Per Area'},
+        children:[
+          { path:'',name:'Promo Per Area',component:()=> import('pages/laporan/promoperarea/List.vue')},
+          { path:'detail/:id',name:'Detail Promo Per Area',component:()=> import('pages/laporan/promoperarea/Detail.vue')},
+          { path:'detail/:id/area/:area',name:'Detail Area',component:()=> import('pages/laporan/promoperarea/DetailArea.vue')},
+        ],
         meta:{
           laporan:true
         }
@@ -210,11 +222,6 @@ const routes = [
         } 
       },
       { path: 'laporan/master',name:'Master', component: () => import('pages/laporan/Master.vue'),
-        meta:{
-          laporan:true
-        }
-      },
-      { path: 'laporan/promo',name:'Laporan Promo', component: () => import('pages/laporan/PromoReport.vue'),
         meta:{
           laporan:true
         }

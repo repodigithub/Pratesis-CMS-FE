@@ -252,18 +252,6 @@ const menu = [
                     HO:true,
                 }
             },
-            // {
-            //     title:'Master',
-            //     access:{
-            //         GA:true,
-            //     }
-            // },
-            // {
-            //     title:'Alokasi',
-            //     access:{
-            //         GA:true,
-            //     }
-            // },
             {
                 title:'Laporan Klaim',
                 access:{
@@ -272,40 +260,35 @@ const menu = [
                 },
             },
             {
-                title:'Export Laporan Klaim',
+                title:'Daftar Klaim',
                 access:{
                     GA:true,
                     DI:true
                 },
             },
             {
-                title:'Export Promo Area',
+                title:'Daftar Opso',
                 access:{
                     GA:true,
                 },
             },
             {
-                title:'Export Opso Id',
+                title:'Daftar Promo',
                 access:{
                     GA:true,
+                    AD:true,
+                    HO:true
                 },
             },
             {
-                title:'Export Promo',
+                title:'Promo Per Area',
                 access:{
                     AD:true,
                     HO:true
                 },
             },
             {
-                title:'Export Promo Per Area',
-                access:{
-                    AD:true,
-                    HO:true
-                },
-            },
-            {
-                title:'Export Promo Per Brand',
+                title:'Promo Per Brand',
                 access:{
                     AD:true,
                     HO:true

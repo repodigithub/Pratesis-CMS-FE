@@ -56,6 +56,9 @@ export default {
             type: Boolean,
             default: true
         },
+        customUrl: {
+            type:String
+        }
     },
     setup(props, { emit }){
         const { putData,getData } = useService()
@@ -74,18 +77,27 @@ export default {
         }
 
         const url = ref(null)
-        url.value = `${route.path.substr(1)}/${props.dataDetail.id}`
-        if(props.options){
-            let x = {...props.options}
-            url.value += `?include=${x.include}`
+        if(!!props.customUrl) {
+            getData(props.customUrl,props.islogin)
+            .then(res=>{
+                emit('update:dataDetail',res.data.data)
+                dataModal.value = res.data.data
+                valid.value = true
+            })
+        }else {
+            url.value = `${route.path.substr(1)}/${props.dataDetail.id}`
+            if(props.options){
+                let x = {...props.options}
+                url.value += `?include=${x.include}`
+            }
+            getData(url.value,props.islogin)
+            .then(res=>{
+                emit('update:dataDetail',res.data.data)
+                dataModal.value = res.data.data
+                valid.value = true
+            })
         }
         
-        getData(url.value,props.islogin)
-        .then(res=>{
-            emit('update:dataDetail',res.data.data)
-            dataModal.value = res.data.data
-            valid.value = true
-        })
 
         function onSave(){
             form.value.validate()
