@@ -5,90 +5,111 @@
 			<div class="col-12">
 				<q-card class="own-card q-mb-lg" flat>
 				<q-card-section>
-					<div class="row items-end q-gutter-xs">
-						<div>
-							<label for="statusDrop">Promo ID:</label>
-							<div class="row q-gutter-xs">
-								<q-select
-									v-model="status_claim"
-									:options="options"
-									outlined
-									dense
-									class="option-three"
-									id="statusDrop"
-									emit-value
-									map-options
-									label="Dari promo ID" stack-label
-									dropdown-icon="expand_more" />
-								<q-select
-									v-model="status_claim"
-									:options="options"
-									outlined
-									dense
-									class="option-three"
-									id="statusDrop"
-									emit-value
-									map-options
-									label="Sampai promo ID" stack-label
-									dropdown-icon="expand_more" />
-							</div>
-						</div>
-						<div>
-								<label for="TglKlaim">Tanggal Klaim :</label>
-								<div class="row q-gutter-xs">
-									<q-input
-								v-model="filter.start_date"
-								type="date"
-								dense
-								outlined
-								class="option-two"
-								label="Dari tanggal" stack-label
-								/>
-									<q-input
-								v-model="filter.start_date"
-								type="date"
-								dense
-								outlined
-								hide-bottom-space
-								label="Sampai tanggal" stack-label
-								class="option-two" />
-								</div>
-						</div>
-						<div v-if="role === 'GA'">
-							<label for="statusDrop">Distributor :</label>
-								<q-select
-									v-model="status_claim"
-									:options="options"
-									outlined
-									dense
-									class="option-three"
-									id="statusDrop"
-									emit-value
-									map-options
-									label="Dari promo ID" stack-label
-									dropdown-icon="expand_more" />
-						</div>
-						<div>
-							<label for="statusDrop">Status Klaim :</label>
-								<q-select
-									v-model="status_claim"
-									:options="options"
-									outlined
-									dense
-									class="option-three"
-									id="statusDrop"
-									emit-value
-									map-options
-									label="Dari promo ID" stack-label
-									dropdown-icon="expand_more" />
-						</div>
-						<div class="text-right">
-							<q-btn color="primary"  no-caps class="btn-one q-mr-md" unelevated @click="onFilter" >
-								Search
-							</q-btn>
-						</div>
-					</div>
-				</q-card-section>
+                    <div class="row q-col-gutter-md">
+                        <div class="col">
+                            <label for="statusDrop">Promo ID:</label>
+                            <div class="row">
+                                <q-select
+                                    v-model="status_claim"
+                                    :options="options"
+                                    outlined
+                                    dense
+                                    class="option-three col-12"
+                                    id="statusDrop"
+                                    emit-value
+                                    map-options
+                                    label="Dari promo ID" stack-label
+                                    dropdown-icon="expand_more" />
+                                <q-select
+                                    v-model="status_claim"
+                                    :options="options"
+                                    outlined
+                                    dense
+                                    class="option-three col-12 q-mt-md"
+                                    id="statusDrop"
+                                    emit-value
+                                    map-options
+                                    label="Sampai promo ID" stack-label
+                                    dropdown-icon="expand_more" />
+                            </div>
+                        </div>
+                        <div class="col">
+                                <label for="TglKlaim">Tanggal Awal :</label>
+                                <div class="row">
+                                    <q-input
+                                v-model="filter.start_date"
+                                type="date"
+                                dense
+                                outlined
+                                class="option-two col-12"
+                                label="Dari tanggal" stack-label
+                                />
+                                    <q-input
+                                v-model="filter.start_date"
+                                type="date"
+                                dense
+                                outlined
+                                hide-bottom-space
+                                label="Sampai tanggal" stack-label
+                                class="option-two col-12 q-mt-md" />
+                                </div>
+                        </div>
+                        <div class="col">
+                                <label for="TglKlaim">Tanggal Akhir :</label>
+                                <div class="row">
+                                    <q-input
+                                v-model="filter.start_date"
+                                type="date"
+                                dense
+                                outlined
+                                class="option-two col-12"
+                                label="Dari tanggal" stack-label
+                                />
+                                    <q-input
+                                v-model="filter.start_date"
+                                type="date"
+                                dense
+                                outlined
+                                hide-bottom-space
+                                label="Sampai tanggal" stack-label
+                                class="option-two col-12 q-mt-md" />
+                                </div>
+                        </div>
+                        <div class="col">
+                            <label for="statusDrop">Area :</label>
+                                <q-select
+                                    v-model="status_claim"
+                                    :options="options"
+                                    outlined
+                                    dense
+                                    class="option-three"
+                                    id="statusDrop"
+                                    emit-value
+                                    map-options
+                                    label="Dari promo ID" stack-label
+                                    dropdown-icon="expand_more" />
+                        </div>
+                        <div class="col">
+                            <label for="statusDrop">Status :</label>
+                                <q-select
+                                    v-model="status_claim"
+                                    :options="options"
+                                    outlined
+                                    dense
+                                    class="option-three"
+                                    id="statusDrop"
+                                    emit-value
+                                    map-options
+                                    label="Dari promo ID" stack-label
+                                    dropdown-icon="expand_more" />
+                        </div>
+                        <div class="col q-mt-lg">
+                          <q-btn color="primary"  no-caps class="btn-one q-mr-md" unelevated @click="onFilter" >
+                                Search
+                            </q-btn>
+                        </div>
+                    </div>
+                </q-card-section>
 				</q-card>
 			</div>
 			<div class="col-12">

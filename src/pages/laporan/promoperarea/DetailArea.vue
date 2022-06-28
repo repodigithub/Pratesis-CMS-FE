@@ -7,7 +7,8 @@
                 <q-breadcrumbs-el label="Detail Area" style="color:#00000073;"/>
             </template>
         </breadcrumb>
-        <div class="row q-pa-lg" >
+        <div class="row q-pa-lg" 
+        >
             <div class="col-12 q-mt-lg">
                 <core-table
                     :columns="columns"

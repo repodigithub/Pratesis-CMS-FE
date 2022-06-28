@@ -5,16 +5,16 @@
             <div class="col-12">
                 <q-card class="own-card q-mb-lg" flat>
                 <q-card-section>
-                    <div class="row items-end q-gutter-xs">
-                        <div>
+                    <div class="row items-end q-col-gutter-md">
+                        <div class="col">
                             <label for="statusDrop">Promo ID:</label>
-                            <div class="row q-gutter-xs">
+                            <div class="row q-col-gutter-md">
                                 <q-select
                                     v-model="status_claim"
                                     :options="options"
                                     outlined
                                     dense
-                                    class="option-three"
+                                    class="option-three col"
                                     id="statusDrop"
                                     emit-value
                                     map-options
@@ -25,7 +25,7 @@
                                     :options="options"
                                     outlined
                                     dense
-                                    class="option-three"
+                                    class="option-three col"
                                     id="statusDrop"
                                     emit-value
                                     map-options
@@ -33,15 +33,15 @@
                                     dropdown-icon="expand_more" />
                             </div>
                         </div>
-                        <div>
+                        <div class="col">
                                 <label for="TglKlaim">Tanggal Klaim :</label>
-                                <div class="row q-gutter-xs">
+                                <div class="row q-col-gutter-md">
                                     <q-input
                                 v-model="filter.start_date"
                                 type="date"
                                 dense
                                 outlined
-                                class="option-two"
+                                class="option-two col"
                                 label="Dari tanggal" stack-label
                                 />
                                     <q-input
@@ -51,10 +51,10 @@
                                 outlined
                                 hide-bottom-space
                                 label="Sampai tanggal" stack-label
-                                class="option-two" />
+                                class="option-two col" />
                                 </div>
                         </div>
-                        <div v-if="role === 'GA'">
+                        <div v-if="role === 'GA'" class="col">
                             <label for="statusDrop">Distributor :</label>
                                 <q-select
                                     v-model="status_claim"
@@ -68,7 +68,7 @@
                                     label="Dari promo ID" stack-label
                                     dropdown-icon="expand_more" />
                         </div>
-                        <div>
+                        <div class="col-2">
                             <label for="statusDrop">Status Klaim :</label>
                                 <q-select
                                     v-model="status_claim"
@@ -82,11 +82,16 @@
                                     label="Dari promo ID" stack-label
                                     dropdown-icon="expand_more" />
                         </div>
-                        <div class="text-right">
+                        <div class="col-2" v-if="role === 'DI'">
                             <q-btn color="primary"  no-caps class="btn-one q-mr-md" unelevated @click="onFilter" >
                                 Search
                             </q-btn>
                         </div>
+                    </div>
+                    <div class="row q-mt-md" v-if="role === 'GA'">
+                        <q-btn color="primary"  no-caps class="btn-one q-mr-md" unelevated @click="onFilter" >
+                                Search
+                            </q-btn>
                     </div>
                 </q-card-section>
                 </q-card>
@@ -250,7 +255,7 @@ export default {
         const status_claim = ref(null)
         const options = ref([ 
         {
-            label: 'Semua',
+            label: '22050013',
             value: null
         },
         {
