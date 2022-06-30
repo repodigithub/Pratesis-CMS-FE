@@ -60,6 +60,10 @@ export default {
         isNormal:{
             type:Boolean,
             default:true
+        },
+        isSearchNormal:{
+            type:Boolean,
+            default:true
         }
     },
     setup(props, context){
@@ -110,7 +114,7 @@ export default {
                 loading.value = true
                 searchKey.value = val.toLowerCase()
                 options.value = []
-                searchUrl.value = `?search=${searchKey.value}`
+                searchUrl.value = props.isSearchNormal ? `?search=${searchKey.value}` : `&search=${searchKey.value}`
                 getData(props.url+searchUrl.value,props.islogin)
                 .then(res=>{
                     update(()=>{

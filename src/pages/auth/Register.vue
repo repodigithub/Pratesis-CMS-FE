@@ -98,7 +98,7 @@
                 </div>
                 <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI') || dataSend.kode_group.includes('GA')">
                     <div class="col-6">
-                        <select-dropdown url="area" v-model:selected="dataSend.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo"/>
+                        <select-dropdown url="area?sort=kode_area,asc" v-model:selected="dataSend.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo" :isSearchNormal="false"/>
                     </div>
                     <div class="col-5">
                         <label for="nama_depo" class="font-normal">Nama Depo</label>
@@ -114,9 +114,9 @@
                         </q-input>
                     </div>
                 </div>
-                <div class="row col-12 justify-between" v-if="showdistributor">
+                <div class="row col-12 justify-between" v-if="showdistributor && dataSend.kode_group.includes('DI')">
                     <div class="col-6">
-                        <select-dropdown :url="urldistributor" v-model:selected="dataSend.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor"/> 
+                        <select-dropdown :url="urldistributor" v-model:selected="dataSend.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor" :isSearchNormal="false"/> 
                     </div>
                     <div class="col-5">
                         <label for="nama_distributor" class="font-normal">Nama Distributor</label>
@@ -242,7 +242,7 @@ export default {
             nama_area.value = a[0].label
             showdistributor.value = false
             setTimeout(() => {
-                urldistributor.value = `distributor?kode_area=${val}&status_distributor=aktif`
+                urldistributor.value = `distributor?kode_area=${val}&status_distributor=aktif&sort=kode_distributor,asc`
                 showdistributor.value = true
             }, 100);
         })

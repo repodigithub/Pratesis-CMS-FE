@@ -179,13 +179,14 @@
                   "
                 >
                   <select-dropdown
-                    url="area"
+                    url="area?sort=kode_area,asc"
                     v-model:selected="dataModal.kode_area"
                     :islogin="false"
                     :master="false"
                     class="q-mb-md"
                     ref="kodedepo"
                     nameLabel="Kode Depot"
+                    :isSearchNormal="false"
                   />
                   <label for="nama_depo" class="font-normal">Nama Depot</label>
                   <q-input v-model="nama_area"  dense outlined id="nama_depo" class="q-mb-md"
@@ -199,7 +200,7 @@
                         </template>
                     </q-input>
                 </div>
-                <div v-if="showdistributor">
+                <div v-if="showdistributor && dataModal.kode_group.includes('DI')">
                   <select-dropdown
                     :url="urldistributor"
                     v-model:selected="dataModal.kode_distributor"
@@ -208,6 +209,7 @@
                     class="q-mb-md"
                     ref="kodedistributor"
                     nameLabel="Kode Distributor"
+                    :isSearchNormal="false"
                   />
                   <label for="nama_distributor" class="font-normal"
                     >Nama Distributor</label
@@ -378,7 +380,7 @@ export default {
         if (val !== null) {
           showdistributor.value = false
           setTimeout(() => {
-              urldistributor.value = `distributor?kode_area=${val}&status_distributor=aktif`
+              urldistributor.value = `distributor?kode_area=${val}&status_distributor=aktif&sort=kode_distributor,asc`
               showdistributor.value = true
           }, 100);
           if(edit.value) {
