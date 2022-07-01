@@ -25,7 +25,7 @@ export const useCustom = () => {
             ]
         })
     }
-    const errorNotif = msg => {
+    const errorNotif = (msg,isHtml = false) => {
         $q.notify({
             message: msg,
             icon:'close',
@@ -34,7 +34,8 @@ export const useCustom = () => {
             progress: true,
             actions: [
                 { label: 'close', color: 'white', handler: () => { /* ... */ } }
-            ]
+            ],
+            html:isHtml
         })
     }
 

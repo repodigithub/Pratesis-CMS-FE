@@ -187,6 +187,7 @@
                     ref="kodedepo"
                     nameLabel="Kode Depot"
                     :isSearchNormal="false"
+                    :isPageNormal="false"
                   />
                   <label for="nama_depo" class="font-normal">Nama Depot</label>
                   <q-input v-model="nama_area"  dense outlined id="nama_depo" class="q-mb-md"
@@ -210,6 +211,7 @@
                     ref="kodedistributor"
                     nameLabel="Kode Distributor"
                     :isSearchNormal="false"
+                    :isPageNormal="false"
                   />
                   <label for="nama_distributor" class="font-normal"
                     >Nama Distributor</label
@@ -328,7 +330,7 @@ export default {
   },
   setup(props, { emit }) {
     const { putData, getData } = useService();
-    const { showLoading, hideLoading, successNotif, GeneralFormatDate, statusPromo,colorStatusPromo } =
+    const { showLoading, hideLoading, successNotif, GeneralFormatDate, statusPromo,colorStatusPromo,errorNotif } =
       useCustom();
     
     const form = ref(null);
@@ -436,7 +438,13 @@ export default {
                 },
               });
             })
-            .catch(() => {
+            .catch((error)=>{
+                let result = Object.values(error?.response?.data?.data)
+                let hasil = '<span>'
+                for (let index = 0; index < result.length; index++) {
+                  hasil += result[index] +"</span>" +"<br>" 
+                }
+                  errorNotif(`${hasil}`,true)
               hideLoading();
             });
         }

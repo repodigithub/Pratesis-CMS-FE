@@ -47,7 +47,7 @@
                     <select-dropdown url="user-group" v-model:selected="send.kode_group" :islogin="false" :master="false" class="q-mb-md col-12" nameLabel="User Level"/>
                     <div class="row col-12 justify-between" v-show="send.kode_group.includes('DI') || send.kode_group.includes('GA')">
                     <div class="col-6">
-                        <select-dropdown url="area?sort=kode_area,asc" v-model:selected="send.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo" :isSearchNormal="false"/>
+                        <select-dropdown url="area?sort=kode_area,asc" v-model:selected="send.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo" :isSearchNormal="false" :isPageNormal="false"/>
                     </div>
                     <div class="col-5">
                         <label for="nama_depo" class="font-normal">Nama Depo</label>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="row col-12 justify-between" v-if="showdistributor && send.kode_group.includes('DI')">
                         <div class="col-6">
-                            <select-dropdown :url="urldistributor" v-model:selected="send.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor" :isSearchNormal="false"/> 
+                            <select-dropdown :url="urldistributor" v-model:selected="send.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor" :isSearchNormal="false" :isPageNormal="false"/> 
                         </div>
                         <div class="col-5">
                             <label for="nama_distributor" class="font-normal">Nama Distributor</label>
@@ -112,7 +112,7 @@ export default {
         const nama_distributor = ref('')
 
         const form = ref()
-        const { showLoading,hideLoading,successNotif } = useCustom()
+        const { showLoading,hideLoading,successNotif,errorNotif } = useCustom()
         const { postData } = useService()
 
         send.value = {
@@ -145,16 +145,22 @@ export default {
             form.value.validate()
             .then(valid=>{
                 if(valid){
-                    showLoading()
-                    postData('user',send.value)
-                    .then(()=>{
-                        hideLoading()
-                        emit('update:adduser',false)
-                        successNotif('User berhasil Ditambahkan')
-                    })
-                    .catch(()=>{
-                        hideLoading()
-                    })
+                  showLoading()
+                  postData('user',send.value)
+                  .then(()=>{
+                      hideLoading()
+                      emit('update:adduser',false)
+                      successNotif('User berhasil Ditambahkan')
+                  })
+                  .catch((error)=>{
+                    let result = Object.values(error?.response?.data?.data)
+                    let hasil = '<span>'
+                    for (let index = 0; index < result.length; index++) {
+                      hasil += result[index] +"</span>" +"<br>" 
+                    }
+                      errorNotif(`${hasil}`,true)
+                      hideLoading()
+                  })
                 }
             })
         }

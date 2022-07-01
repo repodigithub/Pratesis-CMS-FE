@@ -64,6 +64,10 @@ export default {
         isSearchNormal:{
             type:Boolean,
             default:true
+        },
+        isPageNormal:{
+            type:Boolean,
+            default:true
         }
     },
     setup(props, context){
@@ -145,10 +149,14 @@ export default {
             if (loading.value !== true && nextPage.value <= lastPage.value && index === lastIndex) {
                 loading.value = true
                 let localurl = ''
-                if(searchUrl.value){
+                if(props.isPageNormal){
+                    if(searchUrl.value){
+                        localurl = `${props.url}${searchUrl.value}&page=${nextPage.value}`
+                    }else{
+                        localurl = `${props.url}?page=${nextPage.value}`
+                    }
+                }else {
                     localurl = `${props.url}${searchUrl.value}&page=${nextPage.value}`
-                }else{
-                    localurl = `${props.url}?page=${nextPage.value}`
                 }
                 getData(localurl,props.islogin)
                 .then(res=>{

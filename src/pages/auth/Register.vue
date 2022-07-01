@@ -98,7 +98,7 @@
                 </div>
                 <div class="row col-12 justify-between" v-show="dataSend.kode_group.includes('DI') || dataSend.kode_group.includes('GA')">
                     <div class="col-6">
-                        <select-dropdown url="area?sort=kode_area,asc" v-model:selected="dataSend.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo" :isSearchNormal="false"/>
+                        <select-dropdown url="area?sort=kode_area,asc" v-model:selected="dataSend.kode_area" :islogin="false" :master="false" class="q-mb-md" ref="kodedepo" nameLabel="Kode Depo" :isSearchNormal="false" :isPageNormal="false"/>
                     </div>
                     <div class="col-5">
                         <label for="nama_depo" class="font-normal">Nama Depo</label>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="row col-12 justify-between" v-if="showdistributor && dataSend.kode_group.includes('DI')">
                     <div class="col-6">
-                        <select-dropdown :url="urldistributor" v-model:selected="dataSend.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor" :isSearchNormal="false"/> 
+                        <select-dropdown :url="urldistributor" v-model:selected="dataSend.kode_distributor" :islogin="false" :master="false" class="q-mb-md" ref="kodedistributor" nameLabel="Kode Distributor" :isSearchNormal="false" :isPageNormal="false"/> 
                     </div>
                     <div class="col-5">
                         <label for="nama_distributor" class="font-normal">Nama Distributor</label>
@@ -186,16 +186,6 @@ export default {
         })
         const { showLoading,hideLoading,errorNotif } = useCustom()
 
-        dataSend.value = {
-                user_id:'',
-                full_name:'',
-                username:'',
-                email:'',
-                password:'',
-                kode_distributor:null,
-                kode_area:null,
-                kode_group:''
-        }
         const visibility = ref(true)
         const kodedepo = ref('')
         const nama_area = ref('')
@@ -224,13 +214,15 @@ export default {
                             registerSuccess.value = true
                             hideLoading()
                         })
-                        .catch((err)=>{
-                            hideLoading()
+                        .catch((error)=>{
+                          let result = Object.values(error?.response?.data?.data)
+                          let hasil = '<span>'
+                          for (let index = 0; index < result.length; index++) {
+                          hasil += result[index] +"</span>" +"<br>" 
+                          }
+                          errorNotif(`${hasil}`,true)
+                          hideLoading()
                             grecaptcha.reset()
-                            let result = err.response.data
-                            if(result.code === 500){
-                                errorNotif(`${result.message}`)
-                            }
                         })
                     }
                 }
