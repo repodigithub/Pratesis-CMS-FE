@@ -486,17 +486,17 @@ export default {
             }
         }
         function onPromoSubmit(){
-            let tglawal = judul.value.start_date
-            let today = GeneralFormatDate(Date.now(),'YYYY-MM-DD')
-            if(tglawal < today){
-                errorNotif(`tanggal awal : harus lebih dari atau sama dengan tanggal hari ini `)
-            }else{
+            // let tglawal = judul.value.start_date
+            // let today = GeneralFormatDate(Date.now(),'YYYY-MM-DD')
+            // if(tglawal < today){
+            //     errorNotif(`tanggal awal : harus lebih dari atau sama dengan tanggal hari ini `)
+            // }else{
+            //     }
                 if (['HO','AD'].indexOf(role.value) >= 0) {
                     onSubmitHO()
                 }else{
                     onSubmitDepot()
                 }
-            }
         }
         const active = ref(true)
         const modalPromo = ref(false)

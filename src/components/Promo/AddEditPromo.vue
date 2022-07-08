@@ -249,15 +249,15 @@ export default {
             }
             let tglawal = dataPromo.value.start_date
             let today = GeneralFormatDate(Date.now(),'YYYY-MM-DD')
-            if(tglawal < today){
-                errorNotif(`tanggal awal : harus lebih dari atau sama dengan tanggal hari ini `)
-            }else{
+            // if(tglawal < today){
+            //     errorNotif(`tanggal awal : harus lebih dari atau sama dengan tanggal hari ini `)
+            // }else{
+            //     }
                 if (props.edit) { //ketika edit
                     onEdit(sendForm)
                 }else{
                     onAdd(sendForm)
                 }
-            }
         }
         
 
